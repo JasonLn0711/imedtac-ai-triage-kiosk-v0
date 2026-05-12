@@ -12,6 +12,14 @@ The current useful answer is:
 > that measured vital signs can drive dynamic triage-support questioning and a
 > clinician-readable summary.
 
+Current detailed discussion artifact:
+
+- `handoff/2026-05-15-vital-aware-triage-feasibility-source-governance.md`
+- `handoff/2026-05-15-source-registry-and-example-flows.md`
+- `handoff/2026-05-15-friday-discussion-brief.md`
+- `handoff/2026-05-15-first-principles-gap-audit-and-action-plan.md`
+- `handoff/reviewer-packet/`
+
 ## Required Before External Handoff
 
 - Confirm product / API materials from 慧誠.

@@ -1,0 +1,71 @@
+{
+  "fixture_id": "chest-pain-high-bp-low-spo2",
+  "status": "synthetic_demo_only",
+  "not_real_patient_data": true,
+  "intended_use_boundary": "Demo-only vital-aware intake and clinician-review summary; not diagnosis, treatment advice, final triage level, emergency order, or HIS/EMR integration.",
+  "imvs_payload": {
+    "CHART_NO": "DEMO-001",
+    "SAVE_DATETIME": "2026-05-15 09:20:00",
+    "STATION_NAME": "iMVS-DEMO",
+    "NBP": {
+      "Systolic": "188",
+      "Diastolic": "122",
+      "Unit": "mmHg"
+    },
+    "SPO2": {
+      "Value": "91",
+      "Unit": "%"
+    },
+    "HR": {
+      "Value": "112",
+      "Unit": "bpm"
+    },
+    "Temp": {
+      "Value": "36.8",
+      "Unit": "C"
+    },
+    "Glucose": null,
+    "Height": {
+      "Value": "172",
+      "Unit": "cm"
+    },
+    "Weight": {
+      "Value": "78",
+      "Unit": "kg"
+    }
+  },
+  "patient_input": {
+    "chief_concern": "chest pressure",
+    "duration": "started this morning"
+  },
+  "flow_id": "FLOW-CHEST-PAIN-VITALS",
+  "question_ids": [
+    "CP-001",
+    "CP-002",
+    "CP-003",
+    "CP-004",
+    "CP-005",
+    "REV-001"
+  ],
+  "source_ids": [
+    "AHA-HBP-911-2025",
+    "AHA-HEART-ATTACK",
+    "CDC-FLU-WARN",
+    "ENA-ESI-V5",
+    "LOCAL-PROTOCOL-TBD"
+  ],
+  "review_constraints": {
+    "allowed": [
+      "staff-review summary",
+      "source-family display",
+      "demo-only boundary"
+    ],
+    "forbidden": [
+      "diagnosis",
+      "treatment advice",
+      "final ESI level",
+      "automatic emergency order",
+      "HIS/EMR writeback"
+    ]
+  }
+}

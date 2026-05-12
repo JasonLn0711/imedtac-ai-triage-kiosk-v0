@@ -1,0 +1,61 @@
+{
+  "fixture_id": "fever-urinary",
+  "status": "synthetic_demo_only",
+  "not_real_patient_data": true,
+  "intended_use_boundary": "Demo-only vital-aware intake and clinician-review summary; not diagnosis, treatment advice, final triage level, emergency order, or HIS/EMR integration.",
+  "imvs_payload": {
+    "CHART_NO": "DEMO-002",
+    "SAVE_DATETIME": "2026-05-15 09:35:00",
+    "STATION_NAME": "iMVS-DEMO",
+    "NBP": {
+      "Systolic": "102",
+      "Diastolic": "66",
+      "Unit": "mmHg"
+    },
+    "SPO2": {
+      "Value": "96",
+      "Unit": "%"
+    },
+    "HR": {
+      "Value": "108",
+      "Unit": "bpm"
+    },
+    "Temp": {
+      "Value": "38.7",
+      "Unit": "C"
+    },
+    "Glucose": null
+  },
+  "patient_input": {
+    "chief_concern": "fever and painful urination",
+    "duration": "2 days"
+  },
+  "flow_id": "FLOW-FEVER-URINARY",
+  "question_ids": [
+    "FEV-001",
+    "URI-001",
+    "URI-002",
+    "FEV-002",
+    "FEV-003",
+    "REV-001"
+  ],
+  "source_ids": [
+    "CDC-FLU-WARN",
+    "AUA-RUTI",
+    "LOCAL-PROTOCOL-TBD"
+  ],
+  "review_constraints": {
+    "allowed": [
+      "staff-review summary",
+      "source-family display",
+      "demo-only boundary"
+    ],
+    "forbidden": [
+      "diagnosis",
+      "antibiotic recommendation",
+      "sepsis claim",
+      "final triage level",
+      "HIS/EMR writeback"
+    ]
+  }
+}
