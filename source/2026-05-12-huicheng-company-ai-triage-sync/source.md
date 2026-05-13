@@ -30,6 +30,8 @@ This folder stores the structured notes from the `2026-05-12 13:00` sync with �
 
 The user provided a detailed transcript and a post-meeting summary in chat. These should be treated as private meeting evidence for planning and follow-up, not as public artifacts.
 
+`meeting-record.md` is the structured full meeting record for the afternoon company sync. It is organized around the user-specified AI-Triage cooperation record structure: meeting background, current 慧誠 system architecture, company expectations, external AI-triage observations, Jason's urology demo, the three key questions, short-term June demo target, alignment, follow-up action items, workflow-integration interpretation, and the required medical decision mapping.
+
 The user also provided a polished interpretation brief on `2026-05-12`; preserve its structure, Mermaid diagrams, and writing format in `demo-brief.md` for future briefing / planning reuse.
 
 Company follow-up materials from Johnny Fang were added after the meeting:
@@ -51,6 +53,8 @@ The meeting changed the 慧誠 lane from a general post-seminar opportunity into
 - Default measured data are blood pressure, SpO2, temperature, and for the all-in-one SKU height/weight; ECG and ultrasound were mentioned as technically possible custom additions but outside the default triage scope.
 - The hardware is Windows-based, fanless all-in-one, no onboard GPU, and network-capable.
 - The platform context includes RESTful API, FHIR standard, and HIS / EMR integration.
+- The complete structured meeting record now frames the collaboration as a medical workflow integration problem: vital sign -> medical workflow -> question flow -> triage support -> clinical efficiency.
+- The record explicitly identifies medical decision mapping as the next required artifact: vital signal -> clinical concern -> question impact -> routing impact -> source family -> reviewer.
 - The long-term product target is English-first, voice-input, broad/all-specialty symptom triage, vital-sign-aware output, and urgent-care style workflow.
 - The near-term business need is a presentable demo that makes 慧誠 + 智德萬 / Wu-team collaboration visible before customer conversations, possibly including a June US customer visit.
 - Jason showed the urology previsit demo as a bounded starting point: structured intake, dynamic question selection, patient/family assistance, nurse/clinician review, and optional ASR for free-form supplements.

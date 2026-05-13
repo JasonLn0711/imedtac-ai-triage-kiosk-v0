@@ -22,6 +22,7 @@ follow-up package:
 Derived analysis:
 
 - `docs/2026-05-12-huicheng-materials-analysis.md`
+- `source/2026-05-12-huicheng-company-ai-triage-sync/meeting-record.md` is the complete structured afternoon meeting record for the 慧誠智醫 x NYCU AI-Triage cooperation discussion. It now uses the user-specified structure and captures system background, company expectations, Jason's urology demo, all-specialty modularity, symptom wording provenance, vital-sign decision mapping, June demo pressure, follow-up action items, and the workflow-integration interpretation.
 - `workstreams/05-thursday-vital-sign-research-gate.md`
 - `source/2026-05-12-wu-google-meet-ai-triage-510k/meeting-record.md`
 - `source/2026-05-12-wu-google-meet-ai-triage-510k/user-provided-summary.md`
