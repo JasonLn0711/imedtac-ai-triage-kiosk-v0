@@ -1,6 +1,16 @@
 # AI Triage Kiosk Demo
 
-<img src="http://estruyf-github.azurewebsites.net/api/VisitorHit?user=JasonLn0711&repo=ai-triage-kiosk-demo&countColor=%237B1E7B" alt="Visitor count"/>
+<p>
+  <img src="http://estruyf-github.azurewebsites.net/api/VisitorHit?user=JasonLn0711&repo=ai-triage-kiosk-demo&countColor=%237B1E7B" alt="Visitor count"/>
+  <img src="https://img.shields.io/github/last-commit/JasonLn0711/ai-triage-kiosk-demo?color=7B1E7B" alt="GitHub last commit"/>
+  <img src="https://img.shields.io/github/repo-size/JasonLn0711/ai-triage-kiosk-demo?color=7B1E7B" alt="GitHub repo size"/>
+  <img src="https://img.shields.io/github/languages/top/JasonLn0711/ai-triage-kiosk-demo?color=7B1E7B" alt="GitHub top language"/>
+  <img src="https://img.shields.io/github/issues/JasonLn0711/ai-triage-kiosk-demo?color=7B1E7B" alt="GitHub issues"/>
+  <img src="https://img.shields.io/badge/status-demo--only-7B1E7B" alt="Demo-only status"/>
+  <img src="https://img.shields.io/badge/patient%20data-none-success" alt="No real patient data"/>
+  <img src="https://img.shields.io/badge/source--governed-question%20routing-blue" alt="Source-governed question routing"/>
+  <img src="https://img.shields.io/badge/registry-check%20script-success" alt="Registry check script"/>
+</p>
 
 This repo is the standalone execution home for the 慧誠智醫 / imedtac AI
 triage kiosk demo lane.
