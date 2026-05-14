@@ -13,6 +13,28 @@ Internal deadline is stricter: complete the first rigorous package by Thursday
 `2026-05-14 11:30` Asia/Taipei, because the Rao consultation starts at `13:00`
 and Thursday afternoon cannot safely carry this work.
 
+## Final-Pass Status - 2026-05-14
+
+Status: meeting-ready for Friday feasibility discussion.
+
+Final-pass result:
+
+- Primary use file is `handoff/2026-05-15-friday-discussion-brief.md`.
+- Meeting-control file is
+  `handoff/2026-05-15-huicheng-need-fit-meeting-execution-plan.md`.
+- Source-governance baseline is
+  `handoff/2026-05-15-vital-aware-triage-feasibility-source-governance.md`.
+- Hallucination / claim-boundary audit is
+  `handoff/2026-05-15-hallucination-and-source-grounding-audit.md`.
+- Registry validation passed with
+  `python3 scripts/check_governance_registries.py`.
+
+Use the package as a feasibility and source-governance answer, not as a
+prototype, clinical algorithm, FDA memo, or customer-facing claim set. The
+remaining open items are intentional Friday decisions: target SKU / guaranteed
+fields, synthetic-payload permission, output wording owner, clinical sign-off
+owner, and comparator product or `510(k)` reference.
+
 ## Core Judgment
 
 The right first deliverable is not a prototype build and not a broad FDA memo.
