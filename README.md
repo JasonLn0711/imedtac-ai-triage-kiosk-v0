@@ -1,5 +1,7 @@
 # AI Triage Kiosk Demo
 
+<img src="http://estruyf-github.azurewebsites.net/api/VisitorHit?user=JasonLn0711&repo=ai-triage-kiosk-demo&countColor=%237B1E7B" alt="Visitor count"/>
+
 This repo is the standalone execution home for the 慧誠智醫 / imedtac AI
 triage kiosk demo lane.
 
