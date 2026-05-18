@@ -1,0 +1,9 @@
+source/
+handoff/
+docs/
+planning-bridge/
+decisions/
+data/
+workstreams/
+*.md
+!README.md

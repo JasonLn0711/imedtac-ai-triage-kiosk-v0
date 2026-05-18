@@ -4,6 +4,8 @@ const path = require("node:path");
 const ROOT = path.resolve(__dirname, "../..");
 const REQUIRED_FILES = [
   "package.json",
+  "vercel.json",
+  "scripts/build-vercel.js",
   "app/index.html",
   "app/triage-kiosk/index.html",
   "app/triage-kiosk/triage-kiosk.js",
@@ -41,6 +43,9 @@ assert(engine.CASES.every((demoCase) => demoCase.profile && demoCase.profile.age
 assert(!html.includes("<textarea"), "Demo runtime should stay choice-only and not expose free-text input.");
 assert(engine.QUESTION_BANK.every((question) => question.type !== "text"), "Question bank should not include free-text questions.");
 assert(engine.VERSION.boundary.includes("not diagnosis"), "Safety boundary must reject diagnosis claims.");
+
+const vercelConfig = JSON.parse(read("vercel.json"));
+assert(vercelConfig.outputDirectory === "dist", "Vercel should deploy only the sanitized dist directory.");
 
 const serializedDemo = [html, script, read("core/triage_engine/index.js")].join("\n");
 const forbiddenTerms = [

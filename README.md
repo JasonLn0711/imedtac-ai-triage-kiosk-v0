@@ -101,6 +101,24 @@ Run the verification checks:
 npm run demo:ready
 ```
 
+Build the sanitized Vercel frontend runtime:
+
+```bash
+npm run build
+```
+
+The Vercel build output is `dist/`. It intentionally contains only:
+
+```text
+app/
+core/
+demo/fixtures/
+index.html
+```
+
+It must not contain private source bundles, handoff drafts, patent notes,
+planning snapshots, workstream notes, or governance docs.
+
 The runtime demo is intentionally narrow: synthetic vital payload -> governed
 English choice-only follow-up questions -> staff-review summary. Single-choice
 answers advance immediately after click; multi-choice answers show visible

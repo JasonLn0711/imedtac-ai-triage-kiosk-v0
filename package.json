@@ -4,10 +4,11 @@
   "private": true,
   "description": "English synthetic-data AI triage kiosk demo for workflow-support review.",
   "scripts": {
+    "build": "node scripts/build-vercel.js",
     "start": "python3 -m http.server 4183",
     "smoke": "node scripts/checks/smoke-demo.js",
     "test": "node --test",
-    "demo:ready": "npm test && npm run smoke && git diff --check"
+    "demo:ready": "npm test && npm run smoke && npm run build && git diff --check"
   },
   "keywords": [
     "ai-triage",
