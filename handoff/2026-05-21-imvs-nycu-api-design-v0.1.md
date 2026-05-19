@@ -52,8 +52,10 @@ It does not provide:
 - real patient-data processing;
 - production HIS / EMR / FHIR writeback.
 
-Use `staff_review_summary`, `assessment_support`, or `clinical_review_note` for
-the output field. Do not name the output field `diagnosis`.
+Use `staff_review_summary`, `review_basis`, or `clinical_review_note` for the
+output field. Expert freeze-gate update: prefer `review_basis` over
+`assessment_support` because the latter can be confused with SOAP Assessment.
+Do not name the output field `diagnosis`.
 
 ## Endpoint 1: Start Triage Session / Phase 1 Intake
 
@@ -76,11 +78,16 @@ Required fields:
 | `schema_version` | string | yes | Discussion value: `imvs-nycu-triage-demo-schema-v0.2-draft`. |
 | `flow_version` | string | yes | Discussion value: `respiratory-early-handoff-flow-v0.2-draft`. |
 | `case_id` | string | yes | Synthetic demo case id; do not use real encounter id. |
+| `case_version` | string | yes | Synthetic case content version. |
+| `fixture_version` | string | yes | Synthetic fixture version. |
+| `question_set_version` | string | yes | Question wording/order/mapping version. |
+| `wording_version` | string | yes | Staff-summary wording version pending clinical signoff. |
 | `request_id` | string | yes | Client-generated request id for tracing and retry discussion. |
 | `idempotency_key` | string | yes | Prevents duplicate start-session retries from creating duplicate workflow advancement. |
 | `workflow_mode` | string | yes | Preferred: `parallel_measurement_intake`. Fallback: `post_measurement_only`. |
 | `measurement_state` | string | yes | `in_progress` when asking Phase 1 during measurement; `complete` for post-measurement fallback. |
 | `vitals_ready` | boolean | yes | `false` during Phase 1; `true` after measured vital payload arrives. |
+| `safe_to_ask_phase1_question` | boolean | yes when measurement is active | True only when 慧誠 confirms the current measurement step can safely accept touch questions. |
 | `client.source` | string | yes | Example: `imvs-demo`. |
 | `client.locale` | string | yes | Example: `en-US`. |
 | `patient_context.demo_patient_id` | string | yes | Demo-only ID. Do not send real MRN or name. |
@@ -89,9 +96,11 @@ Required fields:
 | `vitals` | object | yes | iMVS-shaped vital payload. Values may be `null` when `measurement_state=in_progress`. |
 | `vitals.measurement_timestamp` | string/null | yes | ISO timestamp for the vital-sign measurement event; `null` if measurement is still in progress. |
 | `vitals.device_id` | string | yes | Demo device identifier, not a patient identifier. |
-| `vitals.measurement_status` | string | yes | `measured`, `missing`, `failed`, `manual_entry`, or `not_available`; per-vital preferred after field dictionary is frozen. |
-| `vitals.quality_flag` | string | yes | `ok`, `needs_review`, `device_error`, `out_of_range_demo`, or `unknown`; per-vital preferred after field dictionary is frozen. |
-| `vitals.missing_reason` | string/null | no | Required when a vital is missing or failed. |
+| `vitals.<field>.value` | number/null | yes | Per-vital measured value or null. |
+| `vitals.<field>.unit` | string | yes | Explicit unit such as `%`, `C`, `mmHg`, `beats/min`, `cm`, or `kg`. |
+| `vitals.<field>.measurement_status` | string | yes | `measured`, `missing`, `failed`, `manual_entry`, or `not_available`. |
+| `vitals.<field>.quality_flag` | string | yes | `ok`, `needs_review`, `device_error`, `out_of_range_demo`, or `unknown`. |
+| `vitals.<field>.missing_reason` | string/null | no | Required when a vital is missing or failed. |
 | `capabilities.question_types` | array | yes | `single_choice`, `multi_choice`, `scale`. |
 | `capabilities.max_questions` | number | yes | Product spec target: fewer than `8` questions. |
 | `capabilities.voice_input` | boolean | yes | Recommended `false` for June critical path. |
@@ -107,6 +116,8 @@ Required fields:
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |
 | `session_key` | string | yes | Proposed: NYCU generates; iMVS echoes it in later calls. |
+| `request_id` | string | yes | Echo request id for traceability. |
+| `response_id` | string | yes | NYCU response id for demo debugging. |
 | `session_expires_at` | string | yes | Expiry time for the demo session. |
 | `session_state` | string | yes | `active`, `summary_ready`, `expired`, `abandoned`, or `error`. |
 | `last_question_id` | string/null | yes | Last answered or emitted question id; `null` on first question. |
@@ -119,6 +130,10 @@ Required fields:
 | `progress.current` | number | yes | Required for AC07 progress display. |
 | `progress.expected_total` | number | yes | Can be estimated for dynamic flows. |
 | `question.id` | string | yes if `status=question` | Stable runtime question id. |
+| `question.registry_refs` | array | yes | Question registry IDs backing this runtime question. |
+| `question.source_refs` | array | yes | Source IDs backing this runtime question. |
+| `question.evidence_status` | string | yes | Current evidence status. |
+| `question.review_owner` | string | yes | Owner for wording/source review. |
 | `question.type` | string | yes if `status=question` | `single_choice`, `multi_choice`, or `scale`. |
 | `question.text` | string | yes if `status=question` | Rendered question text. |
 | `question.options` | array | yes for choice types | Stable option ids and labels. |
@@ -147,6 +162,10 @@ Required fields:
 | `schema_version` | string | yes | Must match supported demo schema. |
 | `flow_version` | string | yes | Must match the running demo flow. |
 | `case_id` | string | yes | Synthetic demo case id. |
+| `case_version` | string | yes | Synthetic case content version. |
+| `fixture_version` | string | yes | Synthetic fixture version. |
+| `question_set_version` | string | yes | Question wording/order/mapping version. |
+| `wording_version` | string | yes | Staff-summary wording version. |
 | `request_id` | string | yes | Client-generated id for tracing one answer submission. |
 | `idempotency_key` | string | yes | Prevents retry from advancing the question flow twice. |
 | `session_key` | string | yes | Same key returned by Endpoint 1. |
@@ -229,7 +248,7 @@ Required fields:
 | `staff_review_summary.format` | string | yes | Proposed: `review_summary_demo`. |
 | `staff_review_summary.subjective` | array | yes | Patient-reported context. |
 | `staff_review_summary.objective` | array | yes | Measured vitals. |
-| `staff_review_summary.assessment_support` | array | yes | Non-diagnostic review support. |
+| `staff_review_summary.review_basis` | array | yes | Non-diagnostic staff-review context; safer replacement for `assessment_support`. |
 | `staff_review_summary.review_action` | array | yes | Human review reminder only. Replaces the risky `plan_support` wording. |
 | `staff_review_summary.staff_handoff_note` | string | yes | Short safe display string: `Please review measured vitals and reported symptoms.` |
 | `staff_review_summary.not_claimed` | array | yes | Explicit forbidden claims. |

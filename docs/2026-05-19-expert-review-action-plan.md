@@ -80,7 +80,24 @@ Keep:
 Rename:
 
 - Replace `plan_support` with `review_action`.
+- Replace `assessment_support` with `review_basis` unless a named clinical
+  owner explicitly approves the older API label.
 - Add `staff_handoff_note` as a short display-safe string.
+
+Add clinical-content version controls:
+
+- `case_version`
+- `fixture_version`
+- `question_set_version`
+- `wording_version`
+
+Add question traceability:
+
+- runtime `question.id`
+- `registry_refs`
+- `source_refs`
+- `evidence_status`
+- `review_owner`
 
 ### Runtime enforcement
 
@@ -110,8 +127,8 @@ clinical-grade triage
 ```
 
 Implementation note: `scripts/checks/smoke-demo.js` now checks runtime strings,
-demo fixtures, and API example JSON for the expert-forbidden high-risk phrases
-and for `plan_support`.
+demo fixtures, and API example JSON for the expert-forbidden high-risk phrases,
+for `plan_support`, and for risky FDA / 510(k) readiness wording.
 
 ### Respiratory case flow
 
@@ -161,9 +178,10 @@ Avoid:
 ## Immediate Next Actions
 
 1. Update API examples to add the v0.2 fields and replace `plan_support`.
-2. Add API v0.2 requirements file for the `2026-05-22` post-sync deliverable.
-3. Update Thursday owner matrix with privacy/security owner.
-4. Confirm whether 慧誠 can support the two-phase measurement-time question flow.
-5. After Thursday sync, convert confirmed field names into API v0.2.
-6. Keep the runtime forbidden-language smoke check passing before broader demo
+2. Add API question-to-registry mapping and respiratory flow registry row.
+3. Add API v0.2 requirements file for the `2026-05-22` post-sync deliverable.
+4. Update Thursday owner matrix with privacy/security owner.
+5. Confirm whether 慧誠 can support the two-phase measurement-time question flow.
+6. After Thursday sync, convert confirmed field names into API v0.2.
+7. Keep the runtime forbidden-language smoke check passing before broader demo
    sharing.

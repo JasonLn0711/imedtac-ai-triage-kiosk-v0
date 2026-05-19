@@ -30,7 +30,7 @@ engineering or 多寶 gives a concrete reason.
 | --- | --- | --- | --- |
 | `session_key` ownership | NYCU generates `session_key`; iMVS echoes it back. | Keeps dynamic question state in one place for June demo. | 慧誠 must provide their encounter/session id format and retry semantics. |
 | Question timing | Prefer two-phase flow: Phase 1 pre-vital intake during measurement, Phase 2 vital-aware follow-up after values arrive. | Uses measurement waiting time and keeps vital-dependent questions honest. | Use post-measurement-only flow if answering questions disrupts measurement quality or UI cannot support it. |
-| Output field name | Use `staff_review_summary`. Do not use `diagnosis`. | Prevents downstream UI and customer wording from implying diagnosis. | At minimum use `assessment_support`; never label it final diagnosis. |
+| Output field name | Use `staff_review_summary`. Do not use `diagnosis`. | Prevents downstream UI and customer wording from implying diagnosis. | At minimum use `review_basis`; never label it final diagnosis. |
 | Summary action field | Use `review_action` and `staff_handoff_note`; do not use `plan_support`. | Expert review flagged SOAP `Plan` wording as too close to medical action. | Use only generic staff-review note until 多寶 approves wording. |
 | Summary visibility | Set `summary_visibility: "staff_only"`. | Prevents patient-facing interpretation as a clinical result. | If 慧誠 needs patient display, create separate patient-safe copy after clinical review. |
 | Handoff flags | Include `handoff_required` and stable `handoff_reason_codes`. | Makes the respiratory case an explicit staff-review handoff rather than hidden triage advice. | If not implemented, keep respiratory case as static demo only. |
@@ -41,6 +41,7 @@ engineering or 多寶 gives a concrete reason.
 | Evidence refs | Use `LOCAL-PROTOCOL-TBD` for unresolved source mapping. | Honest boundary; avoids claiming BMJ / NICE / UpToDate support without mapped text. | Only cite named sources when exact source text and question mapping are reviewed. |
 | Patient identity | Use `demo_patient_id`; no real name, MRN, ID, phone, or raw audio. | Keeps demo local-safe and non-clinical. | If real identifiers are requested, stop and create separate governance path. |
 | API versioning | Include `api_version`, `schema_version`, `flow_version`, and `case_id`. | Prevents small field changes from silently breaking integration. | If 慧誠 wants fewer fields, keep at least `api_version` and `schema_version`. |
+| Clinical content versioning | Include `case_version`, `fixture_version`, `question_set_version`, and `wording_version`. | Case content, question wording, and staff-summary wording can change clinical meaning. | Keep API v0.2 as draft and do not call it frozen. |
 | Failure fallback | If API fails, show fallback; do not fabricate summary. | Avoids unsafe implied clinical output. | Define 慧誠-owned fallback UI before any live demo. |
 | Done definition | One synthetic case completes vital payload -> Q&A -> summary with no forbidden claim. | Makes first milestone testable. | Meeting must name a different measurable done definition. |
 
@@ -74,6 +75,8 @@ These are the questions that must have owners by the end of the call.
   mutually exclusive "none of these" behavior?
 - Can 慧誠 freeze `measurement_timestamp`, `device_id`, `measurement_status`,
   `quality_flag`, and `missing_reason` semantics for v0.2?
+- Can each vital carry its own `measurement_status`, `quality_flag`, and
+  `missing_reason`, or is June limited to session-level quality?
 
 ### Clinical / 多寶
 
@@ -97,6 +100,7 @@ Fill this table before the call ends.
 | Johnny | Demo date and expected audience story. | `2026-05-21` call | Names customer-demo date and whether it is UI/API/workflow proof. | Keep scope to API skeleton and one synthetic case. |
 | Johnny | Engineering point of contact. | `2026-05-21` call | Names one owner and follow-up channel. | Send questions through Johnny only; slower cadence. |
 | Jason / NYCU | API design v0.2. | `2026-05-22` proposed | Updated with confirmed field names, session ownership, question enum, error behavior. | Keep v0.1 as discussion draft; do not implement adapter. |
+| Jason / NYCU | API question mapping and respiratory flow registry. | `2026-05-22` proposed | Runtime question IDs map to registry/source/review rows and `FLOW-RESPIRATORY-EARLY-HANDOFF` is registered. | Do not call API v0.2 frozen. |
 | Jason / NYCU | Mock adapter / static integration rehearsal plan. | `2026-05-25` proposed | One respiratory case can run through request/answer/summary examples. | Do not expand to more cases. |
 | 多寶 | Respiratory case approval. | `2026-05-22` proposed | Confirms `fever + dyspnea + low SpO2` is acceptable as the first early-handoff case. | Use only static API example; no live clinical-looking flow. |
 | 多寶 | Stop rule, forbidden wording, and safe summary wording. | `2026-05-22` proposed | Approves safe summary wording and flags forbidden phrasing. | Use only generic staff-review wording; no vital interpretation beyond measured values. |

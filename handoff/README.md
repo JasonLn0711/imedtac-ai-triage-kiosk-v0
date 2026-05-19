@@ -42,6 +42,17 @@ Current detailed discussion artifacts:
 - `handoff/2026-05-15-first-principles-gap-audit-and-action-plan.md`
 - `handoff/reviewer-packet/`
 
+Current v0.2 freeze-gate additions:
+
+- runtime question IDs are mapped through `../data/api_question_mapping.csv`;
+- respiratory early handoff is registered as
+  `FLOW-RESPIRATORY-EARLY-HANDOFF`;
+- examples carry `case_version`, `fixture_version`, `question_set_version`, and
+  `wording_version`;
+- staff summary uses `review_basis` rather than `assessment_support`;
+- error examples fall back to standard staff workflow and do not include
+  generated summaries.
+
 ## Friday Mainline Rule
 
 The Friday main brief should answer only the company follow-up questions:
@@ -60,10 +71,11 @@ supplemental notes only if they come up in discussion.
   for the engineering team or whether they need OpenAPI, a mock endpoint, or a
   sequence diagram.
 - Apply the expert-review v0.2 deltas before sharing the next API version:
-  `review_action` instead of `plan_support`, `summary_visibility:
-  "staff_only"`, `handoff_required`, `handoff_reason_codes`, session expiry /
-  state fields, retry / idempotency fields, measurement-quality fields, stable
-  error behavior, and no fake summary on failure.
+  `review_basis` / `review_action` instead of `assessment_support` /
+  `plan_support`, `summary_visibility: "staff_only"`, `handoff_required`,
+  `handoff_reason_codes`, session expiry / state fields, retry / idempotency
+  fields, measurement-quality fields, stable error behavior, and no fake
+  summary on failure.
 - Confirm whether 慧誠 can support the two-phase question flow: Phase 1
   pre-vital intake during measurement, vitals-ready update, then Phase 2
   vital-aware follow-up. If this disrupts measurement quality, use the

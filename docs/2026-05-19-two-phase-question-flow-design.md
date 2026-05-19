@@ -28,6 +28,12 @@ This should become the recommended v0.2 API and UI flow, while preserving the
 existing post-measurement-only flow as fallback if 慧誠 cannot render questions
 during measurement.
 
+Expert freeze-gate update: `measurement_state=in_progress` is not enough to
+prove it is safe to ask questions. The API should include an explicit
+`safe_to_ask_phase1_question` or equivalent UI/measurement-step signal, and
+慧誠 must identify which measurement steps allow touch interaction without
+degrading measurement quality.
+
 ## Why This Is Better
 
 This workflow can save patient time and improve perceived efficiency because
@@ -110,6 +116,7 @@ Add these fields to question responses:
 | `workflow_mode` | `parallel_measurement_intake` |
 | `measurement_state` | `not_started`, `in_progress`, `complete`, `failed` |
 | `vitals_ready` | boolean |
+| `safe_to_ask_phase1_question` | boolean; true only for a confirmed safe measurement interaction window |
 | `question_phase` | `pre_vital_intake`, `post_vital_followup`, `summary` |
 | `phase_reason` | short explanation for why this phase/question is allowed |
 
@@ -175,6 +182,7 @@ recommend treatment, or write to HIS/EMR.
 The two-phase flow is ready for June only when:
 
 - Phase 1 questions are confirmed not to depend on vital values.
+- 慧誠 confirms the specific measurement step is safe for touch interaction.
 - Phase 2 starts only after vital payload and quality flags are available.
 - API examples show `question_phase`, `measurement_state`, and `vitals_ready`.
 - Errors never fabricate Phase 2 questions or summaries.

@@ -21,6 +21,7 @@ demo lane and its direct upstream Prof. Wu context.
 | `2026-05-19 17:19-17:50` | `source/2026-05-19-duobao-line-thursday-engineering-sync/` | Jason coordinated with 多寶 for the Thursday engineering sync. 多寶 was available, provided email, received the forwarded materials, and the meeting was confirmed for Thursday `2026-05-21 10:00` pending the 慧誠 meeting link. |
 | `2026-05-19 17:24-17:49` | `source/2026-05-19-johnny-direct-line-thursday-engineering-sync/` | Johnny clarified the spec's triage standards and presentation logic are AI-discussed drafts and adjustable in practice. Jason coordinated 許醫師 / 多寶 inclusion, forwarded the email, shared the email address, and finalized Thursday `10:00` as the sync time. |
 | `2026-05-19` | `source/2026-05-19-expert-review-scope-api-boundary/` | Expert reply after reviewing the project packet. Confirms the scope cut is appropriate if framed as `synthetic-data vital-aware intake + staff-review summary`, not clinical triage product. Adds required v0.2 deltas: runtime enforcement, clinical stop rule, field dictionary, failure fallback, UI wording lock, `review_action` replacing `plan_support`, staff-only summary, handoff flags, and privacy/security owner/date closeout. |
+| `2026-05-19` | `source/2026-05-19-expert-review-v02-freeze-gate/` | Second expert reply on the v0.2 freeze gate. Confirms the demo can proceed but API v0.2 is not frozen; adds timestamp correction, API question-to-registry mapping, respiratory flow registry alignment, per-vital quality preference, expanded error examples, `assessment_support` -> `review_basis`, case/fixture/question/wording versions, and owner/date/fallback closeout for Thursday. |
 | `2026-05-19` | `source/2026-05-19-duobao-two-phase-vital-questioning/` | User-provided clarification of 多寶's two-phase question-flow insight: ask non-vital-dependent questions while vital signs are being measured, then use measured vital values to choose the second-stage follow-up. This becomes the preferred API/UI design if 慧誠 can support it without disrupting measurement quality. |
 
 The `2026-05-12` source folder now also contains Johnny Fang's company-side
@@ -52,6 +53,7 @@ Derived analysis:
 - `source/2026-05-19-duobao-line-thursday-engineering-sync/source.md`
 - `source/2026-05-19-johnny-direct-line-thursday-engineering-sync/source.md`
 - `source/2026-05-19-expert-review-scope-api-boundary/source.md`
+- `source/2026-05-19-expert-review-v02-freeze-gate/source.md`
 - `source/2026-05-19-duobao-two-phase-vital-questioning/source.md`
 - `docs/2026-05-19-expert-review-action-plan.md`
 - `docs/2026-05-19-two-phase-question-flow-design.md`

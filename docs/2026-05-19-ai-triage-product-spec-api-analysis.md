@@ -205,7 +205,7 @@ or return a demo staff-summary:
     "objective": [
       "Synthetic measured vitals include fever, increased respiratory rate, and lower oxygen saturation than expected for this demo scenario."
     ],
-    "assessment_support": [
+    "review_basis": [
       "Staff should review the respiratory complaint and measured vitals."
     ],
     "review_action": [
@@ -236,7 +236,7 @@ or return a demo staff-summary:
 | Session state | The API needs explicit expiry and last-question recovery. | Add `session_expires_at`, `session_state`, and `last_question_id`. |
 | Question type enum | Needed for UI rendering. | Freeze `single_choice`, `multi_choice`, and `scale` first. |
 | Progress semantics | AC07 asks for visible progress. | Return `current`, `expected_total`, and optional `remaining_estimate`. |
-| "Diagnosis" field wording | Company email uses `診斷等格式`. | Rename our output as `summary` / `assessment_support`, not `diagnosis`. |
+| "Diagnosis" field wording | Company email uses `診斷等格式`. | Rename our output as `summary` / `staff_review_summary` with `review_basis`, not `diagnosis`. |
 | `plan_support` wording | Expert review flagged SOAP `Plan` wording as risky. | Replace with `review_action` and `staff_handoff_note`. |
 | Scale widget | Spec AC11 needs it; current v0 may not fully cover it. | Add or stub a pain/severity scale after core question manifest gate. |
 | Evidence mapping | Spec AC16 asks for source links. | For demo, expose `evidence_refs` and mark unresolved rows as `LOCAL-PROTOCOL-TBD`. |
@@ -253,7 +253,7 @@ Use this stance in the next technical sync:
 - iMVS can submit answer objects with the same `session_key`; NYCU returns either
   the next question or a demo staff-summary JSON.
 - We recommend wording the final field as `staff_review_summary`, with
-  `summary_visibility: "staff_only"`, `handoff_required`, `review_action`, and
+  `summary_visibility: "staff_only"`, `handoff_required`, `review_basis`, `review_action`, and
   `staff_handoff_note`, not `diagnosis` or `plan_support`, for the June customer
   demo.
 - Voice can remain optional; if shown, it should have transcript confirmation

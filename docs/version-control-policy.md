@@ -35,6 +35,9 @@ v0.2.0
 | API version | `data/version_manifest.json`, `handoff/api-examples/*.json` | `npm run version:check` |
 | Schema version | `data/version_manifest.json`, `handoff/api-examples/*.json` | `npm run version:check` |
 | Flow version | `data/version_manifest.json`, `handoff/api-examples/*.json`, `data/flow_registry.csv` | `npm run version:check` |
+| Case / fixture version | `data/version_manifest.json`, `handoff/api-examples/*.json`, `demo/fixtures/*.json` | `npm run version:check`, `python3 scripts/check_governance_registries.py` |
+| Question set version | `data/version_manifest.json`, `handoff/api-examples/*.json`, `data/api_question_mapping.csv` | `npm run version:check`, `python3 scripts/check_governance_registries.py` |
+| Wording version | `data/version_manifest.json`, `handoff/api-examples/*.json` | `npm run version:check` |
 | Safety wording | runtime, fixtures, API examples | `npm run smoke` |
 | Demo readiness | version, tests, smoke, build, diff hygiene | `npm run demo:ready` |
 
@@ -65,6 +68,7 @@ Examples:
 - add a new synthetic case;
 - add an optional endpoint or optional fields;
 - change question ordering logic;
+- change `question_set_version`, `case_version`, or `wording_version`;
 - change staff-summary structure while staying staff-only and non-diagnostic.
 
 ### Patch
@@ -114,5 +118,7 @@ choice-only baseline by adding:
 
 - two-phase pre-vital / post-vital question flow;
 - API v0.2 draft fields;
+- respiratory flow registry and API question mapping;
+- case / fixture / question-set / wording version controls;
 - expert-reviewed wording controls;
 - automated version and safety checks.

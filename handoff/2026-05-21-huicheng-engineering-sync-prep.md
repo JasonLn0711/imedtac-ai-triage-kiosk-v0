@@ -159,7 +159,7 @@ Use these field names in the first draft:
 - `phase_reason`
 - `staff_review_summary.subjective`
 - `staff_review_summary.objective`
-- `staff_review_summary.assessment_support`
+- `staff_review_summary.review_basis`
 - `staff_review_summary.review_action`
 - `staff_review_summary.staff_handoff_note`
 - `staff_review_summary.not_claimed`
@@ -219,6 +219,8 @@ Bring this checklist and force closure:
 - [ ] Final summary visibility: `staff_only`.
 - [ ] Handoff flags: `handoff_required` and `handoff_reason_codes`.
 - [ ] No `plan_support`; use `review_action` or `staff_handoff_note`.
+- [ ] No `assessment_support` unless a named clinical owner approves that exact
+      label; default to `review_basis`.
 - [ ] Voice in / out for June.
 - [ ] Demo compute path: external server / laptop / local mock.
 - [ ] UI insertion path.
@@ -443,7 +445,7 @@ If the API field is named `diagnosis`, downstream teams may build UI and claims
 around diagnosis. Freeze safer names now:
 
 - `staff_review_summary`
-- `assessment_support`
+- `review_basis`
 - `clinical_review_note`
 
 ### 7. Voice Input Risk

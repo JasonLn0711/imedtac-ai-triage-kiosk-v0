@@ -104,7 +104,7 @@ Product-spec implications for the current runtime:
 Cut rule:
 
 - Build the API/session contract and mock iMVS adapter before expanding cases.
-- Use `summary`, `assessment_support`, or `staff_review_summary` in payloads.
+- Use `summary`, `review_basis`, or `staff_review_summary` in payloads.
   Do not name the final field `diagnosis`.
 - Ask 慧誠 for one synthetic/de-identified vital payload example, field names,
   UI insertion point, and who will join the technical sync.
@@ -246,6 +246,9 @@ Expert-required changes before API v0.2:
 - add `handoff_required`, `handoff_reason_codes`, and stable `not_claimed`;
 - replace risky `plan_support` wording with `review_action` and/or
   `staff_handoff_note`;
+- replace `assessment_support` with `review_basis` unless a named clinical
+  owner explicitly approves the older label;
+- add question/flow/case/fixture/wording traceability fields;
 - make error behavior explicit: `status=error`, stable `error.code`, and no
   fake summary.
 
