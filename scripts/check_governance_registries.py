@@ -29,6 +29,7 @@ def split_ids(value: str) -> list[str]:
 def main() -> int:
     sources = read_csv(DATA / "source_registry.csv")
     questions = read_csv(DATA / "question_registry.csv")
+    api_questions = read_csv(DATA / "api_question_mapping.csv")
     flows = read_csv(DATA / "flow_registry.csv")
 
     source_ids = {row["source_id"] for row in sources}
@@ -54,6 +55,18 @@ def main() -> int:
             if not row["demo_allowed"].startswith("blocked"):
                 errors.append(
                     f"question {row['question_id']} needs signoff but is not blocked"
+                )
+
+    for row in api_questions:
+        for question_id in split_ids(row["registry_refs"]):
+            if question_id not in question_ids:
+                errors.append(
+                    f"api question {row['api_question_id']} references missing question {question_id}"
+                )
+        for source_id in split_ids(row["source_refs"]):
+            if source_id not in source_ids:
+                errors.append(
+                    f"api question {row['api_question_id']} references missing source {source_id}"
                 )
 
     for row in flows:
@@ -114,7 +127,11 @@ def main() -> int:
             print(f"ERROR: {error}")
         return 1
 
-    print(f"OK sources={len(source_ids)} questions={len(question_ids)} flows={len(flow_ids)}")
+    print(
+        "OK "
+        f"sources={len(source_ids)} questions={len(question_ids)} "
+        f"api_questions={len(api_questions)} flows={len(flow_ids)}"
+    )
     return 0
 
 

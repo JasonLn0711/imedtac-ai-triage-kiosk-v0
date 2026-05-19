@@ -44,7 +44,15 @@ def main() -> int:
     api_contract = manifest["api_contract"]
     for path in sorted((ROOT / "handoff" / "api-examples").glob("*.json")):
         payload = read_json(path)
-        for key in ("api_version", "schema_version", "flow_version"):
+        for key in (
+            "api_version",
+            "schema_version",
+            "flow_version",
+            "case_version",
+            "fixture_version",
+            "question_set_version",
+            "wording_version",
+        ):
             if payload.get(key) != api_contract[key]:
                 errors.append(
                     f"{path.relative_to(ROOT)} {key}={payload.get(key)!r} != {api_contract[key]!r}"

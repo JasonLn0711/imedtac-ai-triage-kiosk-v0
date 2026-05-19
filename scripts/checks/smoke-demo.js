@@ -71,7 +71,10 @@ const expertForbiddenPhrases = [
   "needs emergency treatment",
   "safe to go home",
   "FDA-cleared",
+  "FDA-ready",
   "510(k)-cleared",
+  "510(k)-ready",
+  "predicate-equivalent",
   "clinical-grade triage"
 ];
 const runtimeAndApiExamples = [
