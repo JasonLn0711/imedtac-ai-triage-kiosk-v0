@@ -1,13 +1,13 @@
 ---
-id: 2026-05-13-duobao-line-huicheng-vital-sign-triage
-title: "2026-05-13 Duobao LINE - Huicheng Vital-Sign Triage Clinical Calibration"
+id: 2026-05-13-duobao-line-imedtac-vital-sign-triage
+title: "2026-05-13 Duobao LINE - imedtac Vital-Sign Triage Clinical Calibration"
 date: 2026-05-13
 time: "08:40-09:12 Asia/Taipei"
 type: source-bundle
 source: user-provided-line-thread
 keywords:
   - duobao
-  - huicheng
+  - imedtac
   - imedtac
   - ai-triage
   - vital-signs
@@ -18,10 +18,10 @@ status: active
 participants:
   - 阿聖 Jason
   - 許桓瑜（多寶）
-planning_source_copy: ../planning-everything-track/data/knowledge/personal/sources/2026-05-13-duobao-line-huicheng-vital-sign-triage/source.md
+planning_source_copy: ../planning-everything-track/data/knowledge/personal/sources/2026-05-13-duobao-line-imedtac-vital-sign-triage/source.md
 ---
 
-# 2026-05-13 Duobao LINE - Huicheng Vital-Sign Triage Clinical Calibration
+# 2026-05-13 Duobao LINE - imedtac Vital-Sign Triage Clinical Calibration
 
 ## Context
 

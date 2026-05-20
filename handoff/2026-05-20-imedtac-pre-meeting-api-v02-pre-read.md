@@ -1,5 +1,5 @@
 ---
-id: 2026-05-20-huicheng-pre-meeting-api-v02-pre-read
+id: 2026-05-20-imedtac-pre-meeting-api-v02-pre-read
 title: "慧誠智醫會前提供文件：iMVS / NYCU AI Triage Demo API v0.2 會前閱讀文件"
 date: 2026-05-20
 meeting_date: 2026-05-21

@@ -26,7 +26,7 @@ Path:
 Key locator:
 
 ```text
-../planning-everything-track/data/projects/2026-05-huicheng-er-triage-ekg-asr.md
+../planning-everything-track/data/projects/2026-05-imedtac-er-triage-ekg-asr.md
 ```
 
 Role:
@@ -55,8 +55,8 @@ Role:
 Initial source copies came from:
 
 ```text
-../planning-everything-track/data/knowledge/personal/sources/2026-05-11-wu-huicheng-er-triage-ekg-asr/
-../planning-everything-track/data/knowledge/personal/sources/2026-05-12-huicheng-company-ai-triage-sync/
+../planning-everything-track/data/knowledge/personal/sources/2026-05-11-wu-imedtac-er-triage-ekg-asr/
+../planning-everything-track/data/knowledge/personal/sources/2026-05-12-imedtac-company-ai-triage-sync/
 ../planning-everything-track/data/knowledge/personal/sources/2026-04-16-wu-yute-tomi-meeting/
 ../planning-everything-track/data/knowledge/personal/sources/2026-04-20-cde-prof-wu-clinical-medical-device-it-cybersecurity-speech/
 ```

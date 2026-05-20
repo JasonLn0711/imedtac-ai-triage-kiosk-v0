@@ -19,7 +19,7 @@ Current main meeting packet:
 - `handoff/2026-05-15-complete-meeting-packet.md`
 - `handoff/2026-05-15-complete-meeting-packet-zh-TW.md` for Taiwan Traditional
   Chinese meeting use
-- `handoff/2026-05-15-huicheng-anticipated-q-and-a-zh-TW.md` for anticipated
+- `handoff/2026-05-15-imedtac-anticipated-q-and-a-zh-TW.md` for anticipated
   imedtac questions and Taiwan Traditional Chinese answer wording
 
 Current detailed discussion artifacts:
@@ -27,9 +27,9 @@ Current detailed discussion artifacts:
 - `handoff/2026-05-20-nycu-response-to-imedtac-ai-triage-demo-api-v02.md`
   - Active copy of the user's manually edited file recorded under
     `source/2026-05-20-nycu-response-to-imedtac-user-edited/`
-- `handoff/2026-05-20-huicheng-pre-meeting-api-v02-pre-read.md`
+- `handoff/2026-05-20-imedtac-pre-meeting-api-v02-pre-read.md`
 - `docs/writing-method-policy.md`
-- `handoff/2026-05-21-huicheng-engineering-sync-prep.md`
+- `handoff/2026-05-21-imedtac-engineering-sync-prep.md`
 - `handoff/2026-05-21-imedtac-meeting-q-and-a.md`
 - `handoff/2026-05-21-imvs-nycu-api-design-v0.2-draft.md`
 - `handoff/2026-05-21-decision-defaults-and-owner-matrix.md`
@@ -40,7 +40,7 @@ Current detailed discussion artifacts:
 - `handoff/api-examples/` for the first iMVS / NYCU JSON request and response
   examples
 - `handoff/2026-05-15-hallucination-and-source-grounding-audit.md`
-- `handoff/2026-05-15-huicheng-need-fit-meeting-execution-plan.md`
+- `handoff/2026-05-15-imedtac-need-fit-meeting-execution-plan.md`
 - `handoff/2026-05-15-510k-comparable-product-scan.md`
 - `handoff/2026-05-15-vital-aware-triage-feasibility-source-governance.md`
 - `handoff/2026-05-15-source-registry-and-example-flows.md`

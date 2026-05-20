@@ -234,7 +234,7 @@ Primary:
 - `handoff/2026-05-15-friday-discussion-brief.md`
 - the five-slide outline inside that file;
 - the vital-to-question table from `handoff/2026-05-15-vital-aware-triage-feasibility-source-governance.md`;
-- 多寶 calibration notes from `source/2026-05-13-duobao-line-huicheng-vital-sign-triage/source.md`.
+- 多寶 calibration notes from `source/2026-05-13-duobao-line-imedtac-vital-sign-triage/source.md`.
 
 Supplemental only if asked:
 

@@ -1,6 +1,6 @@
 ---
-id: 2026-05-12-huicheng-company-ai-triage-sync-transcript-cleaned
-title: "2026-05-12 Cleaned Transcript - Huicheng AI Triage Sync"
+id: 2026-05-12-imedtac-company-ai-triage-sync-transcript-cleaned
+title: "2026-05-12 Cleaned Transcript - imedtac AI Triage Sync"
 date: 2026-05-12
 time: "13:00 Asia/Taipei"
 topic: personal
@@ -9,7 +9,7 @@ type: transcript
 source: user-provided-transcript
 status: active
 privacy: private-meeting-evidence
-keywords: [huicheng, imedtac, ai-triage, urgent-care, vital-sign-kiosk, asr, llm, fhir, his, emr, transcript]
+keywords: [imedtac, imedtac, ai-triage, urgent-care, vital-sign-kiosk, asr, llm, fhir, his, emr, transcript]
 ---
 
 # Cleaned Transcript

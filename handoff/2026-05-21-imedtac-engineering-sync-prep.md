@@ -1,5 +1,5 @@
 ---
-id: 2026-05-21-huicheng-engineering-sync-prep
+id: 2026-05-21-imedtac-engineering-sync-prep
 title: "慧誠 Thursday Engineering Sync Prep"
 date: 2026-05-21
 topic: ai-triage

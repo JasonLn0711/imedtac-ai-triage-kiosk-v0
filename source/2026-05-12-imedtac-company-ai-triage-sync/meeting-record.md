@@ -1,6 +1,6 @@
 ---
-id: 2026-05-12-huicheng-company-ai-triage-sync-meeting-record
-title: "2026-05-12 Meeting Record - Huicheng Company AI Triage Sync"
+id: 2026-05-12-imedtac-company-ai-triage-sync-meeting-record
+title: "2026-05-12 Meeting Record - imedtac Company AI Triage Sync"
 date: 2026-05-12
 time: "13:00 Asia/Taipei"
 topic: personal
@@ -8,7 +8,7 @@ subtopic: sources
 type: meeting-record
 source: user-provided-transcript
 course: ""
-keywords: [huicheng, imedtac, ai-triage, urgent-care, vital-sign-kiosk, asr, llm, fhir, his, emr, product-demo]
+keywords: [imedtac, imedtac, ai-triage, urgent-care, vital-sign-kiosk, asr, llm, fhir, his, emr, product-demo]
 status: active
 ---
 
@@ -31,11 +31,11 @@ status: active
 
 **相關材料：**
 
-- Cleaned transcript: `source/2026-05-12-huicheng-company-ai-triage-sync/transcript-cleaned.md`
-- Polished interpretation brief: `source/2026-05-12-huicheng-company-ai-triage-sync/demo-brief.md`
-- Company follow-up package: `source/2026-05-12-huicheng-company-ai-triage-sync/assets/`
-- Extracted follow-up text: `source/2026-05-12-huicheng-company-ai-triage-sync/extracted/`
-- Detailed materials analysis: `docs/2026-05-12-huicheng-materials-analysis.md`
+- Cleaned transcript: `source/2026-05-12-imedtac-company-ai-triage-sync/transcript-cleaned.md`
+- Polished interpretation brief: `source/2026-05-12-imedtac-company-ai-triage-sync/demo-brief.md`
+- Company follow-up package: `source/2026-05-12-imedtac-company-ai-triage-sync/assets/`
+- Extracted follow-up text: `source/2026-05-12-imedtac-company-ai-triage-sync/extracted/`
+- Detailed materials analysis: `docs/2026-05-12-imedtac-materials-analysis.md`
 
 ## 一、會議核心背景
 

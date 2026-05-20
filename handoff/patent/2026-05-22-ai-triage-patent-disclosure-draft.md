@@ -9,8 +9,8 @@ Draft date: `2026-05-18`
 
 Source basis:
 
-- `source/2026-05-13-duobao-line-huicheng-vital-sign-triage/source.md`
-- `source/2026-05-15-huicheng-second-sync-and-duobao-followup/meeting-record.md`
+- `source/2026-05-13-duobao-line-imedtac-vital-sign-triage/source.md`
+- `source/2026-05-15-imedtac-second-sync-and-duobao-followup/meeting-record.md`
 - `docs/architecture-insertion-and-clinical-grounding.md`
 - `handoff/2026-05-15-june-demo-case-pack-v0.md`
 - `handoff/reviewer-packet/claim-language-control.md`

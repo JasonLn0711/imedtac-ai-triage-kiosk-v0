@@ -1,6 +1,6 @@
 ---
-id: 2026-05-11-wu-huicheng-er-triage-ekg-asr-source
-title: "2026-05-11 Prof. Wu Huicheng ER Triage EKG ASR Discussion"
+id: 2026-05-11-wu-imedtac-er-triage-ekg-asr-source
+title: "2026-05-11 Prof. Wu imedtac ER Triage EKG ASR Discussion"
 date: 2026-05-11
 time: "afternoon after seminar Asia/Taipei"
 topic: personal
@@ -8,14 +8,14 @@ subtopic: sources
 type: source-bundle
 source: user-provided-transcript
 course: ""
-keywords: [wu-yute, yu-zong, huicheng, er-triage, ekg, asr, llm, edge-computing, eeg, loreta]
+keywords: [wu-yute, yu-zong, imedtac, er-triage, ekg, asr, llm, edge-computing, eeg, loreta]
 status: active
 participants:
   - Wu, YuTe
   - Lin, Jun-Yi
   - Jason
 topics:
-  - Huicheng emergency triage device collaboration
+  - imedtac emergency triage device collaboration
   - EKG normal/abnormal classification
   - ASR or touch-based questionnaire
   - LLM necessity and human-workflow question

@@ -7,7 +7,7 @@ Status: main meeting talking track; supplemental notes are used only if asked.
 
 Related supplemental artifacts:
 
-- `handoff/2026-05-15-huicheng-need-fit-meeting-execution-plan.md`
+- `handoff/2026-05-15-imedtac-need-fit-meeting-execution-plan.md`
 - `handoff/2026-05-15-vital-aware-triage-feasibility-source-governance.md`
 - `handoff/2026-05-15-source-registry-and-example-flows.md`
 - `handoff/2026-05-15-first-principles-gap-audit-and-action-plan.md`

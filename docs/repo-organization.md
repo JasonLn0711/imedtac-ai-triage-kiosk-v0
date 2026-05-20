@@ -13,14 +13,14 @@ ai-triage-kiosk-demo/
     repo-relationships.md
     repo-organization.md
   source/
-    2026-05-11-wu-huicheng-er-triage-ekg-asr/
-    2026-05-12-huicheng-company-ai-triage-sync/
-    2026-05-15-huicheng-second-sync-and-duobao-followup/
+    2026-05-11-wu-imedtac-er-triage-ekg-asr/
+    2026-05-12-imedtac-company-ai-triage-sync/
+    2026-05-15-imedtac-second-sync-and-duobao-followup/
     upstream-wu-context/
       2026-04-16-wu-yute-tomi-meeting/
       2026-04-20-cde-prof-wu-clinical-medical-device-it-cybersecurity-speech/
   planning-bridge/
-    2026-05-huicheng-er-triage-ekg-asr.md
+    2026-05-imedtac-er-triage-ekg-asr.md
     project-locators/
   workstreams/
   decisions/
@@ -41,7 +41,7 @@ ai-triage-kiosk-demo/
 ## Canonical Routing
 
 - Current execution detail goes here.
-- Planning status goes to `../planning-everything-track/data/projects/2026-05-huicheng-er-triage-ekg-asr.md`.
+- Planning status goes to `../planning-everything-track/data/projects/2026-05-imedtac-er-triage-ekg-asr.md`.
 - Urology implementation details stay in `../urology-ai-previsit-demo`.
 - Regulatory-memory details stay in `../tfda-fda-regulatory-advisor`.
 - Medical cybersecurity deck execution stays in its own talk / deck repo.

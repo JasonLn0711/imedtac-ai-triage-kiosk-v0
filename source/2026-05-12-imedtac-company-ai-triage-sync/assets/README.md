@@ -8,7 +8,7 @@ kiosk demo lane.
 
 | Local file | Original name | Purpose |
 | --- | --- | --- |
-| `2026-05-12-huicheng-ai-triage-followup-email.pdf` | `Gmail - [20260512] AI-Triage 討論會議記錄.pdf` | Company-side AI-generated meeting minutes, action items, and reference links from Johnny Fang. |
+| `2026-05-12-imedtac-ai-triage-followup-email.pdf` | `Gmail - [20260512] AI-Triage 討論會議記錄.pdf` | Company-side AI-generated meeting minutes, action items, and reference links from Johnny Fang. |
 | `2026-05-12-imvs-product-spec-v2.0.4.docx` | `1. iMVS_Product Spec_-V2.0.4.docx` | iMVS product specification, including product architecture, software modules, UI flow, and hardware specifications. |
 | `2026-05-12-imvs-api-v1.4-eng.pdf` | `2. iMVS_API_V.1.4_12052026_Eng.pdf` | iMVS API definition for optional patient authentication and vital-sign upload. |
 

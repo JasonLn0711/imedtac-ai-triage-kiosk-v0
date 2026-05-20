@@ -7,7 +7,7 @@ type: clinical-workflow-source
 status: archived
 source: user-provided supplemental note
 related:
-  - ../2026-05-15-huicheng-second-sync-and-duobao-followup/meeting-record.md
+  - ../2026-05-15-imedtac-second-sync-and-duobao-followup/meeting-record.md
 ---
 
 # Duobao Two-Phase Vital-Sign Questioning Insight
@@ -54,5 +54,5 @@ This is a good June-demo workflow cut because it:
 
 - `../../docs/2026-05-19-two-phase-question-flow-design.md`
 - `../../handoff/2026-05-22-api-v0.2-requirements-from-expert-review.md`
-- `../../handoff/2026-05-21-huicheng-engineering-sync-prep.md`
+- `../../handoff/2026-05-21-imedtac-engineering-sync-prep.md`
 - `../../workstreams/08-june-demo-case-and-integration-plan.md`

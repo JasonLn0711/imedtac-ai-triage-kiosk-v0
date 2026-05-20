@@ -11,7 +11,7 @@ participants:
   - 林家聖
   - 吳育德老師
 keywords:
-  - huicheng
+  - imedtac
   - imedtac
   - ai-triage
   - google-meet
@@ -26,8 +26,8 @@ keywords:
   - lianyi
 status: active
 related:
-  - data/projects/2026-05-huicheng-er-triage-ekg-asr.md
-  - data/knowledge/personal/sources/2026-05-12-huicheng-company-ai-triage-sync/source.md
+  - data/projects/2026-05-imedtac-er-triage-ekg-asr.md
+  - data/knowledge/personal/sources/2026-05-12-imedtac-company-ai-triage-sync/source.md
   - data/knowledge/personal/sources/2026-05-12-wu-line-lianyi-asr-llm-demo/source.md
   - ../ai-triage-kiosk-demo/source/2026-05-12-wu-google-meet-ai-triage-510k/
 ---

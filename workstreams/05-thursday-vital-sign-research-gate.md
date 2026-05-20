@@ -21,7 +21,7 @@ Final-pass result:
 
 - Primary use file is `handoff/2026-05-15-friday-discussion-brief.md`.
 - Meeting-control file is
-  `handoff/2026-05-15-huicheng-need-fit-meeting-execution-plan.md`.
+  `handoff/2026-05-15-imedtac-need-fit-meeting-execution-plan.md`.
 - Source-governance baseline is
   `handoff/2026-05-15-vital-aware-triage-feasibility-source-governance.md`.
 - Hallucination / claim-boundary audit is
@@ -69,9 +69,9 @@ Friday meeting constraint:
 Company / product sources:
 
 - iMVS product spec v2.0.4:
-  `source/2026-05-12-huicheng-company-ai-triage-sync/assets/2026-05-12-imvs-product-spec-v2.0.4.docx`
+  `source/2026-05-12-imedtac-company-ai-triage-sync/assets/2026-05-12-imvs-product-spec-v2.0.4.docx`
 - iMVS API v1.4:
-  `source/2026-05-12-huicheng-company-ai-triage-sync/assets/2026-05-12-imvs-api-v1.4-eng.pdf`
+  `source/2026-05-12-imedtac-company-ai-triage-sync/assets/2026-05-12-imvs-api-v1.4-eng.pdf`
 - iMVS product page:
   `https://www.imedtac.com/service/%e6%99%ba%e6%85%a7%e7%94%9f%e7%90%86%e9%87%8f%e6%b8%ac%e7%ab%99/`
 - Company demo video:

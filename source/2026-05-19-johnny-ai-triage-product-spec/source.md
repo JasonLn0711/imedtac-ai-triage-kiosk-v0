@@ -138,6 +138,6 @@ and no production HIS writeback.
 
 Planning repo should keep only status, locator, blocker, and next-action notes:
 
-- `../planning-everything-track/data/projects/2026-05-huicheng-er-triage-ekg-asr.md`
+- `../planning-everything-track/data/projects/2026-05-imedtac-er-triage-ekg-asr.md`
 - `../planning-everything-track/data/knowledge/personal/sources/2026-05-19-johnny-ai-triage-product-spec/source.md`
 - `../planning-everything-track/weeks/2026-W21/days/2026-05-19.md`

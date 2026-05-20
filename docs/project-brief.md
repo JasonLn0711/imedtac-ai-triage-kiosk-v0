@@ -48,7 +48,7 @@ Supporting context:
 docs/source-index.md
 docs/wu-instruction-register.md
 workstreams/
-docs/2026-05-12-huicheng-materials-analysis.md
+docs/2026-05-12-imedtac-materials-analysis.md
 ```
 
 ## What Exists

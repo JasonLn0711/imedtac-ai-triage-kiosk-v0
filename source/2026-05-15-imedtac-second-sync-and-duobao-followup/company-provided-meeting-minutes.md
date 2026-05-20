@@ -1,17 +1,17 @@
 ---
-id: 2026-05-15-huicheng-company-provided-meeting-minutes
-title: "2026-05-15 Huicheng-Provided Meeting Minutes And Comparison"
+id: 2026-05-15-imedtac-company-provided-meeting-minutes
+title: "2026-05-15 imedtac-Provided Meeting Minutes And Comparison"
 date: 2026-05-15
 time: "15:25 Asia/Taipei"
 topic: personal
 subtopic: sources
 type: company-provided-minutes
 source: company-provided-email-pdf
-keywords: [huicheng, imedtac, ai-triage, meeting-minutes, urgent-care, june-demo, action-items, comparison]
+keywords: [imedtac, imedtac, ai-triage, meeting-minutes, urgent-care, june-demo, action-items, comparison]
 status: active
-source_id: HUICHENG-MINUTES-20260515
-pdf_file: assets/2026-05-15-huicheng-company-meeting-minutes-email.pdf
-extracted_text_file: extracted/2026-05-15-huicheng-company-meeting-minutes-email.txt
+source_id: IMEDTAC-MINUTES-20260515
+pdf_file: assets/2026-05-15-imedtac-company-meeting-minutes-email.pdf
+extracted_text_file: extracted/2026-05-15-imedtac-company-meeting-minutes-email.txt
 related_internal_record: meeting-record.md
 ---
 
@@ -22,8 +22,8 @@ This note records 慧誠智醫's own post-meeting minutes from Johnny Fang's
 
 The complete original email is preserved as:
 
-- PDF: `assets/2026-05-15-huicheng-company-meeting-minutes-email.pdf`
-- Searchable text: `extracted/2026-05-15-huicheng-company-meeting-minutes-email.txt`
+- PDF: `assets/2026-05-15-imedtac-company-meeting-minutes-email.pdf`
+- Searchable text: `extracted/2026-05-15-imedtac-company-meeting-minutes-email.txt`
 
 ## Email Context
 

@@ -28,22 +28,22 @@
 - Governance registries: `../ai-triage-kiosk-demo/data/`
 - Synthetic demo fixtures: `../ai-triage-kiosk-demo/demo/fixtures/`
 - Registry validation script: `../ai-triage-kiosk-demo/scripts/check_governance_registries.py`
-- Source bundle: `data/knowledge/personal/sources/2026-05-11-wu-huicheng-er-triage-ekg-asr/source.md`
-- Meeting record: `data/knowledge/personal/sources/2026-05-11-wu-huicheng-er-triage-ekg-asr/meeting-record.md`
-- Company-sync source bundle: `data/knowledge/personal/sources/2026-05-12-huicheng-company-ai-triage-sync/source.md`
-- Company-sync meeting record: `data/knowledge/personal/sources/2026-05-12-huicheng-company-ai-triage-sync/meeting-record.md`
-- Company-sync demo brief: `data/knowledge/personal/sources/2026-05-12-huicheng-company-ai-triage-sync/demo-brief.md`
-- Company-sync cleaned transcript: `data/knowledge/personal/sources/2026-05-12-huicheng-company-ai-triage-sync/transcript-cleaned.md`
-- Company follow-up materials analysis: `../ai-triage-kiosk-demo/docs/2026-05-12-huicheng-materials-analysis.md`
-- LINE-group context source: `data/knowledge/personal/sources/2026-05-02-12-huicheng-zhidewan-line-thread/source.md`
+- Source bundle: `data/knowledge/personal/sources/2026-05-11-wu-imedtac-er-triage-ekg-asr/source.md`
+- Meeting record: `data/knowledge/personal/sources/2026-05-11-wu-imedtac-er-triage-ekg-asr/meeting-record.md`
+- Company-sync source bundle: `data/knowledge/personal/sources/2026-05-12-imedtac-company-ai-triage-sync/source.md`
+- Company-sync meeting record: `data/knowledge/personal/sources/2026-05-12-imedtac-company-ai-triage-sync/meeting-record.md`
+- Company-sync demo brief: `data/knowledge/personal/sources/2026-05-12-imedtac-company-ai-triage-sync/demo-brief.md`
+- Company-sync cleaned transcript: `data/knowledge/personal/sources/2026-05-12-imedtac-company-ai-triage-sync/transcript-cleaned.md`
+- Company follow-up materials analysis: `../ai-triage-kiosk-demo/docs/2026-05-12-imedtac-materials-analysis.md`
+- LINE-group context source: `data/knowledge/personal/sources/2026-05-02-12-imedtac-zhidewan-line-thread/source.md`
 - Prof. Wu LINE demo request source: `data/knowledge/personal/sources/2026-05-12-wu-line-lianyi-asr-llm-demo/source.md`
 - Prof. Wu Google Meet 510(k) direction source:
   `data/knowledge/personal/sources/2026-05-12-wu-google-meet-ai-triage-510k/source.md`
 - Prof. Wu Google Meet 510(k) meeting record:
   `data/knowledge/personal/sources/2026-05-12-wu-google-meet-ai-triage-510k/meeting-record.md`
 - Execution-repo source copies:
-  - `../ai-triage-kiosk-demo/source/2026-05-11-wu-huicheng-er-triage-ekg-asr/`
-  - `../ai-triage-kiosk-demo/source/2026-05-12-huicheng-company-ai-triage-sync/`
+  - `../ai-triage-kiosk-demo/source/2026-05-11-wu-imedtac-er-triage-ekg-asr/`
+  - `../ai-triage-kiosk-demo/source/2026-05-12-imedtac-company-ai-triage-sync/`
   - `../ai-triage-kiosk-demo/source/2026-05-12-wu-google-meet-ai-triage-510k/`
   - `../ai-triage-kiosk-demo/source/upstream-wu-context/2026-04-16-wu-yute-tomi-meeting/`
   - `../ai-triage-kiosk-demo/source/upstream-wu-context/2026-04-20-cde-prof-wu-clinical-medical-device-it-cybersecurity-speech/`
@@ -124,7 +124,7 @@ Current best interpretation:
 
 > 慧誠智醫短期希望在六月前，基於我們現有的 triage prototype，快速做出英文版 demo，能被放進他們既有 Kiosk / web service 產品流程中，展示「慧誠智醫 + 智德萬 / 吳老師團隊已具備 AI triage capability」。這個 demo 主要用途是 go-to-market 與美國客戶展示，還不是正式醫療決策產品。
 
-The full polished version, including Mermaid diagrams and the reusable writing format, is preserved in `data/knowledge/personal/sources/2026-05-12-huicheng-company-ai-triage-sync/demo-brief.md`.
+The full polished version, including Mermaid diagrams and the reusable writing format, is preserved in `data/knowledge/personal/sources/2026-05-12-imedtac-company-ai-triage-sync/demo-brief.md`.
 
 Updated concrete product context:
 
@@ -167,17 +167,17 @@ Current blocker after the company follow-up package:
 Johnny Fang's company-side follow-up email and two attachments were moved out
 of `~/Downloads` and into the execution repo:
 
-- `../ai-triage-kiosk-demo/source/2026-05-12-huicheng-company-ai-triage-sync/assets/2026-05-12-huicheng-ai-triage-followup-email.pdf`
-- `../ai-triage-kiosk-demo/source/2026-05-12-huicheng-company-ai-triage-sync/assets/2026-05-12-imvs-product-spec-v2.0.4.docx`
-- `../ai-triage-kiosk-demo/source/2026-05-12-huicheng-company-ai-triage-sync/assets/2026-05-12-imvs-api-v1.4-eng.pdf`
+- `../ai-triage-kiosk-demo/source/2026-05-12-imedtac-company-ai-triage-sync/assets/2026-05-12-imedtac-ai-triage-followup-email.pdf`
+- `../ai-triage-kiosk-demo/source/2026-05-12-imedtac-company-ai-triage-sync/assets/2026-05-12-imvs-product-spec-v2.0.4.docx`
+- `../ai-triage-kiosk-demo/source/2026-05-12-imedtac-company-ai-triage-sync/assets/2026-05-12-imvs-api-v1.4-eng.pdf`
 
 Searchable text extracts are preserved under:
 
-- `../ai-triage-kiosk-demo/source/2026-05-12-huicheng-company-ai-triage-sync/extracted/`
+- `../ai-triage-kiosk-demo/source/2026-05-12-imedtac-company-ai-triage-sync/extracted/`
 
 Detailed analysis:
 
-- `../ai-triage-kiosk-demo/docs/2026-05-12-huicheng-materials-analysis.md`
+- `../ai-triage-kiosk-demo/docs/2026-05-12-imedtac-materials-analysis.md`
 
 Main update:
 
@@ -301,7 +301,7 @@ Planning interpretation:
 
 The broader 智德萬 / 慧誠智醫 LINE-group thread is preserved as a private source note:
 
-- `data/knowledge/personal/sources/2026-05-02-12-huicheng-zhidewan-line-thread/source.md`
+- `data/knowledge/personal/sources/2026-05-02-12-imedtac-zhidewan-line-thread/source.md`
 
 Planning interpretation from the LINE thread:
 

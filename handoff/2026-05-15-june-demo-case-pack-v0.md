@@ -5,7 +5,7 @@ date: 2026-05-15
 topic: ai-triage
 type: handoff
 status: draft
-source_bundle: ../source/2026-05-15-huicheng-second-sync-and-duobao-followup/
+source_bundle: ../source/2026-05-15-imedtac-second-sync-and-duobao-followup/
 ---
 
 # June AI-Triage Demo Case Pack v0
@@ -27,7 +27,7 @@ material mentioned `8-10`; the later 慧誠 / iMVS product spec says fewer than
 families should be confirmed against the vital-sign story before implementation.
 
 多寶's first case draft is preserved at
-`source/2026-05-15-huicheng-second-sync-and-duobao-followup/duobao-demo-case-draft.md`.
+`source/2026-05-15-imedtac-second-sync-and-duobao-followup/duobao-demo-case-draft.md`.
 Use it as a clinical design anchor, not as customer-facing diagnosis output.
 
 多寶's later structured case and question-design files are preserved at

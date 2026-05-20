@@ -1,6 +1,6 @@
 ---
-id: 2026-05-12-huicheng-company-ai-triage-sync-source
-title: "2026-05-12 Huicheng Company AI Triage Sync"
+id: 2026-05-12-imedtac-company-ai-triage-sync-source
+title: "2026-05-12 imedtac Company AI Triage Sync"
 date: 2026-05-12
 time: "13:00 Asia/Taipei"
 topic: personal
@@ -8,7 +8,7 @@ subtopic: sources
 type: source-bundle
 source: user-provided-transcript
 course: ""
-keywords: [huicheng, imedtac, ai-triage, urgent-care, vital-sign-kiosk, asr, llm, fhir, his, emr, urology-previsit, product-sync]
+keywords: [imedtac, imedtac, ai-triage, urgent-care, vital-sign-kiosk, asr, llm, fhir, his, emr, urology-previsit, product-sync]
 status: active
 participants:
   - Jason Miao
@@ -18,10 +18,10 @@ meeting_record_file: meeting-record.md
 demo_brief_file: demo-brief.md
 transcript_file: transcript-cleaned.md
 company_followup_assets:
-  - assets/2026-05-12-huicheng-ai-triage-followup-email.pdf
+  - assets/2026-05-12-imedtac-ai-triage-followup-email.pdf
   - assets/2026-05-12-imvs-product-spec-v2.0.4.docx
   - assets/2026-05-12-imvs-api-v1.4-eng.pdf
-analysis_file: ../../docs/2026-05-12-huicheng-materials-analysis.md
+analysis_file: ../../docs/2026-05-12-imedtac-materials-analysis.md
 ---
 
 # Source
@@ -42,7 +42,7 @@ Company follow-up materials from Johnny Fang were added after the meeting:
 - searchable extracted text for all three files.
 
 Detailed comparison and follow-up analysis:
-`docs/2026-05-12-huicheng-materials-analysis.md`.
+`docs/2026-05-12-imedtac-materials-analysis.md`.
 
 ## Why this source is kept
 
@@ -64,15 +64,15 @@ The meeting changed the 慧誠 lane from a general post-seminar opportunity into
 
 ## Repo Links
 
-- Planning locator: `../planning-everything-track/data/projects/2026-05-huicheng-er-triage-ekg-asr.md`
+- Planning locator: `../planning-everything-track/data/projects/2026-05-imedtac-er-triage-ekg-asr.md`
 - Repo project brief: `docs/project-brief.md`
-- Meeting record: `source/2026-05-12-huicheng-company-ai-triage-sync/meeting-record.md`
-- Demo brief: `source/2026-05-12-huicheng-company-ai-triage-sync/demo-brief.md`
-- Cleaned transcript: `source/2026-05-12-huicheng-company-ai-triage-sync/transcript-cleaned.md`
-- Company follow-up attachments: `source/2026-05-12-huicheng-company-ai-triage-sync/assets/`
-- Extracted attachment text: `source/2026-05-12-huicheng-company-ai-triage-sync/extracted/`
-- Materials analysis: `docs/2026-05-12-huicheng-materials-analysis.md`
-- Prior source bundle: `source/2026-05-11-wu-huicheng-er-triage-ekg-asr/`
+- Meeting record: `source/2026-05-12-imedtac-company-ai-triage-sync/meeting-record.md`
+- Demo brief: `source/2026-05-12-imedtac-company-ai-triage-sync/demo-brief.md`
+- Cleaned transcript: `source/2026-05-12-imedtac-company-ai-triage-sync/transcript-cleaned.md`
+- Company follow-up attachments: `source/2026-05-12-imedtac-company-ai-triage-sync/assets/`
+- Extracted attachment text: `source/2026-05-12-imedtac-company-ai-triage-sync/extracted/`
+- Materials analysis: `docs/2026-05-12-imedtac-materials-analysis.md`
+- Prior source bundle: `source/2026-05-11-wu-imedtac-er-triage-ekg-asr/`
 
 ## Boundary
 

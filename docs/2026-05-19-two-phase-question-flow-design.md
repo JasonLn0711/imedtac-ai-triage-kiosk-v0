@@ -7,7 +7,7 @@ type: design
 status: active
 source:
   - ../source/2026-05-19-duobao-two-phase-vital-questioning/source.md
-  - ../source/2026-05-15-huicheng-second-sync-and-duobao-followup/meeting-record.md
+  - ../source/2026-05-15-imedtac-second-sync-and-duobao-followup/meeting-record.md
   - ../source/2026-05-19-expert-review-scope-api-boundary/source.md
 ---
 

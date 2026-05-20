@@ -88,7 +88,7 @@ Do not turn this repo into:
   recommend" / "this demo shows" / "the API contract is" before scope controls.
 - Use the official English company name consistently. First formal mention:
   `慧誠智醫（imedtac Co., Ltd.）`; subsequent English shorthand: `imedtac`.
-  Do not use `Huicheng` as the English company name except in historical file
+  Do not use `imedtac` as the English company name except in historical file
   paths, copied source titles, or quoted source material.
 - Safety boundaries still apply. Confident writing must not become diagnosis,
   treatment advice, final triage / acuity claims, FDA / 510(k) readiness claims,

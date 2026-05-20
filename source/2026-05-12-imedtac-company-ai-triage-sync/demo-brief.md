@@ -1,5 +1,5 @@
 ---
-id: 2026-05-12-huicheng-company-ai-triage-sync-demo-brief
+id: 2026-05-12-imedtac-company-ai-triage-sync-demo-brief
 title: "慧誠智醫 AI Triage Demo Brief"
 date: 2026-05-12
 time: "13:00 Asia/Taipei"
@@ -7,7 +7,7 @@ topic: personal
 subtopic: sources
 type: interpretation-brief
 source: user-provided-synthesis
-keywords: [huicheng, imedtac, ai-triage, kiosk, web-service, market-demo, vital-signs, asr, fhir, his, emr]
+keywords: [imedtac, imedtac, ai-triage, kiosk, web-service, market-demo, vital-signs, asr, fhir, his, emr]
 status: active
 ---
 

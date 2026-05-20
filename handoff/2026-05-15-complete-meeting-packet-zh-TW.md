@@ -368,12 +368,12 @@ urgent-care-style internal medicine 最合適，但要請多寶醫師校準。
 | 需求 | 檔案 |
 | --- | --- |
 | 主 talking track | `handoff/2026-05-15-friday-discussion-brief.md` |
-| need-fit 與會議流程 | `handoff/2026-05-15-huicheng-need-fit-meeting-execution-plan.md` |
+| need-fit 與會議流程 | `handoff/2026-05-15-imedtac-need-fit-meeting-execution-plan.md` |
 | vital-to-question 與 source governance | `handoff/2026-05-15-vital-aware-triage-feasibility-source-governance.md` |
 | source registry 與 example flows | `handoff/2026-05-15-source-registry-and-example-flows.md` |
 | hallucination / source-grounding audit | `handoff/2026-05-15-hallucination-and-source-grounding-audit.md` |
 | first-principles gap audit | `handoff/2026-05-15-first-principles-gap-audit-and-action-plan.md` |
-| 慧誠預期 Q&A | `handoff/2026-05-15-huicheng-anticipated-q-and-a-zh-TW.md` |
-| 慧誠資料分析 | `docs/2026-05-12-huicheng-materials-analysis.md` |
+| 慧誠預期 Q&A | `handoff/2026-05-15-imedtac-anticipated-q-and-a-zh-TW.md` |
+| 慧誠資料分析 | `docs/2026-05-12-imedtac-materials-analysis.md` |
 | source index | `docs/source-index.md` |
 | 吳老師 instruction register | `docs/wu-instruction-register.md` |

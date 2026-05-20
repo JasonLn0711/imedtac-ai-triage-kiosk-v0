@@ -1,6 +1,6 @@
 ---
-id: 2026-05-11-wu-huicheng-er-triage-ekg-asr-meeting-record
-title: "2026-05-11 Meeting Record - Prof. Wu Huicheng ER Triage EKG ASR"
+id: 2026-05-11-wu-imedtac-er-triage-ekg-asr-meeting-record
+title: "2026-05-11 Meeting Record - Prof. Wu imedtac ER Triage EKG ASR"
 date: 2026-05-11
 time: "afternoon after seminar Asia/Taipei"
 topic: personal
@@ -8,7 +8,7 @@ subtopic: sources
 type: meeting-record
 source: user-provided-transcript
 course: ""
-keywords: [wu-yute, yu-zong, huicheng, er-triage, ekg, asr, llm, edge-computing, eeg, loreta, meeting-record]
+keywords: [wu-yute, yu-zong, imedtac, er-triage, ekg, asr, llm, edge-computing, eeg, loreta, meeting-record]
 status: active
 ---
 
@@ -97,9 +97,9 @@ The proposed product is an emergency-triage support device / workflow. The compa
 
 ## Planning Links
 
-- Planning locator: `../planning-everything-track/data/projects/2026-05-huicheng-er-triage-ekg-asr.md`
-- Source bundle: `source/2026-05-11-wu-huicheng-er-triage-ekg-asr/source.md`
-- Transcript: `source/2026-05-11-wu-huicheng-er-triage-ekg-asr/transcript.txt`
+- Planning locator: `../planning-everything-track/data/projects/2026-05-imedtac-er-triage-ekg-asr.md`
+- Source bundle: `source/2026-05-11-wu-imedtac-er-triage-ekg-asr/source.md`
+- Transcript: `source/2026-05-11-wu-imedtac-er-triage-ekg-asr/transcript.txt`
 
 ## Next Action
 

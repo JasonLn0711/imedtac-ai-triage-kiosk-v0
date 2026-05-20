@@ -378,11 +378,11 @@ Use the appendix files only when needed:
 | Need | File |
 | --- | --- |
 | Main talking track | `handoff/2026-05-15-friday-discussion-brief.md` |
-| Need-fit and meeting flow | `handoff/2026-05-15-huicheng-need-fit-meeting-execution-plan.md` |
+| Need-fit and meeting flow | `handoff/2026-05-15-imedtac-need-fit-meeting-execution-plan.md` |
 | Vital-to-question and source governance | `handoff/2026-05-15-vital-aware-triage-feasibility-source-governance.md` |
 | Source registry and example flows | `handoff/2026-05-15-source-registry-and-example-flows.md` |
 | Hallucination/source-grounding audit | `handoff/2026-05-15-hallucination-and-source-grounding-audit.md` |
 | First-principles gap audit | `handoff/2026-05-15-first-principles-gap-audit-and-action-plan.md` |
-| Company material analysis | `docs/2026-05-12-huicheng-materials-analysis.md` |
+| Company material analysis | `docs/2026-05-12-imedtac-materials-analysis.md` |
 | Source index | `docs/source-index.md` |
 | Prof. Wu instruction register | `docs/wu-instruction-register.md` |

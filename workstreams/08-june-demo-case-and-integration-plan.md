@@ -5,7 +5,7 @@ date: 2026-05-15
 topic: ai-triage
 type: workstream
 status: active
-source_bundle: ../source/2026-05-15-huicheng-second-sync-and-duobao-followup/
+source_bundle: ../source/2026-05-15-imedtac-second-sync-and-duobao-followup/
 ---
 
 # June Demo Case And Integration Plan
@@ -13,7 +13,7 @@ source_bundle: ../source/2026-05-15-huicheng-second-sync-and-duobao-followup/
 ## First Principle
 
 - Scarce resource: execution bandwidth before the June customer demo.
-- Canonical source: `source/2026-05-15-huicheng-second-sync-and-duobao-followup/`.
+- Canonical source: `source/2026-05-15-imedtac-second-sync-and-duobao-followup/`.
 - Near-term output: a believable, synthetic, urgent-care intake demo.
 - Boundary: clinician-review summary only; no diagnosis, treatment, test order,
   final triage level, or live patient deployment claim.
@@ -42,7 +42,7 @@ all-specialty autonomous AI triage
 
 Johnny Fang's company-side minutes after the meeting are preserved at:
 
-- `source/2026-05-15-huicheng-second-sync-and-duobao-followup/company-provided-meeting-minutes.md`
+- `source/2026-05-15-imedtac-second-sync-and-duobao-followup/company-provided-meeting-minutes.md`
 
 They confirm the June urgent-care demo frame, `3-5` cases, touch plus partial
 voice input, an earlier `8-10` question-budget reference, and doctor-facing
@@ -133,7 +133,7 @@ Source:
 
 Preparation:
 
-- `handoff/2026-05-21-huicheng-engineering-sync-prep.md`
+- `handoff/2026-05-21-imedtac-engineering-sync-prep.md`
 - `handoff/2026-05-21-imvs-nycu-api-design-v0.1.md`
 - `handoff/2026-05-21-decision-defaults-and-owner-matrix.md`
 - `docs/2026-05-19-two-phase-question-flow-design.md`
@@ -287,7 +287,7 @@ Thursday closeout now must include:
 
 多寶 sent the first case draft after the meeting:
 
-- `source/2026-05-15-huicheng-second-sync-and-duobao-followup/duobao-demo-case-draft.md`
+- `source/2026-05-15-imedtac-second-sync-and-duobao-followup/duobao-demo-case-draft.md`
 
 The draft contains four diagnosis-labeled clinical scenarios:
 

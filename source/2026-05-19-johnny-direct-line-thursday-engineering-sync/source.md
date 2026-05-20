@@ -87,5 +87,5 @@ Related:
 - `../2026-05-19-johnny-ai-triage-product-spec/source.md`
 - `../2026-05-19-johnny-line-thursday-engineering-sync/source.md`
 - `../2026-05-19-duobao-line-thursday-engineering-sync/source.md`
-- `../../handoff/2026-05-21-huicheng-engineering-sync-prep.md`
+- `../../handoff/2026-05-21-imedtac-engineering-sync-prep.md`
 - `../../handoff/2026-05-21-imvs-nycu-api-design-v0.2-draft.md`

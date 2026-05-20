@@ -6,7 +6,7 @@ topic: ai-triage
 type: handoff
 status: draft
 source:
-  - ./2026-05-21-huicheng-engineering-sync-prep.md
+  - ./2026-05-21-imedtac-engineering-sync-prep.md
   - ./2026-05-21-imvs-nycu-api-design-v0.2-draft.md
   - ../source/2026-05-19-expert-review-scope-api-boundary/source.md
 ---

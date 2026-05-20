@@ -1,12 +1,12 @@
 ---
-id: 2026-05-13-johnny-line-friday-huicheng-sync
-title: "2026-05-13 Johnny Fang LINE - Friday Huicheng Follow-Up Scheduling"
+id: 2026-05-13-johnny-line-friday-imedtac-sync
+title: "2026-05-13 Johnny Fang LINE - Friday imedtac Follow-Up Scheduling"
 date: 2026-05-13
 time: "04:22-04:54 Asia/Taipei"
 type: source-bundle
 source: user-provided-line-thread
 keywords:
-  - huicheng
+  - imedtac
   - imedtac
   - johnny-fang
   - ai-triage
@@ -18,10 +18,10 @@ status: active
 participants:
   - 慧誠智醫 - Johnny Fang
   - 阿聖 Jason
-planning_source_copy: ../planning-everything-track/data/knowledge/personal/sources/2026-05-13-johnny-line-friday-huicheng-sync/source.md
+planning_source_copy: ../planning-everything-track/data/knowledge/personal/sources/2026-05-13-johnny-line-friday-imedtac-sync/source.md
 ---
 
-# 2026-05-13 Johnny Fang LINE - Friday Huicheng Follow-Up Scheduling
+# 2026-05-13 Johnny Fang LINE - Friday imedtac Follow-Up Scheduling
 
 ## Raw LINE Record
 

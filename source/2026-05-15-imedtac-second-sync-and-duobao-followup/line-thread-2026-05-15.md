@@ -1,12 +1,12 @@
 ---
-id: 2026-05-15-huicheng-second-sync-duobao-line-thread
+id: 2026-05-15-imedtac-second-sync-duobao-line-thread
 title: "2026-05-15 LINE Thread - AI-Triage Meeting And Duobao Follow-Up"
 date: 2026-05-15
 topic: personal
 subtopic: sources
 type: line-thread
 source: user-provided-chat-log
-keywords: [line, duobao, huicheng, ai-triage, notion, meeting-link, demo-cases]
+keywords: [line, duobao, imedtac, ai-triage, notion, meeting-link, demo-cases]
 status: active
 ---
 

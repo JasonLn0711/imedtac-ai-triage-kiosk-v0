@@ -419,7 +419,7 @@ Jason 敬上
 - `handoff/2026-05-21-imedtac-meeting-q-and-a.md`
   - 用途：分類 Q&A 與 detailed speaking answers；
   - 重點：產品定位、REST API / JSON / FastAPI、`session_key`、vitals missing / quality flag、CORS/auth/logs、local scripted fallback、clinical wording、ASR / HIS deferral、versioning、closeout questions。
-- `handoff/2026-05-21-huicheng-engineering-sync-prep.md`
+- `handoff/2026-05-21-imedtac-engineering-sync-prep.md`
   - 用途：會議流程與議程控場；
   - 重點：meeting frame、roles、agenda、what Jason should prepare、questions for Johnny / engineering / 多寶。
 - `handoff/2026-05-21-imvs-nycu-api-design-v0.2-draft.md`

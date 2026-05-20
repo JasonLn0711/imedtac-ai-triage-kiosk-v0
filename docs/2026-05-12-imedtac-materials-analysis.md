@@ -5,18 +5,18 @@
 Company follow-up materials from Johnny Fang were moved into:
 
 ```text
-source/2026-05-12-huicheng-company-ai-triage-sync/
+source/2026-05-12-imedtac-company-ai-triage-sync/
 ```
 
 Original files:
 
-- `assets/2026-05-12-huicheng-ai-triage-followup-email.pdf`
+- `assets/2026-05-12-imedtac-ai-triage-followup-email.pdf`
 - `assets/2026-05-12-imvs-product-spec-v2.0.4.docx`
 - `assets/2026-05-12-imvs-api-v1.4-eng.pdf`
 
 Searchable text:
 
-- `extracted/2026-05-12-huicheng-ai-triage-followup-email.txt`
+- `extracted/2026-05-12-imedtac-ai-triage-followup-email.txt`
 - `extracted/2026-05-12-imvs-product-spec-v2.0.4.txt`
 - `extracted/2026-05-12-imvs-api-v1.4-eng.txt`
 

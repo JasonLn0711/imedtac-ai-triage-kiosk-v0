@@ -156,7 +156,7 @@ The urology branch can diagnose UTI or pyelonephritis.
 
 Use the current materials in this order:
 
-1. `handoff/2026-05-15-huicheng-need-fit-meeting-execution-plan.md`
+1. `handoff/2026-05-15-imedtac-need-fit-meeting-execution-plan.md`
 2. `handoff/2026-05-15-friday-discussion-brief.md`
 3. `handoff/2026-05-15-vital-aware-triage-feasibility-source-governance.md`
 4. `handoff/2026-05-15-source-registry-and-example-flows.md`

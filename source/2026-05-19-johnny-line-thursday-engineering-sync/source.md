@@ -93,7 +93,7 @@ Confirmed meeting logistics:
 
 Canonical preparation note:
 
-- `../../handoff/2026-05-21-huicheng-engineering-sync-prep.md`
+- `../../handoff/2026-05-21-imedtac-engineering-sync-prep.md`
 
 Related source and analysis:
 

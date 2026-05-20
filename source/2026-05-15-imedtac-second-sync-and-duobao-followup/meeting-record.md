@@ -1,6 +1,6 @@
 ---
-id: 2026-05-15-huicheng-second-sync-and-duobao-followup-meeting-record
-title: "2026-05-15 Meeting Record - Huicheng Second AI-Triage Sync And Duobao Follow-Up"
+id: 2026-05-15-imedtac-second-sync-and-duobao-followup-meeting-record
+title: "2026-05-15 Meeting Record - imedtac Second AI-Triage Sync And Duobao Follow-Up"
 date: 2026-05-15
 time: "13:00-14:53 Asia/Taipei"
 topic: personal
@@ -8,7 +8,7 @@ subtopic: sources
 type: meeting-record
 source: user-provided-meeting-record-transcripts-and-line-log
 course: ""
-keywords: [huicheng, imedtac, ai-triage, urgent-care, june-demo, vital-sign-kiosk, duobao, asr, llm, clinical-workflow, emr, his]
+keywords: [imedtac, imedtac, ai-triage, urgent-care, june-demo, vital-sign-kiosk, duobao, asr, llm, clinical-workflow, emr, his]
 status: active
 ---
 
@@ -17,7 +17,7 @@ status: active
 **紀錄性質：** 結構化整理版。完整原始材料保留在同一資料夾：
 
 - User-provided structured note: `user-provided-meeting-record.md`
-- 慧誠會議逐字稿: `transcript-huicheng-meeting-1259.txt`
+- 慧誠會議逐字稿: `transcript-imedtac-meeting-1259.txt`
 - 多寶會後討論逐字稿: `transcript-duobao-followup-1358.txt`
 - LINE context: `line-thread-2026-05-15.md`
 - 慧誠 company-side minutes: `company-provided-meeting-minutes.md`
