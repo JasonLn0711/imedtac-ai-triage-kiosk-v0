@@ -93,7 +93,7 @@
   },
   "capabilities": {
     "question_types": ["single_choice", "multi_choice", "scale"],
-    "max_questions": 11,
+    "max_questions": 7,
     "voice_input": false
   }
 }

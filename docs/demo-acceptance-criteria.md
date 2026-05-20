@@ -17,7 +17,7 @@ integration.
 - The chest-pressure and fever/urinary synthetic cases are selectable.
 - Each case shows a synthetic patient profile.
 - Each case shows a vital payload.
-- June case flows stay under `12` visible patient-facing questions; hidden
+- June case flows stay under `8` visible patient-facing questions; hidden
   routing metadata, vital payload fields, and staff-summary sections do not
   count toward the question budget.
 - Single-choice answers advance immediately after click.

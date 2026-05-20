@@ -106,7 +106,7 @@ Required fields:
 | `vitals.<field>.quality_flag` | string | yes | `ok`, `needs_review`, `device_error`, `out_of_range_demo`, or `unknown`. |
 | `vitals.<field>.missing_reason` | string/null | no | Required when a vital is missing or failed. |
 | `capabilities.question_types` | array | yes | `single_choice`, `multi_choice`, `scale`. |
-| `capabilities.max_questions` | number | yes | Current June design cap: fewer than `12` visible patient-facing questions; use `11` as the hard maximum. |
+| `capabilities.max_questions` | number | yes | Current June design cap follows the 慧誠 / iMVS product spec: fewer than `8` visible patient-facing questions; use `7` as the hard maximum. |
 | `capabilities.voice_input` | boolean | yes | Recommended `false` for June critical path. |
 
 ### Response

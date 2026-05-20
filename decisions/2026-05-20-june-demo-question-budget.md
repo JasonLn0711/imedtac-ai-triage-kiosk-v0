@@ -6,6 +6,7 @@ topic: ai-triage
 type: decision
 status: active
 source:
+  - ../source/2026-05-19-johnny-ai-triage-product-spec/source.md
   - ../source/2026-05-20-duobao-demo-cases-question-design/source.md
   - ../docs/2026-05-20-duobao-demo-design-consistency-review.md
 ---
@@ -14,10 +15,11 @@ source:
 
 ## Decision
 
-The June demo may use fewer than `12` visible patient-facing questions per
+The June demo should follow the 慧誠 / iMVS product-spec requirement for the
+current customer-demo path: fewer than `8` visible patient-facing questions per
 completed case flow.
 
-Use `capabilities.max_questions = 11` in API examples and runtime contract
+Use `capabilities.max_questions = 7` in API examples and runtime contract
 discussions when a hard numeric cap is needed.
 
 ## Counting Rule
@@ -40,28 +42,31 @@ Do not count:
 
 ## Design Guidance
 
-`<12` is the maximum, not the target. The preferred first respiratory demo flow
-should stay around `6-8` visible questions when possible.
+`<8` is the maximum, not the target. The preferred first respiratory demo flow
+should stay around `5-7` visible questions when possible.
 
-Use the extra budget only when it improves clinical plausibility or demo
-clarity, for example:
+Use the question budget only for details that improve clinical plausibility or
+demo clarity, for example:
 
 - adding medication/allergy context;
 - adding a relevant chronic disease / baseline context question;
-- adding one targeted red-flag screen after vital signs are ready;
-- supporting a contrast case without compressing the story unnaturally.
+- adding one targeted red-flag screen after vital signs are ready.
 
-Do not use the larger budget to create an all-specialty questionnaire, collect
-real identifiers, ask free-text questions, or output diagnosis / final triage /
+Do not expand the June runtime into an all-specialty questionnaire, collect real
+identifiers, ask free-text questions, or output diagnosis / final triage /
 disposition / department recommendations.
 
 ## Relationship To Earlier Source Material
 
-Earlier company/source material mentioned `8-10` questions, and the product
-spec text mentions fewer than `8` questions in places. Those remain preserved as
-source history. This decision updates the current June demo design constraint:
+Earlier company/minutes material mentioned `8-10` questions, while the
+2026-05-19 慧誠 / iMVS product spec says the OPQRST dynamic questioning flow
+should have a total expected question count under `8`. Johnny also clarified
+that the spec logic is adjustable, but the current user decision is to follow
+the 慧誠 requirement. This decision therefore updates the current June demo
+design constraint:
 
 ```text
-visible patient-facing question cap: <12
-preferred first respiratory flow: 6-8
+visible patient-facing question cap: <8
+API hard maximum: max_questions=7
+preferred first respiratory flow: 5-7
 ```

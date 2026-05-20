@@ -58,7 +58,7 @@ patient name + all-specialty questionnaire
 | Disposition, department, and immediate action suggestions. | Output template `ER / Urgent Care / Clinic / Home`, `Recommended Department`, `ECG if chest pain`. | This reads as clinical decision support / orders. | Replace with `staff_handoff_note: Please review measured vitals and reported symptoms.` |
 | Diagnosis-shaped case labels. | `Acute Cholecystitis`, `AfRVR`, `Pneumonia`, `URI`. | Useful as internal scenario labels, risky as system output. | Keep labels internal. Runtime summary must describe symptoms/vitals, not diagnose. |
 | Vital thresholds as fixed rules. | Temperature, SpO2, HR, BP, RR trigger tables. | Repo treats thresholds as clinical validation gates, not source-verified rules. | Mark as `clinical-signoff-needed`; use only as synthetic-demo routing until owner approves. |
-| Question count expansion. | Initial + symptom-specific + universal + post-vital can exceed the old `8-10` working range. | Current June decision allows fewer than `12` visible patient-facing questions, but the cap is not a target. | Count only visible patient questions; keep the first respiratory flow around `6-8` questions when possible and never exceed `11`. |
+| Question count expansion. | Initial + symptom-specific + universal + post-vital can exceed the 慧誠 / iMVS product-spec limit. | Current June decision follows the product-spec requirement: fewer than `8` visible patient-facing questions. | Count only visible patient questions; keep the first respiratory flow around `5-7` questions and never exceed `7`. |
 | Universal phase asks every patient PMH/surgery/medication/allergy/pregnancy. | Section 2 universal phase. | Useful, but too heavy for June and can create sensitive-data capture. | For demo, ask only medication/allergy or pregnancy when relevant, as staff-review context. |
 | Flow chart timing is ambiguous. | Symptom-specific phase can trigger abnormal vitals even though vitals timing is not explicit. | Current API has explicit `measurement_state`, `vitals_ready`, and two-phase flow. | Rewrite flow as Phase 1 pre-vital intake -> vitals-ready payload -> Phase 2 vital-aware follow-up. |
 | Fever threshold mismatch. | Question design says `T > 37.5°C`; URI case treats `T 37.5°C` as fever trigger. | Strict `>` does not include exactly `37.5`; this could confuse demo behavior. | Either change to demo wording "temperature cue" or have clinical owner freeze `>=` / `>` threshold. |
@@ -130,7 +130,7 @@ Do not import the full question bank into runtime yet. Instead:
    passed demo-ready checks.
 4. For future expansion, turn each 多寶 question into a registry row with:
    `clinical_purpose`, `vital_trigger`, `evidence_status`, and `review_owner`.
-5. Design each June case under the new `<12` visible-question cap, with an
+5. Design each June case under the `<8` visible-question cap, with an
    explicit per-case question budget before implementation.
 
 ## Open Owner Decisions
