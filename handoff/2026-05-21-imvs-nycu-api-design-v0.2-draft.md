@@ -74,7 +74,25 @@ output field. Expert freeze-gate update: prefer `review_basis` over
 `assessment_support` because the latter can be confused with SOAP Assessment.
 Do not name the output field `diagnosis`.
 
-## Endpoint 1: Start Triage Session With Measured Vitals
+## June v0.2 Endpoint Summary
+
+The June integration contract has two required endpoints:
+
+```text
+POST /api/triage-demo/sessions
+POST /api/triage-demo/sessions/{session_key}/answers
+```
+
+For June, iMVS starts the NYCU session only after measurement is complete. The
+start-session request therefore includes the measured vital payload. NYCU returns
+`session_key` plus the first typed question. Every later answer submission echoes
+the same `session_key`; NYCU returns either the next typed question or
+`staff_review_summary`.
+
+The future two-phase vitals-ready endpoint is documented in the appendix. It is
+not required for the June customer-demo integration.
+
+## Endpoint 1: Start Session With Measured Vitals
 
 ```http
 POST /api/triage-demo/sessions
@@ -101,19 +119,19 @@ Required fields:
 | `wording_version` | string | yes | Staff-summary wording version pending clinical signoff. |
 | `request_id` | string | yes | Client-generated request id for tracing and retry discussion. |
 | `idempotency_key` | string | yes | Prevents duplicate start-session retries from creating duplicate workflow advancement. |
-| `workflow_mode` | string | yes | Post-sync June default: `post_measurement_only`. Future optimized value: `parallel_measurement_intake`. |
-| `measurement_state` | string | yes | June default: `complete` because iMVS calls this endpoint after measurement. |
-| `vitals_ready` | boolean | yes | June default: `true` because measured vitals are included in this first call. |
-| `safe_to_ask_phase1_question` | boolean | no for June default | Only needed for future `parallel_measurement_intake`. |
+| `workflow_mode` | string | yes | Must be `post_measurement_only` for the June contract. Future optimized value: `parallel_measurement_intake`. |
+| `measurement_state` | string | yes | Must be `complete` for the June contract because iMVS calls this endpoint after measurement. |
+| `vitals_ready` | boolean | yes | Must be `true` for the June contract because measured vitals are included in this first call. |
+| `safe_to_ask_phase1_question` | boolean | no | Do not send for the June contract. Only needed for future `parallel_measurement_intake`. |
 | `client.source` | string | yes | Example: `imvs-demo`. |
 | `client.locale` | string | yes | Example: `en-US`. |
 | `patient_context.demo_patient_id` | string | yes | Demo-only ID. Do not send real MRN or name. |
 | `patient_context.age` | number | no | Synthetic demo demographics only. |
 | `patient_context.sex` | string | no | Synthetic demo demographics only. |
-| `vitals` | object | yes | iMVS-shaped vital payload. Values may be `null` when `measurement_state=in_progress`. |
-| `vitals.measurement_timestamp` | string/null | yes | ISO timestamp for the vital-sign measurement event; `null` if measurement is still in progress. |
+| `vitals` | object | yes | iMVS-shaped measured vital payload. June requests should not use `measurement_state=in_progress`. |
+| `vitals.measurement_timestamp` | string | yes | ISO timestamp for the vital-sign measurement event. |
 | `vitals.device_id` | string | yes | Demo device identifier, not a patient identifier. |
-| `vitals.<field>.value` | number/null | yes | Per-vital measured value or null. |
+| `vitals.<field>.value` | number/null | yes | Per-vital measured value or `null` when unavailable / failed. |
 | `vitals.<field>.unit` | string | yes | Explicit unit such as `%`, `C`, `mmHg`, `beats/min`, `cm`, or `kg`. |
 | `vitals.<field>.measurement_status` | string | yes | `measured`, `missing`, `failed`, `manual_entry`, or `not_available`. |
 | `vitals.<field>.quality_flag` | string | yes | `ok`, `needs_review`, `device_error`, `out_of_range_demo`, or `unknown`. |
@@ -143,9 +161,9 @@ Required fields:
 | `last_question_id` | string/null | yes | Last answered or emitted question id; `null` on first question. |
 | `status` | string | yes | `question` or `summary`. |
 | `workflow_mode` | string | yes | Echoes the chosen workflow mode. |
-| `measurement_state` | string | yes | Current measurement state. |
-| `vitals_ready` | boolean | yes | Whether Phase 2 can start. |
-| `question_phase` | string | yes if `status=question` | June default may use `post_measurement_intake`; future two-phase uses `pre_vital_intake` or `post_vital_followup`. |
+| `measurement_state` | string | yes | Echoes `complete` for the June contract. |
+| `vitals_ready` | boolean | yes | Echoes `true` for the June contract. |
+| `question_phase` | string | yes if `status=question` | Use `post_measurement_intake` for the June contract; future two-phase uses `pre_vital_intake` or `post_vital_followup`. |
 | `phase_reason` | string | yes if `status=question` | Short reason why this question is allowed in the current phase. |
 | `progress.current` | number | yes | Required for AC07 progress display. |
 | `progress.expected_total` | number | yes | Can be estimated for dynamic flows. |
@@ -203,51 +221,16 @@ Required fields:
 | `client_event.input_mode` | string | yes | `touch`, `keyboard`, `voice_confirmed`, etc. |
 | `client_event.answered_at` | string | no | ISO timestamp if available. |
 
-### Response: Next Question
+### Response: Next Question Or Staff Summary
 
 Example:
 
 - `api-examples/2026-05-21-next-question-response-demo-respiratory.json`
 - `api-examples/2026-05-21-post-vital-question-response-demo-respiratory.json`
+- `api-examples/2026-05-21-summary-response-demo-respiratory.json`
 
-The response follows the same `status=question` structure as Endpoint 1.
-
-## Endpoint 3: Submit Vital Payload When Ready
-
-Post-sync status: out of the June default path.
-
-Use this endpoint only for the optimized future two-phase workflow. It allows
-Phase 1 questions to run during measurement, then starts Phase 2 after vital
-signs are available.
-
-```http
-POST /api/triage-demo/sessions/{session_key}/vitals
-Content-Type: application/json
-```
-
-Example:
-
-- `api-examples/2026-05-21-update-vitals-request-demo-respiratory.json`
-
-Required fields:
-
-| Field | Type | Required | Notes |
-| --- | --- | --- | --- |
-| `api_version` | string | yes | Must match supported demo API version. |
-| `schema_version` | string | yes | Must match supported demo schema. |
-| `flow_version` | string | yes | Must match the running demo flow. |
-| `case_id` | string | yes | Synthetic demo case id. |
-| `request_id` | string | yes | Client-generated id for tracing the vitals-ready update. |
-| `idempotency_key` | string | yes | Prevents duplicate vitals-ready updates from resetting the flow. |
-| `session_key` | string | yes | Same key returned by Endpoint 1. |
-| `workflow_mode` | string | yes | `parallel_measurement_intake`. |
-| `measurement_state` | string | yes | `complete` when vital values are ready; `failed` if measurement failed. |
-| `vitals_ready` | boolean | yes | `true` only when measured values and quality flags are available. |
-| `vitals` | object | yes | Measured vital payload plus quality fields. |
-
-June default: do not require Endpoint 3. Call Endpoint 1 only after measured or
-synthetic vital values are available. Reintroduce Endpoint 3 only for the future
-two-phase workflow.
+When `status=question`, the response follows the same typed question structure
+as Endpoint 1.
 
 ### Response: Staff Summary
 
@@ -280,6 +263,50 @@ Required fields:
 | `staff_review_summary.not_claimed` | array | yes | Explicit forbidden claims. |
 | `evidence_refs` | array | no | For demo, may be `LOCAL-PROTOCOL-TBD`. |
 | `demo_boundary` | string | yes | Synthetic demo only. |
+
+## Appendix: Future Endpoint 3 For Two-Phase Mode
+
+Post-sync status: future optimized mode, not June default.
+
+Do not require this endpoint for the June customer-demo integration. Use it only
+if a later stakeholder decision reopens the optimized two-phase workflow:
+
+```text
+Phase 1 during measurement
+-> vitals-ready payload
+-> Phase 2 vital-aware follow-up
+```
+
+Future endpoint shape:
+
+```http
+POST /api/triage-demo/sessions/{session_key}/vitals
+Content-Type: application/json
+```
+
+Example:
+
+- `api-examples/2026-05-21-update-vitals-request-demo-respiratory.json`
+
+Required fields for that future mode:
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `api_version` | string | yes | Must match supported demo API version. |
+| `schema_version` | string | yes | Must match supported demo schema. |
+| `flow_version` | string | yes | Must match the running demo flow. |
+| `case_id` | string | yes | Synthetic demo case id. |
+| `request_id` | string | yes | Client-generated id for tracing the vitals-ready update. |
+| `idempotency_key` | string | yes | Prevents duplicate vitals-ready updates from resetting the flow. |
+| `session_key` | string | yes | Same key returned by Endpoint 1. |
+| `workflow_mode` | string | yes | Must be `parallel_measurement_intake`. |
+| `measurement_state` | string | yes | `complete` when vital values are ready; `failed` if measurement failed. |
+| `vitals_ready` | boolean | yes | `true` only when measured values and quality flags are available. |
+| `vitals` | object | yes | Measured vital payload plus quality fields. |
+
+Reintroduce this endpoint only after imedtac confirms a safe measurement-time UI
+window and a vitals-ready event. Until then, call Endpoint 1 after measured or
+synthetic vital values are available.
 
 ## Question Types
 

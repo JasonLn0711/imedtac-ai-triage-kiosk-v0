@@ -31,6 +31,8 @@ Current detailed discussion artifacts:
 - `handoff/2026-05-21-imedtac-meeting-q-and-a.md`
 - `handoff/2026-05-21-imedtac-engineering-sync-closeout.md`
 - `handoff/2026-05-21-imvs-nycu-api-design-v0.2-draft.md`
+- `handoff/2026-05-21-imedtac-two-endpoint-api-reply.md`
+- `handoff/2026-05-21-to-2026-05-25-imedtac-response-plan.md`
 - `handoff/2026-05-21-decision-defaults-and-owner-matrix.md`
 - `handoff/2026-05-22-api-v0.2-requirements-from-expert-review.md`
 - `docs/2026-05-19-two-phase-question-flow-design.md`
@@ -49,6 +51,12 @@ Current detailed discussion artifacts:
 
 Current v0.2 freeze-gate additions:
 
+- June v0.2 requires only `POST /api/triage-demo/sessions` and
+  `POST /api/triage-demo/sessions/{session_key}/answers`;
+- the start-session request includes the measured or synthetic iMVS vital
+  payload and returns `session_key` plus the first typed question;
+- the answer endpoint returns either the next typed question or
+  `staff_review_summary`;
 - runtime question IDs are mapped through `../data/api_question_mapping.csv`;
 - respiratory early handoff is registered as
   `FLOW-RESPIRATORY-EARLY-HANDOFF`;
@@ -67,6 +75,9 @@ Post-sync `2026-05-21` update:
   first customer-demo default.
 - Voice input is out of the June critical path.
 - Prepare Remote REST API Mode plus clearly labeled Local Scripted Demo Mode.
+- Johnny's post-meeting Gmail record confirms imedtac's preference to lead the
+  US customer demo with a tachycardia / chest-tightness live-performance lane,
+  while keeping the same two-endpoint API shape.
 
 Post-Duobao internal sync update:
 

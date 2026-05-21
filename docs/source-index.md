@@ -18,6 +18,8 @@ demo lane and its direct upstream Prof. Wu context.
 | `2026-05-21 09:50` | `source/2026-05-15-imedtac-second-sync-and-duobao-followup/pre-sync-thread-snapshot-2026-05-21.md` | Gmail thread snapshot exported before the 5/21 engineering sync. Extends the original 5/15 Johnny minutes with the 5/20 NYCU API v0.2 pre-read reply and Johnny's 5/21 reply adding Ben Siu from imedtac engineering, confirming the meeting should close API field dictionary, UI insertion point, `session_key`, Phase 1 feasibility, first respiratory case wording, and delivery timing. |
 | `2026-05-21 09:59` | `source/2026-05-21-imedtac-engineering-sync/` | 慧誠智醫 / NYCU engineering sync source bundle. Preserves the corrected GPT transcript and user-provided meeting record, and records the post-sync decision that June should use a conservative post-measurement iMVS vital payload -> NYCU question loop -> staff-review summary flow, with Endpoint 1/3 merged for June, voice out of scope, local scripted fallback required, and case design split between respiratory synthetic and tachycardia live-performance lanes. |
 | `2026-05-21 10:57` | `source/2026-05-21-duobao-post-imedtac-internal-sync/` | Jason / 多寶 internal post-imedtac sync. Preserves the GPT corrected transcript, Gemini reference, and a cleaned full transcript. Clarifies that formal triage-level output is the risky boundary, AI should be placed in vital-aware question selection and staff-summary generation, iMVS needs reusable question templates rather than hand-coded screens, and next week should include an actual iMVS machine review instead of more imagined workflow design. |
+| `2026-05-21 13:35` | `source/2026-05-21-imedtac-post-meeting-progress-record/` | Johnny Fang's post-meeting Gmail record for the `2026-06-10`-around US customer demo. Confirms imedtac's reading of measure-first-then-question flow, Endpoint 1/3 merge, single/multi-choice UI limit, no voice for June, demo preview page after measurement report, tachycardia/chest-tightness live-demo preference, and NYCU action items to adjust API logic and provide demo script / parameters / expected output. |
+| `2026-05-21 13:38-17:28` | `source/2026-05-21-imedtac-teams-api-followup/` | Microsoft Teams follow-up channel after the engineering sync. Johnny opened `AI Triage 討論 w/ 陽交大`; Ben identified himself and Lauren as primary imedtac technical contacts; imedtac asked NYCU for the two-endpoint API document, preset questions/options by tomorrow or Monday, and a response on whether users may skip questions. |
 | `2026-05-21 11:53` | `source/2026-05-21-wu-line-ai-triage-patent-protection/` | Prof. Wu LINE exchange after Jason sent the 5/21 meeting note. Prof. Wu asked to find time with Tomi to discuss patents and warned that NYCU should protect its own patent / IP position before teaching imedtac the full method; cooperation can last only if boundaries are clarified first. |
 | `2026-05-21 12:05` | `source/2026-05-21-wu-ai-triage-ip-and-career-call/` | Prof. Wu network phone call after the LINE patent-protection exchange. Confirms lab API as both demo path and know-how protection boundary, meeting-note idea attribution requirement, MOU insufficiency for product co-development, need for contract / license / revenue discussion, imedtac engineering-capability assessment, postdoc/personnel-cost runway thinking, and June deep-cultivation proposal structure. |
 | `2026-05-21` | `source/2026-05-21-zhidewan-public-profile/` | Public-source dossier on 智德萬 / AItewan for the imedtac protection lane. Records official company framing, public registration snapshot, DeepBT TFDA / FDA K252190 footprint, public patent / trademark signals, and the operational implication that deeper imedtac method transfer should route through Prof. Wu / 智德萬 legal or patent review, with NYCU checked only for university-owned or university-resource-derived material. |
@@ -57,6 +59,8 @@ Derived analysis:
 - `source/2026-05-21-imedtac-engineering-sync/meeting-record.md`
 - `source/2026-05-21-imedtac-engineering-sync/transcript-corrected-gpt.txt`
 - `source/2026-05-21-imedtac-engineering-sync/user-provided-meeting-record.md`
+- `source/2026-05-21-imedtac-post-meeting-progress-record/source.md`
+- `source/2026-05-21-imedtac-teams-api-followup/source.md`
 - `source/2026-05-21-duobao-post-imedtac-internal-sync/source.md`
 - `source/2026-05-21-duobao-post-imedtac-internal-sync/meeting-record.md`
 - `source/2026-05-21-duobao-post-imedtac-internal-sync/transcript-corrected.md`
@@ -98,6 +102,8 @@ Derived analysis:
 - `handoff/2026-05-21-imedtac-engineering-sync-prep.md`
 - `handoff/2026-05-21-imedtac-engineering-sync-closeout.md`
 - `handoff/2026-05-21-imvs-nycu-api-design-v0.2-draft.md`
+- `handoff/2026-05-21-imedtac-two-endpoint-api-reply.md`
+- `handoff/2026-05-21-to-2026-05-25-imedtac-response-plan.md`
 - `handoff/2026-05-21-decision-defaults-and-owner-matrix.md`
 - `handoff/2026-05-22-api-v0.2-requirements-from-expert-review.md`
 - `handoff/api-examples/`

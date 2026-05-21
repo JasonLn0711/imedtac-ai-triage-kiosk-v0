@@ -1,0 +1,95 @@
+Gmail - [20250521] AI Triage 進度討論                                https://mail.google.com/mail/u/0/?ik=69124dd482&view=p...
+
+
+
+
+                                                                                Jason Lin <cre062400@gmail.com>
+
+
+
+         [20250521] AI Triage 進度討論
+         1 message
+
+         Johnny Fang ⽅偉翰, imedtac Corp. <Johnny.Fang@imedtac.com>                     Thu, May 21, 2026 at 1:35 PM
+         To: "cre062400@gmail.com" <cre062400@gmail.com>, "max870121@gmail.com" <max870121@gmail.com>, "Jason
+         Miao 苗中聖, imedtac Corp." <Jason.Miao@imedtac.com>, "Ben Siu 蕭銳輝, imedtac Corp." <Ben.Siu@imedtac.com>
+         Cc: "Ken Yu 余⾦樹, imedtac Corp." <Ken.Yu@imedtac.com>, "ytwu@nycu.edu.tw" <ytwu@nycu.edu.tw>
+
+
+
+          Hi all,
+
+          關於今天討論 AI Triage 系統預計於 6/10 ⽇左右進⾏的美國客⼾ Demo 情境規劃摘要如下:
+
+          重點摘錄
+
+          1. 系統流程與 API 架構調整
+
+              • Demo 流程為「先量測、後問答」: 為了最⼩化雙⽅⼯程資源的投⼊與系統⼤改動，定為
+                使⽤者先在設備上完成 Vital Signs 量測並上傳後，再開始進⾏ AI 問題的詢問
+              • API 調整： 合併 Endpoint � 與 3。當 imedtac 上傳完量測數據後，陽交⼤回傳 Session
+                Key 與第⼀題問題，後續再透過 Endpoint � 進⾏⼀問⼀答
+
+          2. 使⽤者介⾯ (UI/UX) 設計
+
+              • 題型限制： 考量到 Kiosk 的操作便利性（避免滑動或複雜互動），AI ⽣成的問題將為
+                「單選」或「複選」題
+              • 檢傷結果展⽰： 為了 Demo 需求，imedtac 會在流程最後特別開啟⼀個預覽按鈕或⾴
+                ⾯，⽤來展⽰ AI 整理的 SOAP 摘要與檢傷結果（實務上此結果應傳回 HIS 系統，不會直
+                接顯⽰給病患看）
+              • 語⾳功能： 本次 Demo 暫不納⼊語⾳互動功能，不需額外準備⿆克⾵設備
+
+          �. Demo 劇本與情境規劃 (針對美國客⼾)
+
+              • 先採⽤「心跳過快（心律不整/胸悶）」的緊急情境來做主打 Demo，以便現場⼈員透過
+                運動拉⾼心率來真實呈現數值異常的 AI 判斷
+
+          Action Items
+
+          imedtac
+
+              • 建⽴技術溝通管道： 建⽴雙⽅⼯程團隊可以直接溝通的群組（如 Microsoft Teams 或
+                LINE），以加速後續開發討論
+              • UI 流程實作：
+                   ◦ 配合「先量測、後問答」流程調整 Kiosk 介⾯，並在量測報告後⽅加上⼀個可觀看
+                     AI 檢傷結果的 Demo ⽤按鈕/⾴⾯
+
+
+
+1 of 2                                                                                                       5/21/26, 20:58
+Gmail - [20250521] AI Triage 進度討論                                         https://mail.google.com/mail/u/0/?ik=69124dd482&view=p...
+
+
+                       ◦ ⽣成的問題將為「單選」或「複選」題
+
+         陽交⼤
+
+              • 調整 API 邏輯： 配合決議，將 API 流程改為收到量測數據後才核發 Session Key 並開始
+                問答的循序模式
+              • 提供 Demo 腳本： 根據現場實測的可⾏性（心跳過快情境），進⼀步完善劇本的相關參
+                數與 AI 預期產出
+
+
+         Thanks,
+         Johnny
+         ---------------
+         Johnny Fang / ⽅偉翰
+         iMedtac Co., Ltd. www.imedtac.com
+         Rm. �, ��F., No.335, Ruiguang Rd. Neihu Dist., Taipei City �����, Taiwan (R.O.C)
+         本通訊及其所有附件所含之資訊均屬機密，僅供指定之收件⼈使⽤，未經寄件⼈許可不得揭露、複製或散布本通
+         訊。若您⾮指定之收件⼈，嚴禁使⽤、保存或揭露本通訊之任何部分，請通知寄件⼈並完全刪除本通訊。網路通訊
+         可能含有病毒，收件⼈應⾃⾏確認本郵件是否安全。此外，該電⼦訊息內容可能被變更，且網際網路並不保證該電
+         ⼦訊息內容之完整性，因此，慧誠智醫股份有限公司及其關係企業對於他⼈變更、修改、竄改或偽造之電⼦訊息內
+         容，恕不負任何責任。 The information contained in this communication and attachment is confidential and is for
+         the use of the intended recipient only. Any disclosure, copying or distribution of this communication without the
+         sender’s consent is strictly prohibited. If you are not the intended recipient, please notify the sender and delete this
+         communication entirely without using, retaining, or disclosing any of its contents. Internet message cannot be
+         guaranteed to be virus-free. The recipient is responsible for ensuring that this message is virus free. Besides, the
+         Message is susceptible to alteration and cannot guarantee the integrity of the Message. Therefore, imedtac Co.,
+         Ltd. and its affiliates shall not be liable for the Message if altered, modified, changed or falsified by any third party.
+
+
+
+
+2 of 2                                                                                                                          5/21/26, 20:58
+

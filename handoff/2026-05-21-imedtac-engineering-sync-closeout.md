@@ -11,6 +11,8 @@ source:
   - ../source/2026-05-21-imedtac-engineering-sync/transcript-corrected-gpt.txt
   - ../source/2026-05-21-imedtac-engineering-sync/user-provided-meeting-record.md
   - ../source/2026-05-21-duobao-post-imedtac-internal-sync/meeting-record.md
+  - ../source/2026-05-21-imedtac-post-meeting-progress-record/source.md
+  - ../source/2026-05-21-imedtac-teams-api-followup/source.md
 ---
 
 # imedtac Engineering Sync Closeout And Next Steps
@@ -46,7 +48,7 @@ production HIS / EMR writeback.
 | Output | `staff_review_summary`, staff-only / doctor-preview / customer-preview. |
 | Product wording | `vital-aware intake support` or `AI-assisted staff-review intake workflow`. |
 | Fallback | Remote REST API Mode primary; Local Scripted Demo Mode as clearly labeled backup. |
-| Case script | Prepare respiratory synthetic lane plus tachycardia live-performance lane; choose after iMVS machine review. |
+| Case script | imedtac prefers tachycardia / chest-tightness for the live US-customer demo; keep respiratory synthetic as a fallback / comparison lane until clinical wording review. |
 
 ## Post-Duobao Internal Sync Clarification
 
@@ -72,14 +74,43 @@ engineering boundary after the imedtac call:
    - Merge Endpoint 1 and Endpoint 3 for the first June integration pass.
    - Explain `idempotency_key`, retry behavior, and error/fallback behavior in
      plain engineering language.
+   - Teams follow-up: Ben asked for the two-endpoint API document through the
+     new `AI Triage 討論 w/ 陽交大` Microsoft Teams channel.
+   - Current draft: `handoff/2026-05-21-imedtac-two-endpoint-api-reply.md`.
 
-2. Request the imedtac field dictionary.
+2. Prepare the preset question / option template packet for imedtac by
+   `2026-05-22` if possible, or `2026-05-25` at latest.
+   - Include the first tachycardia / chest-tightness live-demo lane if 多寶 /
+     許醫師 can review quickly; keep respiratory early-handoff as fallback.
+   - Include stable question ids, option ids, labels, question type, and whether
+     each question is required or optional.
+   - Keep the wording demo-safe: no diagnosis, final triage level, treatment
+     advice, or safe-to-go-home language.
+   - Route clinical wording / required-question judgment through 多寶 / 許醫師
+     before sending externally if time allows.
+
+3. Answer imedtac's skip-behavior question.
+   - Product question from Teams: if a user cannot answer a question, can the
+     user skip it in practice?
+   - Working default before review: do not use a generic silent skip for
+     required safety questions.
+   - Prefer explicit options such as `I am not sure` or `Unable to answer` when
+     the answer affects the staff-review summary.
+   - If skip is allowed for non-critical questions, represent it explicitly in
+     the API, for example `answer.skipped=true` plus `skip_reason`, rather than
+     treating it as a missing answer.
+   - Confirm with 多寶 / 許醫師 which questions must be answered for the first
+     demo case.
+   - Use `handoff/2026-05-21-to-2026-05-25-imedtac-response-plan.md` for the
+     holding reply and Monday plan.
+
+4. Request the imedtac field dictionary.
    - Field names, units, required/optional, missing/failed/quality flags.
    - Blood pressure structure.
    - Whether respiratory rate exists as measured, manually entered, or absent.
    - Example payload for one synthetic or demo patient.
 
-3. Request the imedtac question-rendering template contract.
+5. Request the imedtac question-rendering template contract.
    - Supported `question.type` values: `single_choice`, `multi_choice`,
      numeric / scale, and any yes/no shortcut.
    - Maximum visible options without scrolling.
@@ -88,20 +119,37 @@ engineering boundary after the imedtac call:
    - Whether the response can carry `ui_template`, `option_count`, progress,
      and answer constraints.
 
-4. Prepare two case lanes.
-   - Respiratory synthetic lane: best for vital-aware medical story.
-   - Tachycardia live-performance lane: best for real-room customer theater.
+6. Prepare two case lanes.
+   - Tachycardia live-performance lane: imedtac's current preferred customer-demo
+     lead because heart rate can be raised on site.
+   - Respiratory synthetic lane: best for a controlled vital-aware medical story
+     and useful as fallback / comparison.
    - Keep both under staff-review wording; do not output final triage level.
 
-5. Build or preserve fallback.
+7. Build or preserve fallback.
    - Remote REST API Mode for normal demo.
    - Local Scripted Demo Mode for network/API failure.
    - Static Mock Mode only if both live and local scripted modes fail.
    - Label fallback mode clearly in internal runbooks.
 
-6. Arrange iMVS machine review with 多寶 / 許醫師.
+8. Arrange iMVS machine review with 多寶 / 許醫師.
    - Observe screen order, measurement posture, option capacity, scrolling
      tolerance, result page, and operator script.
+
+## Microsoft Teams Follow-Up TODOs
+
+Sources:
+
+- `../source/2026-05-21-imedtac-teams-api-followup/source.md`
+- `../source/2026-05-21-imedtac-post-meeting-progress-record/source.md`
+
+| Task | Owner | Due / timing | Status | Notes |
+| --- | --- | --- | --- | --- |
+| Provide two-endpoint API document to Ben / Lauren / Johnny. | NYCU / Jason | `2026-05-22` target | drafted | Use `handoff/2026-05-21-imedtac-two-endpoint-api-reply.md`; June contract is start-session-with-vitals plus submit-answer. |
+| Provide preset question and option template contents. | NYCU / Jason with 多寶 / 許醫師 wording review | Tomorrow or Monday from the Teams ask: `2026-05-22` or `2026-05-25` | pending | Include question ids, option ids, labels, required/optional status, and demo-safe wording. |
+| Decide and reply on user skip behavior. | NYCU / Jason with 多寶 / 許醫師 clinical review; imedtac UI to confirm rendering | Before sending question template if possible | pending | Default to explicit `Unable to answer` / `I am not sure` options for clinically relevant questions; avoid silent skip for required safety questions. |
+| Align first customer-demo lane with imedtac's post-meeting preference. | NYCU / Jason with 多寶 / 許醫師 review | Before Monday `2026-05-25` if possible | pending | imedtac prefers tachycardia / chest-tightness because HR can be raised live; keep output as staff-review summary, not formal triage result. |
+| Preserve Teams channel as engineering communication route. | NYCU / Jason | done after source capture | recorded | Johnny opened `AI Triage 討論 w/ 陽交大`; Ben and Lauren are the primary imedtac technical contacts. |
 
 ## What imedtac Should Provide
 
