@@ -23,6 +23,7 @@ Detailed architecture note:
 
 ```text
 docs/architecture-insertion-and-clinical-grounding.md
+docs/2026-05-12-imvs-hardware-and-vital-units-baseline.md
 source/2026-05-21-imedtac-engineering-sync/meeting-record.md
 source/2026-05-21-duobao-post-imedtac-internal-sync/meeting-record.md
 source/2026-05-21-wu-line-ai-triage-patent-protection/thinking-and-schedule.md
@@ -37,7 +38,8 @@ remains a future optimized path after the first customer-demo loop is stable.
 The next engineering gate is:
 
 ```text
-imedtac field dictionary
+company-provided iMVS V1.4 field/unit baseline
+-> current imedtac field-dictionary delta confirmation
 -> post-sync API v0.2 update
 -> generic iMVS question-template confirmation
 -> safe question / summary wording
@@ -75,6 +77,9 @@ docs/2026-05-12-imedtac-materials-analysis.md
 
 - medical measurement devices for blood pressure, SpO2, temperature, height, and
   weight;
+- company-provided `2026-05-12` hardware and unit baseline for iMVS:
+  `NBP` in `mmHg`, `SPO2` in `%`, `HR` in `bpm`, `Temp` in `deg C` / `C`,
+  `Glucose` in `mg/dL`, `Weight` in `kg`, and `Height` in `cm`;
 - a Windows-based fanless all-in-one kiosk with no onboard GPU;
 - a web service UI for measurement flow and summary report;
 - middleware / gateway integration;
@@ -119,7 +124,9 @@ flowchart TD
 
 ## Required Decisions Before Implementation
 
-- What exact imedtac Vital Upload API field dictionary should NYCU adapt to?
+- Does the current imedtac demo machine / GitHub format still match the
+  `2026-05-12` iMVS API `V1.4` baseline, and what field-name or optionality
+  deltas should NYCU adapt to?
 - Where exactly is the post-measurement AI question loop inserted in iMVS?
 - Can iMVS render reusable typed question templates from NYCU JSON, or does
   each question screen need to be hand-coded?
@@ -151,7 +158,8 @@ By Friday `2026-05-22`, keep the main artifact focused on the 5/21 sync
 closeout:
 
 - post-measurement API v0.2 update;
-- imedtac field dictionary request;
+- imedtac current field-dictionary delta request against the 5/12 V1.4
+  field/unit baseline;
 - generic question-template request for `single_choice`, `multi_choice`,
   numeric / scale, variable option counts, and no-scroll display limits;
 - `idempotency_key` / retry explanation;

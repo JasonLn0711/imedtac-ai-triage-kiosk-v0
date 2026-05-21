@@ -63,6 +63,43 @@ flowchart TD
 The first design task is to understand this workflow precisely enough to insert
 AI without breaking the product.
 
+## Company-Provided iMVS Hardware And Unit Baseline
+
+慧誠智醫 already provided an iMVS product-spec and API baseline on
+`2026-05-12`. The canonical extraction is
+`docs/2026-05-12-imvs-hardware-and-vital-units-baseline.md`.
+
+The baseline matters because the AI adapter should begin from imedtac's known
+measurement station shape, not from a generic vital-sign schema.
+
+Company-provided measurement modules:
+
+| Module | Company-provided baseline | Adapter role |
+| --- | --- | --- |
+| Blood pressure / pulse | A&D TM2657; blood pressure display range `0-299 mmHg`; pulse `40-180/min`; blood pressure accuracy `+/- 3 mmHg`; pulse accuracy `+/- 5%`. | `NBP` maps to systolic/diastolic blood pressure; `HR.BP_Value` maps to heart-rate context. |
+| Body temperature | Rossmax HC700 BT; display range `34.4 C - 42.2 C`; Bluetooth transmission. | `Temp` maps to `temperature_c` and infection/fever-context question routing. |
+| Blood oxygen | Optional Rossmax SB-210 in the product spec; API sample includes `SPO2`. | `SPO2` maps to `spo2_percent`; confirm target SKU before treating it as guaranteed. |
+| Height / weight | Nagata height/weight sensors; height range `10-300 cm`; weight range `100 g - 200 kg`. | `Height` and `Weight` map to context fields; BMI is derived only when both are present. |
+| Blood glucose | Optional Rossmax HT-100B in the product spec; API sample includes `Glucose`. | `Glucose` maps to `glucose_mg_dl`; keep diabetes/metabolic branch optional until device availability is confirmed. |
+
+Company-provided Vital Sign Upload API units:
+
+| API object | Source unit | Normalized runtime field |
+| --- | --- | --- |
+| `NBP.SYS_Value`, `NBP.DIA_Value` | `mmHg` | `blood_pressure_systolic_mm_hg`, `blood_pressure_diastolic_mm_hg` |
+| `SPO2.Value` | `%` | `spo2_percent` |
+| `HR.BP_Value` | `bpm` | `heart_rate_bpm` |
+| `Temp.Value` | `deg C` / source sample `°C` | `temperature_c` |
+| `Glucose.Value` | `mg/dL` | `glucose_mg_dl` |
+| `Weight.Value` | `kg` | `weight_kg` |
+| `Height.Value` | `cm` | `height_cm` |
+
+The June design should preserve these units explicitly in payloads and staff
+review summaries. The open 5/21 engineering confirmation is narrower: whether
+the current demo device and current Vital Upload implementation still match the
+V1.4 field names, which modules are guaranteed, and how missing/failed/quality
+states are represented.
+
 ## Preferred Insertion Point
 
 The most plausible v0 insertion point is **after measurement completes**.
@@ -228,7 +265,7 @@ question flow.
 | High or low BP | cardiovascular risk branch; ask chest pain, neuro symptoms, distress, medication context | source mapping required |
 | Fever / abnormal temperature | infection branch; ask duration, source symptoms, systemic warning signs | source mapping required |
 | BMI / height / weight | metabolic and risk-context questions, not immediate standalone triage claim | source mapping required |
-| Heart rate, if available | urgency context and possible escalation signal | source mapping required |
+| Heart rate, if available | live-performable tachycardia / palpitation branch; ask current heart-racing feeling, chest tightness, warning-symptom family, rhythm-history / medication context, then generate staff-review summary | `AHA-TACHYCARDIA-FAST-HR`, `AHA-HEART-ATTACK`, `MEDLINEPLUS-AFIB`, and `ENA-ESI-V5` now support demo question-family mapping; exact thresholds and stop rules still require clinician/company signoff |
 
 ## MVP Scope Guardrail
 
@@ -242,7 +279,7 @@ The first version should be deliberately narrow:
 - urgent-care lite,
 - one kiosk workflow,
 - CPU-only by default,
-- touch input plus optional ASR,
+- touch input for June; ASR stays a later expansion path,
 - limited vital-sign set,
 - small symptom-category set,
 - no diagnosis,

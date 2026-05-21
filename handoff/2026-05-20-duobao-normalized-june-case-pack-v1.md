@@ -128,12 +128,18 @@ scope.
 
 ## Case Priority
 
+Post-`2026-05-21` imedtac update: the first customer-demo lane should lead with
+the live-performable tachycardia / palpitation / chest-tightness scenario. The
+section order below still preserves the original normalized case-pack order, but
+the active first-lane handoff now lives at
+`handoff/2026-05-21-duobao-style-tachycardia-live-demo-question-set.md`.
+
 | Priority | Internal clinical label | Runtime-safe case label | Why this order |
 | --- | --- | --- | --- |
-| 1 | Pneumonia | Shortness of breath with fever and lower oxygen saturation | Best first demo: strong vital-aware story using temperature, SpO2, respiratory rate cue, and staff handoff. |
-| 2 | Acute cholecystitis | Fever with right upper abdominal pain | Good second case: shows pain location + pain score + fever without needing diagnosis output. |
-| 3 | AfRVR | Palpitation / chest tightness with very fast heart rate | Strong vital cue, but needs conservative wording because HR 150 can sound urgent. |
-| 4 | URI | Fever, cough, and runny nose contrast case | Useful contrast case, but must not imply safe-to-go-home or low-acuity clearance. |
+| 1 | AfRVR | Palpitation / chest tightness with very fast heart rate | Best first live demo after the 5/21 sync: heart rate is controllable enough for live performance and shows vital-aware question selection clearly. |
+| 2 | Pneumonia | Shortness of breath with fever and lower oxygen saturation | Strong synthetic fallback: SpO2 is clinically expressive but difficult to control reliably in a live meeting. |
+| 3 | URI | Fever, cough, and runny nose contrast case | Useful contrast case for showing that not every flow should look urgent; must not imply safe-to-go-home or low-acuity clearance. |
+| 4 | Acute cholecystitis | Fever with right upper abdominal pain | Future expansion case: useful for pain-location and fever context but less tied to live vital-sign performance. |
 
 ## Case 1: Shortness Of Breath With Fever And Lower Oxygen Saturation
 
@@ -367,9 +373,9 @@ Completed items:
 4. Wire the Case 1 runtime questions to
    `data/api_question_mapping.csv`, `data/question_registry.csv`, and
    `FLOW-RESPIRATORY-EARLY-HANDOFF`.
-5. Keep the existing staff-summary API example in
-   `handoff/api-examples/2026-05-21-summary-response-demo-respiratory.json`
-   aligned with `review_basis`, `review_action`, and `not_claimed`.
+5. Keep the current tachycardia staff-summary API example in
+   `handoff/api-examples/2026-05-21-summary-response-demo-tachycardia.json`
+   aligned with `review_basis`, `review_action`, and `scope_controls`.
 6. Run the current gates:
 
 ```bash
@@ -377,14 +383,25 @@ python3 scripts/check_governance_registries.py
 npm run demo:ready
 ```
 
+Post-`2026-05-21` addendum:
+
+- The tachycardia live-performance lane now has a clinical-review draft packet:
+  `handoff/2026-05-21-duobao-style-tachycardia-live-demo-question-set.md`.
+- The governance registries now include tachycardia source rows, seven visible
+  tachycardia question rows, API question mappings, and
+  `FLOW-TACHYCARDIA-LIVE-DEMO`.
+- The synthetic fixture is `demo/fixtures/tachycardia-live-demo.json`; it is a
+  rehearsal/control artifact, not real patient data.
+
 Next after 多寶 / 慧誠 review:
 
-1. Ask 多寶 to approve or edit the seven visible questions.
+1. Ask 多寶 to approve or edit the seven visible tachycardia questions.
 2. Ask imedtac engineering whether iMVS can render the question templates used
-   here: `single_choice`, `multi_choice`, numeric / scale, variable option
-   counts, and no-scroll display limits.
-3. Add abdominal-pain and tachycardia fixtures only after Case 1 wording is
-   accepted.
+   here: `single_choice`, `multi_choice`, variable option counts, and no-scroll
+   display limits. Keep numeric / scale as a future template only if imedtac
+   confirms support.
+3. Decide whether the respiratory fixture remains the first synthetic fallback
+   or becomes the second demo lane after tachycardia review.
 
 ## What Not To Do Yet
 

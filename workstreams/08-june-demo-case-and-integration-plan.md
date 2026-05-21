@@ -9,6 +9,7 @@ source_bundle: ../source/2026-05-15-imedtac-second-sync-and-duobao-followup/
 related_source:
   - ../source/2026-05-21-imedtac-engineering-sync/meeting-record.md
   - ../source/2026-05-21-duobao-post-imedtac-internal-sync/meeting-record.md
+  - ../handoff/2026-05-21-duobao-style-tachycardia-live-demo-question-set.md
 ---
 
 # June Demo Case And Integration Plan
@@ -114,8 +115,10 @@ Cut rule:
 - Build the API/session contract and mock iMVS adapter before expanding cases.
 - Use `summary`, `review_basis`, or `staff_review_summary` in payloads.
   Do not name the final field `diagnosis`.
-- Ask 慧誠 for one synthetic/de-identified vital payload example, field names,
-  UI insertion point, and who will join the technical sync.
+- Use the `2026-05-12` iMVS API `V1.4` field/unit baseline as the adapter
+  starting point, then ask 慧誠 for one current synthetic/de-identified payload
+  example, any field-name deltas, UI insertion point, and who will join the
+  technical sync.
 
 ## 2026-05-19 LINE Thursday Engineering Sync Update
 
@@ -185,6 +188,17 @@ Plain-language implication:
 - The first programming obligation is not a full AI product. It is a small mock
   API server, session state, deterministic question router, summary generator,
   validation, and fallback behavior for one synthetic respiratory case.
+
+Post-`2026-05-21` case-selection update:
+
+- imedtac's customer-demo preference now points to tachycardia / palpitation /
+  chest tightness as the first live-performance lane because heart rate can be
+  demonstrated more reliably than SpO2.
+- The first-lane question packet is
+  `handoff/2026-05-21-duobao-style-tachycardia-live-demo-question-set.md`.
+- The system design remains the same two-endpoint post-measurement loop; the
+  case change is implemented through `flow_version`, `case_id`,
+  `question_set_version`, registry rows, and staff-summary reason codes.
 
 ## 2026-05-19 多寶 Two-Phase Question Flow Update
 
@@ -274,8 +288,9 @@ an early staff-review handoff.
 
 Thursday closeout now must include:
 
-- 慧誠 engineering: payload field dictionary, required/optional rules,
-  missing/failure representation, UI insertion point, demo environment;
+- 慧誠 engineering: current payload field-dictionary deltas from the 5/12 V1.4
+  baseline, required/optional rules, missing/failure representation, UI
+  insertion point, demo environment;
 - Johnny / product: customer-demo date, audience, success standard, single
   engineering POC;
 - 多寶: respiratory case approval, stop rule, forbidden wording, safe summary
@@ -556,7 +571,8 @@ Avoid:
 Ask 慧誠 for the smallest technical packet needed to wire the demo:
 
 - Current kiosk UI flow screenshots or screen order.
-- Vital-sign payload field names and example values.
+- Current Vital Upload payload example values and any deltas from the 5/12 iMVS
+  API `V1.4` units / field baseline.
 - Where the AI screen can be inserted.
 - Whether June demo can call an external server / laptop API.
 - Who from 慧誠's software team should join the next technical sync.

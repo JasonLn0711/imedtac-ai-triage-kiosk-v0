@@ -7,6 +7,7 @@ type: design-review
 status: active
 source:
   - ../source/2026-05-20-duobao-demo-cases-question-design/source.md
+  - ../handoff/2026-05-21-duobao-style-tachycardia-live-demo-question-set.md
   - ./2026-05-19-two-phase-question-flow-design.md
   - ../handoff/2026-05-21-imvs-nycu-api-design-v0.2-draft.md
   - ./demo-acceptance-criteria.md
@@ -135,13 +136,16 @@ stay symptom/vital based:
 
 ## Near-Term Implementation Recommendation
 
-Do not import the full question bank into runtime yet. Instead:
+Do not import the full question bank into runtime yet. After the `2026-05-21`
+meeting, the near-term implementation should be:
 
 1. Add 多寶's `2026-05-20` source bundle to `data/source_registry.csv`.
-2. Convert only the first respiratory / dyspnea case into the existing
-   `FLOW-RESPIRATORY-EARLY-HANDOFF` line.
-3. Add abdominal-pain and tachycardia cases only after the respiratory flow has
-   passed demo-ready checks.
+2. Keep the respiratory / dyspnea case as
+   `FLOW-RESPIRATORY-EARLY-HANDOFF` for synthetic fallback and evidence demo.
+3. Use the tachycardia / palpitation / chest-tightness lane as the first
+   live-performance lane through
+   `handoff/2026-05-21-duobao-style-tachycardia-live-demo-question-set.md` and
+   `FLOW-TACHYCARDIA-LIVE-DEMO`.
 4. For future expansion, turn each 多寶 question into a registry row with:
    `clinical_purpose`, `vital_trigger`, `evidence_status`, and `review_owner`.
 5. Design each June case under the `<8` visible-question cap, with an

@@ -1,0 +1,92 @@
+{
+  "case_id": "demo-tachycardia-live-001",
+  "case_version": "demo-tachycardia-live-001-v0.2",
+  "fixture_version": "v0.2.0",
+  "flow_id": "FLOW-TACHYCARDIA-LIVE-DEMO",
+  "flow_version": "tachycardia-live-demo-flow-v0.2-draft",
+  "question_set_version": "tachycardia-question-set-v0.2-draft",
+  "status": "synthetic_demo_only",
+  "not_real_patient_data": true,
+  "profile": {
+    "demo_patient_id": "DEMO-TACHY-001",
+    "age": 76,
+    "sex": "female",
+    "language": "English",
+    "identity_mode": "demo"
+  },
+  "live_demo_controls": {
+    "primary_mode": "live_measured",
+    "fallback_modes": [
+      "synthetic_override",
+      "local_scripted_demo"
+    ],
+    "operator_note": "Use voluntary live measurement only. Do not require exercise. If the measured heart-rate cue is not suitable for the demo, use the synthetic fixture or local scripted fallback."
+  },
+  "vitals": {
+    "temperature_c": 36.5,
+    "spo2_percent": 98,
+    "heart_rate_bpm": 150,
+    "respiratory_rate_per_min": 16,
+    "blood_pressure_systolic_mm_hg": 102,
+    "blood_pressure_diastolic_mm_hg": 68
+  },
+  "question_ids": [
+    "TACHY-001",
+    "TACHY-002",
+    "TACHY-003",
+    "TACHY-004",
+    "TACHY-005",
+    "TACHY-006",
+    "TACHY-007",
+    "REV-001"
+  ],
+  "source_ids": [
+    "LOCAL-PROTOCOL-TBD",
+    "DUOBAO-CASE-DRAFT-20260515",
+    "DUOBAO-DEMO-DESIGN-20260520",
+    "IMEDTAC-ENGINEERING-SYNC-20260521",
+    "IMEDTAC-POST-MEETING-PROGRESS-20260521",
+    "IMEDTAC-TEAMS-API-FOLLOWUP-20260521",
+    "AHA-TACHYCARDIA-FAST-HR",
+    "AHA-HEART-ATTACK",
+    "MEDLINEPLUS-AFIB",
+    "ENA-ESI-V5"
+  ],
+  "expected_answer_path": {
+    "tachy-chief-concern": [
+      "heart_racing"
+    ],
+    "tachy-onset": [
+      "half_day"
+    ],
+    "tachy-current-feeling": [
+      "heart_racing",
+      "chest_heavy"
+    ],
+    "tachy-associated-symptoms": [
+      "short_breath"
+    ],
+    "tachy-post-vital-heart-rate-cue": [
+      "both"
+    ],
+    "tachy-heart-history-meds": [
+      "known_rhythm_problem"
+    ],
+    "tachy-medication-allergy-confirm": [
+      "not_sure"
+    ]
+  },
+  "allowed_output": "staff-review summary only",
+  "forbidden_output": [
+    "diagnosis",
+    "arrhythmia diagnosis",
+    "AfRVR diagnosis",
+    "ACS diagnosis",
+    "ECG order",
+    "treatment advice",
+    "final acuity",
+    "formal triage score",
+    "autonomous emergency order",
+    "production HIS/EMR/FHIR writeback"
+  ]
+}

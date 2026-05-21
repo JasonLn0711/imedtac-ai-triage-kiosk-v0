@@ -6,3 +6,10 @@ respiratory-symptoms,RESP-005,CDC-FLU-WARN;AHA-HEART-ATTACK;DUOBAO-DEMO-DESIGN-2
 chest-pain-pressure,CP-001,AHA-HEART-ATTACK;AHA-HBP-911-2025,source-backed,clinical_reviewer_tbd,Runtime Phase 2 chest pain or pressure follow-up maps to existing chest-pain registry question.
 lung-history-context,RESP-003,LOCAL-PROTOCOL-TBD,clinician-signoff-needed,clinical_reviewer_tbd,Runtime Phase 2 baseline lung disease or oxygen context needs clinical owner approval before patient-facing freeze.
 medication-allergy,MED-001,LOCAL-PROTOCOL-TBD,clinical-review-needed,clinical_reviewer_tbd,Runtime handoff medication/allergy context remains a staff-confirmation field.
+tachy-chief-concern,TACHY-001,DUOBAO-DEMO-DESIGN-20260520;IMEDTAC-POST-MEETING-PROGRESS-20260521;LOCAL-PROTOCOL-TBD,clinical-review-needed,clinical_reviewer_tbd,Tachycardia live lane chief-concern question for post-measurement intake.
+tachy-onset,TACHY-002,DUOBAO-DEMO-DESIGN-20260520;LOCAL-PROTOCOL-TBD,clinical-review-needed,clinical_reviewer_tbd,Tachycardia live lane onset and duration question.
+tachy-current-feeling,TACHY-003,AHA-TACHYCARDIA-FAST-HR;AHA-HEART-ATTACK;DUOBAO-DEMO-DESIGN-20260520,source-backed,clinical_reviewer_tbd,Tachycardia live lane current symptom descriptor question.
+tachy-associated-symptoms,TACHY-004,AHA-TACHYCARDIA-FAST-HR;AHA-HEART-ATTACK;MEDLINEPLUS-AFIB,source-backed,clinical_reviewer_tbd,Tachycardia live lane associated warning-symptom question.
+tachy-post-vital-heart-rate-cue,TACHY-005,AHA-TACHYCARDIA-FAST-HR;MEDLINEPLUS-AFIB;DUOBAO-DEMO-DESIGN-20260520,source-backed,clinical_reviewer_tbd,Tachycardia live lane post-vital heart-rate cue question.
+tachy-heart-history-meds,TACHY-006,MEDLINEPLUS-AFIB;ENA-ESI-V5;LOCAL-PROTOCOL-TBD,source-family,clinical_reviewer_tbd,Tachycardia live lane history and medication context question for staff confirmation.
+tachy-medication-allergy-confirm,TACHY-007,LOCAL-PROTOCOL-TBD;DUOBAO-DEMO-DESIGN-20260520,clinical-review-needed,clinical_reviewer_tbd,Tachycardia live lane medication and allergy staff-confirmation question.
