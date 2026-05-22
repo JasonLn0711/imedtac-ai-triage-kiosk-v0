@@ -9,6 +9,7 @@ source:
   - ../handoff/2026-05-21-imedtac-two-endpoint-api-reply.md
   - ../handoff/2026-05-21-duobao-style-tachycardia-live-demo-question-set.md
   - ./2026-05-12-imvs-hardware-and-vital-units-baseline.md
+  - ./2026-05-22-future-complete-api-design-plan.md
 ---
 
 # imedtac API Field MVP / Complete Scope Note
@@ -16,6 +17,12 @@ source:
 本文件保存從對外 API 回覆文件移出的欄位 scope 思考。對外文件最後一欄改為
 「範例與說明」，方便 imedtac 工程團隊直接對照 JSON field；本文件保留 NYCU
 內部用來排六月 demo MVP、完整 API 與 imedtac 待確認事項的判斷。
+
+## 2026-05-22 Scope Decision
+
+六月對外 API reply 改為「小而固定」的 implementation baseline，只要求貴司實作兩個 endpoint、compact vital payload、question object、`answer.selected_option_ids`、`not_sure` option behavior、以及 `staff_review_summary`。本文件中的完整 field inventory 不再代表六月外部必接欄位；它是 NYCU 內部 future complete API planning 的來源之一。
+
+完整 trace-friendly API 的未來規劃已另存於 `docs/2026-05-22-future-complete-api-design-plan.md`。若 future design 中的欄位要升級成外部 implementation contract，必須先有 owner、example payload、compatibility note、version impact，以及雙方記錄過的 change request。
 
 ## Scope 標籤
 
