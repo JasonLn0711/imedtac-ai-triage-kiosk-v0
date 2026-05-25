@@ -150,8 +150,8 @@ summary_visibility 維持 staff_only；summary 是 staff-review / demo preview�
 
 NYCU implementation checklist:
 
-- Provide one HTTPS API base URL before rehearsal. Current Render rehearsal
-  service:
+- Provide one HTTPS API base URL before rehearsal. Current Render rehearsal API
+  is live and verified:
   `https://nycu-imedtac-triage-demo-api.onrender.com/api/triage-demo`.
 - Allow CORS origins:
   - `http://localhost`
@@ -166,8 +166,20 @@ NYCU implementation checklist:
   - Start Command: `npm run render:start`
   - Health Check Path: `/healthz`
 - The first Render deploy accidentally used `yarn start`, which runs the static
-  frontend server. The next deploy must run `node scripts/mock-api-server.js`
-  through `npm run render:start`.
+  frontend server. This has been corrected: Render now runs
+  `node scripts/mock-api-server.js` through `npm run render:start`.
+- Public verification passed on `2026-05-25 17:50 GMT+8`:
+  - `GET /healthz` returned HTTP `200`.
+  - CORS preflight from `http://localhost:5174` returned HTTP `204`.
+  - `POST /api/triage-demo/sessions` returned `status="question"`,
+    `session_state="active"`, `session_key="demo-session-tachy-001"`,
+    first question `tachy-chief-concern`, and `progress.expected_total=7`.
+  - `POST /api/triage-demo/sessions/demo-session-tachy-001/answers` returned
+    next question `tachy-onset`.
+- Outbound IP ranges shown by Render (`74.220.50.0/24`,
+  `74.220.58.0/24`) are not needed for the current browser-direct path from
+  iMVS to NYCU. They only matter if the NYCU Render service needs to call an
+  imedtac IP-restricted backend or webhook.
 
 ## Work Plan
 
@@ -178,17 +190,17 @@ NYCU implementation checklist:
 | 3 | Deliver the first tachycardia preset question/option template aligned to 多寶's HR `130` case. | Jason + 多寶 | `2026-05-25` |
 | 4 | Confirm whether summary display will use iMVS existing preview page or a temporary NYCU-hosted demo preview page. | imedtac UI + NYCU | Immediate |
 | 5 | Confirm iMVS locks answer-related controls after answer submit and unlocks only after NYCU next-question / summary response. | imedtac UI | Before first rehearsal |
-| 6 | Prepare the Render browser-callable rehearsal API and verify `/healthz`, CORS preflight, start-session, and submit-answer. | NYCU engineering | Before first rehearsal |
+| 6 | Prepare the Render browser-callable rehearsal API and verify `/healthz`, CORS preflight, start-session, and submit-answer. | NYCU engineering | Achieved on `2026-05-25` |
 | 7 | Run contract rehearsal: start session -> first question -> answer -> next question -> summary. | NYCU + imedtac | Before `2026-06-10` customer demo |
 | 8 | Run fallback rehearsal: API timeout / invalid session / idempotency conflict -> structured error -> restart demo session or local scripted demo label. | NYCU + imedtac | Before customer demo |
 | 9 | Capture UI screenshots from imedtac and update option-count / progress assumptions. | imedtac UI + Jason | After first rehearsal |
 
 ## Suggested Teams Reply
 
-Send gate: send the following reply only after the Render public endpoint passes
-`GET /healthz`, CORS preflight, `POST /sessions`, and one
-`POST /sessions/{session_key}/answers` check from the public URL. Before that,
-keep it as the frozen draft reply.
+Send gate: the Render public endpoint now passes `GET /healthz`, CORS
+preflight, `POST /sessions`, and one
+`POST /sessions/{session_key}/answers` check from the public URL. The reply
+below is ready to send after Jason confirms the timing.
 
 ```text
 Ben、Johnny、Lauren 大家好，收到，謝謝，我們先把幾個工程點對齊如下：
@@ -224,6 +236,8 @@ POST https://nycu-imedtac-triage-demo-api.onrender.com/api/triage-demo/sessions
 POST https://nycu-imedtac-triage-demo-api.onrender.com/api/triage-demo/sessions/{session_key}/answers
 
 我們會把 http://localhost 與 http://localhost:5174 加入 CORS allowlist。Demo bearer token 我們會用一個簡單的 demo token 做法，之後提供實際 header 格式；實際 token 不會寫入文件或截圖。
+
+另外，Render dashboard 上看到的 Outbound IP Addresses 是 NYCU Render service 主動往外呼叫其他外部系統時會使用的來源 IP 範圍，不是 iMVS browser 呼叫 NYCU API 時需要設定的值。這次 browser direct call 只需要 base URL、CORS origin 與 header 規則即可。若之後需要 NYCU Render service 主動呼叫你們的後端、webhook 或需要通過你們 firewall allowlist 的系統，我們再提供目前 Render 顯示的 outbound IP ranges 讓你們加入 allowlist。
 
 我們也會把第一版 tachycardia preset questions/options 對齊多寶今天提供的 case 後整理給大家。
 ```

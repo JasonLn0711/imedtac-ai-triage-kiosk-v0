@@ -89,7 +89,13 @@ Current v0.2 freeze-gate additions:
 - Render rehearsal API service is created as
   `nycu-imedtac-triage-demo-api`; the intended API base URL is
   `https://nycu-imedtac-triage-demo-api.onrender.com/api/triage-demo`.
-  Render must use `npm run render:start`, not the repo's static `start` script.
+  Render now uses `npm run render:start`, and public `/healthz`, CORS
+  preflight, start-session, and submit-answer checks passed on
+  `2026-05-25 17:50 GMT+8`.
+- Render outbound IP ranges (`74.220.50.0/24`, `74.220.58.0/24`) are only for
+  NYCU Render service initiated outbound calls. They are not needed for the
+  current iMVS browser -> NYCU API path unless a future imedtac backend
+  allowlist requires NYCU service egress ranges.
 
 Post-sync `2026-05-21` update:
 

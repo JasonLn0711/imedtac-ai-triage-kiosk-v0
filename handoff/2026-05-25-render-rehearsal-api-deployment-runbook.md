@@ -65,9 +65,10 @@ execution merge commit `1d808e8`, confirmed this state:
 | `GET /healthz` | HTTP `404`; `x-render-origin-server: SimpleHTTP/0.6 Python/3.11.2` | Render is still running the static Python server from `yarn start`. |
 | `OPTIONS /api/triage-demo/sessions` | HTTP `501`; `x-render-origin-server: SimpleHTTP/0.6 Python/3.11.2` | The public service still does not support API preflight because the Start Command has not been changed to `npm run render:start`. |
 
-## Required Render Settings
+## Applied Render Settings
 
-Update the Render Web Service settings to these values before the next deploy:
+Jason updated the Render Web Service settings on `2026-05-25` and triggered a
+manual deploy of GitHub commit `c190240`.
 
 | Render field | Required value |
 | --- | --- |
@@ -92,6 +93,30 @@ The mock API server reads Render's `PORT` environment variable and exposes:
 ```http
 GET /healthz
 ```
+
+The successful Render deploy log showed:
+
+```text
+Running 'npm run render:start'
+node scripts/mock-api-server.js
+AI triage demo mock API listening on http://localhost:10000
+New primary port detected: 10000
+Your service is live
+Available at your primary URL https://nycu-imedtac-triage-demo-api.onrender.com
+```
+
+## Public Verification After Settings Update
+
+Public verification passed on `2026-05-25 17:50 GMT+8`:
+
+| Check | Result | Evidence |
+| --- | --- | --- |
+| `GET /healthz` | HTTP `200` | Response body: `{"status":"ok","service":"nycu-imedtac-triage-demo-api","mode":"synthetic-data-rehearsal-api"}`; header `x-render-origin-server: Render`. |
+| `OPTIONS /api/triage-demo/sessions` from `http://localhost:5174` | HTTP `204` | Response included `Access-Control-Allow-Origin: http://localhost:5174`, `Access-Control-Allow-Methods: POST, OPTIONS`, and `Access-Control-Allow-Headers: Content-Type, Authorization`. |
+| `POST /api/triage-demo/sessions` | HTTP success / JSON `status="question"` | Returned `session_state="active"`, `session_key="demo-session-tachy-001"`, first question `tachy-chief-concern`, and `progress.expected_total=7`. |
+| `POST /api/triage-demo/sessions/demo-session-tachy-001/answers` | HTTP success / JSON `status="question"` | Returned next question `tachy-onset` and `progress.expected_total=7`. |
+
+The public Render service is now ready for first browser-callable rehearsal.
 
 ## Deployment Sequence
 
@@ -120,7 +145,11 @@ Start Command: npm run render:start
 Health Check Path: /healthz
 ```
 
+   Completed on `2026-05-25`.
+
 5. Trigger `Manual Deploy -> Deploy latest commit`.
+
+   Completed on `2026-05-25` for commit `c190240`.
 
 6. Wait for Render logs to show the API server start message:
 
@@ -186,6 +215,51 @@ curl -sS -X POST "$API_BASE/api/triage-demo/sessions/$SESSION_KEY/answers" \
 The request file's `session_key` field is not used for routing; the URL
 `session_key` is authoritative.
 
+## Outbound IP Address Decision
+
+The Render dashboard currently shows these service outbound IP ranges:
+
+```text
+74.220.50.0/24
+74.220.58.0/24
+```
+
+These are **outbound** ranges for requests initiated by the NYCU Render service
+to the public internet. They are not the inbound URL for imedtac to call, and
+they are not the CORS setting.
+
+For the current first rehearsal, imedtac's browser or front-end code calls the
+NYCU Render API at:
+
+```text
+https://nycu-imedtac-triage-demo-api.onrender.com/api/triage-demo
+```
+
+Therefore, NYCU does **not** need to send the outbound IP ranges to imedtac for
+this browser-direct path. imedtac needs the API base URL, endpoint paths, CORS
+origin assumptions, and optional bearer-token header format.
+
+Send the outbound IP ranges to imedtac only if a future rehearsal path requires
+the NYCU Render service to call an imedtac-controlled backend, firewall, VPN,
+database, webhook, or other IP-restricted system. In that case, imedtac would
+allowlist both CIDR ranges on **their** firewall / allowlist:
+
+```text
+74.220.50.0/24
+74.220.58.0/24
+```
+
+There is no repo code setting to change for these shared ranges. Render assigns
+them by region. If imedtac requires unique, exclusive static outbound IPs, that
+is a later infrastructure decision: Render's dedicated outbound IP feature
+requires a Pro plan or higher, and the IP set is created from the Render
+workspace networking settings.
+
+Reference:
+
+- Render outbound IP ranges: `https://render.com/docs/outbound-ip-addresses`
+- Render dedicated outbound IPs: `https://render.com/docs/dedicated-ips`
+
 ## Demo-Day Operating Notes
 
 - Render Free instances spin down after inactivity. Pre-warm the service before
@@ -199,8 +273,8 @@ The request file's `session_key` field is not used for routing; the URL
 
 ## Message To imedtac
 
-Send this message only after the public Render endpoint passes `/healthz`,
-CORS preflight, start-session, and submit-answer checks.
+The public Render endpoint now passes `/healthz`, CORS preflight,
+start-session, and submit-answer checks.
 
 ```text
 We will provide one NYCU-hosted Render rehearsal API base URL:

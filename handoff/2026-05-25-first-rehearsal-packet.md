@@ -76,6 +76,15 @@ Do not use Render's autofilled `yarn start` for this service. In this repo,
 `start` is the static frontend server; the rehearsal API must run
 `node scripts/mock-api-server.js` through `npm run render:start`.
 
+Status update on `2026-05-25 17:50 GMT+8`: Render now runs
+`npm run render:start`; public `/healthz`, CORS preflight, start-session, and
+submit-answer checks all passed against the `onrender.com` URL.
+
+Render Outbound IP Addresses (`74.220.50.0/24`, `74.220.58.0/24`) are not
+needed for the current iMVS browser -> NYCU API call path. They become relevant
+only if NYCU's Render service must initiate calls to an imedtac IP-restricted
+backend or webhook.
+
 ## Browser / CORS Contract
 
 Allowed rehearsal origins:
