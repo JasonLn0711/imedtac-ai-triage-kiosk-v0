@@ -57,12 +57,13 @@ POST /api/triage-demo/sessions
 POST /api/triage-demo/sessions/{session_key}/answers
 ```
 
-Public verification on `2026-05-25` confirmed this state:
+Public verification on `2026-05-25`, including a post-push check after
+execution merge commit `1d808e8`, confirmed this state:
 
 | Check | Result | Interpretation |
 | --- | --- | --- |
 | `GET /healthz` | HTTP `404`; `x-render-origin-server: SimpleHTTP/0.6 Python/3.11.2` | Render is still running the static Python server from `yarn start`. |
-| `OPTIONS /api/triage-demo/sessions` | HTTP `404`; `x-render-routing: no-server` | API routing is not active on the public service yet. |
+| `OPTIONS /api/triage-demo/sessions` | HTTP `501`; `x-render-origin-server: SimpleHTTP/0.6 Python/3.11.2` | The public service still does not support API preflight because the Start Command has not been changed to `npm run render:start`. |
 
 ## Required Render Settings
 
@@ -103,7 +104,13 @@ npm run demo:ready
 2. Commit the Render API deployment prep and the imedtac rehearsal contract
    updates.
 
+   Completed on `2026-05-25`: `61267d7`, preserved in published merge commit
+   `1d808e8`.
+
 3. Push the commit to `origin/main`.
+
+   Completed on `2026-05-25`: `git push origin HEAD:main` updated GitHub
+   `main` to `1d808e8`.
 
 4. In Render settings, update:
 
