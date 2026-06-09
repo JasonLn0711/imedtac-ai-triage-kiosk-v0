@@ -1,14 +1,21 @@
 const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
+const dynamicEngine = require("./dynamic-engine");
+const { createConfiguredRedisSessionAdapter, redisStoreEnabled } = require("./session-store");
 
 const ROOT = path.resolve(__dirname, "../..");
 const DEMO_BOUNDARY = "Synthetic-data staff-review intake support with human-review workflow and separate production validation path.";
-const ALLOWED_ORIGINS = new Set(["http://localhost", "http://localhost:5174"]);
+const DEFAULT_ALLOWED_ORIGINS = ["http://localhost", "http://localhost:5174"];
 const SESSION_TTL_MS = 30 * 60 * 1000;
+const MAX_JSON_BODY_BYTES = Number(process.env.DEMO_MAX_JSON_BODY_BYTES || 32 * 1024);
+const RATE_LIMIT_WINDOW_MS = Number(process.env.DEMO_RATE_LIMIT_WINDOW_MS || 60 * 1000);
+const RATE_LIMIT_MAX_REQUESTS = Number(process.env.DEMO_RATE_LIMIT_MAX_REQUESTS || 120);
 
 const sessions = new Map();
 const idempotencyRecords = new Map();
+const rateLimitRecords = new Map();
+const auditEvents = [];
 let responseCounter = 0;
 let sessionCounter = 0;
 
@@ -18,118 +25,14 @@ function readJson(relativePath) {
 
 const fixture = readJson("demo/fixtures/tachycardia-live-demo.json");
 const startQuestionExample = readJson("handoff/api-examples/2026-05-21-start-session-response-question.json");
-const nextQuestionExample = readJson("handoff/api-examples/2026-05-21-next-question-response-demo-tachycardia.json");
-const postVitalQuestionExample = readJson("handoff/api-examples/2026-05-21-post-vital-question-response-demo-tachycardia.json");
 const summaryExample = readJson("handoff/api-examples/2026-05-21-summary-response-demo-tachycardia.json");
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
 }
 
-function makeQuestion(config) {
-  return {
-    registry_refs: config.registry_refs,
-    source_refs: config.source_refs,
-    evidence_status: config.evidence_status,
-    review_owner: "clinical_reviewer_tbd",
-    type: config.type,
-    ui_template: config.type,
-    text: config.text,
-    options: config.options,
-    option_count: config.options.length,
-    none_option_id: config.none_option_id || null,
-    required: config.required !== false,
-    allow_not_sure: config.allow_not_sure !== false,
-    allow_skip: config.allow_skip === true,
-    max_selections: config.max_selections,
-    trigger_reason_codes: config.trigger_reason_codes,
-    summary_effect: config.summary_effect,
-    rendering_constraints: {
-      requires_no_scroll: true,
-      max_visible_options_without_scroll: 9
-    },
-    evidence_refs: config.evidence_refs || ["DUOBAO-AFRVR-TACHY-QA-20260525", "LOCAL-PROTOCOL-TBD"],
-    demo_boundary: config.demo_boundary || "Synthetic-data demo question for staff-review intake support.",
-    id: config.id
-  };
-}
-
-const questionSequence = [
-  clone(startQuestionExample.question),
-  clone(nextQuestionExample.question),
-  makeQuestion({
-    id: "tachy-current-feeling",
-    registry_refs: ["TACHY-003"],
-    source_refs: ["AHA-TACHYCARDIA-FAST-HR", "AHA-HEART-ATTACK", "DUOBAO-DEMO-DESIGN-20260520", "DUOBAO-AFRVR-TACHY-QA-20260525"],
-    evidence_status: "source-backed",
-    type: "multi_choice",
-    text: "Which descriptions fit what you feel now?",
-    options: [
-      { id: "heart_racing", label: "Heart racing or pounding" },
-      { id: "chest_heavy", label: "Chest tightness or heaviness" },
-      { id: "chest_pressure_pain", label: "Chest pressure or pain" },
-      { id: "burning_sharp_or_not_sure", label: "Burning, sharp discomfort, or not sure" }
-    ],
-    max_selections: 4,
-    trigger_reason_codes: ["reported_palpitations", "reported_chest_tightness"],
-    summary_effect: "Adds current palpitation and chest-tightness descriptors to the staff-review summary."
-  }),
-  makeQuestion({
-    id: "tachy-associated-symptoms",
-    registry_refs: ["TACHY-004"],
-    source_refs: ["AHA-TACHYCARDIA-FAST-HR", "AHA-HEART-ATTACK", "MEDLINEPLUS-AFIB", "DUOBAO-AFRVR-TACHY-QA-20260525"],
-    evidence_status: "source-backed",
-    type: "multi_choice",
-    text: "Are any of these happening with it?",
-    options: [
-      { id: "short_breath", label: "Shortness of breath" },
-      { id: "sweating_nausea_fatigue", label: "Sweating, nausea, or unusual fatigue" },
-      { id: "dizzy_faint", label: "Dizziness, lightheadedness, or fainting" },
-      { id: "none_of_these", label: "None of these" }
-    ],
-    none_option_id: "none_of_these",
-    max_selections: 4,
-    trigger_reason_codes: ["associated_warning_symptom_screen"],
-    summary_effect: "Adds associated warning-symptom positives or negatives to the staff-review summary."
-  }),
-  clone(postVitalQuestionExample.question),
-  makeQuestion({
-    id: "tachy-heart-history-meds",
-    registry_refs: ["TACHY-006"],
-    source_refs: ["MEDLINEPLUS-AFIB", "ENA-ESI-V5", "DUOBAO-AFRVR-TACHY-QA-20260525", "LOCAL-PROTOCOL-TBD"],
-    evidence_status: "source-family",
-    type: "multi_choice",
-    text: "Have you been told you have a heart rhythm problem, or do you take heart / blood-pressure medicine?",
-    options: [
-      { id: "known_rhythm_problem", label: "Known rhythm problem" },
-      { id: "heart_bp_medicine", label: "Heart or blood-pressure medicine" },
-      { id: "no_known", label: "No known history / medicine" },
-      { id: "staff_confirm", label: "Not sure, staff should confirm" }
-    ],
-    max_selections: 4,
-    trigger_reason_codes: ["history_medication_context"],
-    summary_effect: "Adds rhythm-history and heart/blood-pressure medication context for staff confirmation."
-  }),
-  makeQuestion({
-    id: "tachy-medication-allergy-confirm",
-    registry_refs: ["TACHY-007"],
-    source_refs: ["LOCAL-PROTOCOL-TBD", "DUOBAO-DEMO-DESIGN-20260520", "DUOBAO-AFRVR-TACHY-QA-20260525"],
-    evidence_status: "clinical-review-needed",
-    type: "multi_choice",
-    text: "Do you have medication allergies or medicines staff should confirm?",
-    options: [
-      { id: "med_allergy", label: "Medication allergy" },
-      { id: "regular_medicines", label: "Regular medicines" },
-      { id: "none_known", label: "No known medication allergy" },
-      { id: "not_sure", label: "Not sure" }
-    ],
-    max_selections: 4,
-    trigger_reason_codes: ["medication_allergy_context"],
-    summary_effect: "Adds medication and allergy uncertainty to the staff-review summary."
-  })
-];
-
-const expectedTotal = questionSequence.length;
+const questionSequence = dynamicEngine.defaultQuestionSequence();
+const expectedTotal = dynamicEngine.expectedTotal();
 const contractFields = {
   api_version: startQuestionExample.api_version,
   schema_version: startQuestionExample.schema_version,
@@ -187,6 +90,14 @@ function demoBearerAuthChallenge() {
   return 'Bearer realm="nycu-imedtac-triage-demo"';
 }
 
+function allowedOrigins() {
+  const configured = process.env.DEMO_ALLOWED_ORIGINS;
+  const origins = configured && configured.trim()
+    ? configured.split(",").map((origin) => origin.trim()).filter(Boolean)
+    : DEFAULT_ALLOWED_ORIGINS;
+  return new Set(origins);
+}
+
 function requireDemoBearerAuth(req) {
   const expectedToken = configuredDemoBearerToken();
   if (!expectedToken) return null;
@@ -231,25 +142,135 @@ function baseResponse(body, session, kind) {
   };
 }
 
-function buildQuestionResponse(body, session, questionIndex, lastQuestionId, phaseReason) {
-  const question = clone(questionSequence[questionIndex]);
+function sessionKeyHash(sessionKey) {
+  return crypto.createHash("sha256").update(String(sessionKey || "")).digest("hex").slice(0, 16);
+}
+
+function appendAuditEvent(event) {
+  const record = {
+    timestamp: new Date().toISOString(),
+    ...event
+  };
+  auditEvents.push(record);
+
+  const auditPath = process.env.DEMO_AUDIT_LOG_PATH;
+  if (auditPath) {
+    fs.appendFileSync(auditPath, `${JSON.stringify(record)}\n`, "utf8");
+  }
+  return record;
+}
+
+function persistentSessionStorePath() {
+  return process.env.DEMO_SESSION_STORE_FILE || null;
+}
+
+function savePersistentSessions() {
+  const storePath = persistentSessionStorePath();
+  if (!storePath) return;
+  const payload = {
+    saved_at: new Date().toISOString(),
+    sessions: [...sessions.values()]
+  };
+  fs.writeFileSync(storePath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+}
+
+function reloadPersistentSessions() {
+  const storePath = persistentSessionStorePath();
+  if (!storePath || !fs.existsSync(storePath)) return 0;
+  const payload = JSON.parse(fs.readFileSync(storePath, "utf8"));
+  sessions.clear();
+  for (const session of payload.sessions || []) {
+    sessions.set(session.session_key, session);
+  }
+  return sessions.size;
+}
+
+async function saveRedisSession(session) {
+  const adapter = createConfiguredRedisSessionAdapter();
+  if (!adapter || !session || !session.session_key) return false;
+  await adapter.saveSession(session);
+  return true;
+}
+
+async function loadSessionFromRedis(sessionKey) {
+  const adapter = createConfiguredRedisSessionAdapter();
+  if (!adapter || !sessionKey) return null;
+  const session = await adapter.loadSession(sessionKey);
+  if (session && session.session_key) {
+    sessions.set(session.session_key, session);
+    return session;
+  }
+  return null;
+}
+
+async function ensureSessionLoaded(sessionKey) {
+  if (!sessionKey) return null;
+  const existing = sessions.get(sessionKey);
+  if (existing) return existing;
+
+  if (persistentSessionStorePath()) {
+    reloadPersistentSessions();
+    const reloaded = sessions.get(sessionKey);
+    if (reloaded) return reloaded;
+  }
+
+  return loadSessionFromRedis(sessionKey);
+}
+
+function auditResult(endpoint, body, session, result, extra = {}) {
+  const lastTrace = session && session.routing_trace && session.routing_trace.length
+    ? session.routing_trace[session.routing_trace.length - 1]
+    : null;
+  appendAuditEvent({
+    endpoint,
+    status_code: result.statusCode,
+    response_status: result.body && result.body.status,
+    request_id: body && body.request_id ? body.request_id : null,
+    session_key_hash: session && session.session_key ? sessionKeyHash(session.session_key) : null,
+    idempotency_key_hash: body && body.idempotency_key ? sessionKeyHash(body.idempotency_key) : null,
+    routing_trace_id: lastTrace ? lastTrace.routing_trace_id : null,
+    ...extra
+  });
+  return result;
+}
+
+function isSessionExpired(session, now = new Date()) {
+  if (!session || !session.session_expires_at) return false;
+  return new Date(session.session_expires_at).getTime() <= now.getTime();
+}
+
+function sessionExpiredResult(body, session) {
+  session.state = "expired";
+  const result = errorResult(410, body, "session_expired", "The session has expired; start a new demo session.", {
+    retryable: false,
+    session_key: session.session_key,
+    session_expires_at: session.session_expires_at,
+    session_state: "expired"
+  });
+  savePersistentSessions();
+  return result;
+}
+
+function buildQuestionResponse(body, session, question, lastQuestionId, phaseReason) {
+  const questionNumber = session.answers.length + 1;
   return {
-    ...baseResponse(body, session, `question-${questionIndex + 1}`),
+    ...baseResponse(body, session, `question-${questionNumber}`),
     session_state: "active",
     last_question_id: lastQuestionId,
     status: "question",
     question_phase: "post_measurement_intake",
     phase_reason: phaseReason,
     progress: {
-      current: questionIndex + 1,
+      current: questionNumber,
       expected_total: expectedTotal
     },
-    question
+    question: clone(question)
   };
 }
 
 function buildSummaryResponse(body, session, lastQuestionId) {
   const response = clone(summaryExample);
+  const summary = dynamicEngine.buildSummary(session);
   return {
     ...response,
     ...baseResponse(body, session, "summary"),
@@ -260,7 +281,17 @@ function buildSummaryResponse(body, session, lastQuestionId) {
     progress: {
       current: expectedTotal,
       expected_total: expectedTotal
-    }
+    },
+    summary_visibility: summary.summary_visibility,
+    handoff_required: summary.handoff_required,
+    handoff_reason_codes: summary.handoff_reason_codes,
+    staff_review_summary: summary.staff_review_summary,
+    ...(body.debug ? { debug: {
+      manifest_version: session.manifest_version,
+      routing_trace_id: session.routing_trace.length ? session.routing_trace[session.routing_trace.length - 1].routing_trace_id : null,
+      reason_codes: summary.handoff_reason_codes,
+      selected_next_question_id: null
+    } } : {})
   };
 }
 
@@ -289,6 +320,35 @@ function errorResult(statusCode, body, code, message, options = {}) {
       demo_boundary: DEMO_BOUNDARY
     }
   };
+}
+
+function isSessionStoreRuntimeError(error) {
+  const code = error && error.code ? String(error.code) : "";
+  return code === "redis_timeout"
+    || code === "redis_error"
+    || code === "redis_protocol_error"
+    || code === "ECONNREFUSED"
+    || code === "ECONNRESET"
+    || code === "ETIMEDOUT"
+    || code === "ENOTFOUND";
+}
+
+function requestRuntimeErrorResult(error) {
+  if (isSessionStoreRuntimeError(error)) {
+    return errorResult(503, {}, "session_store_unavailable", "The configured demo session store is unavailable.", {
+      retryable: true,
+      details: {
+        store: redisStoreEnabled() ? "redis" : "local",
+        code: error && error.code ? String(error.code) : null
+      }
+    });
+  }
+
+  const code = error.code === "request_body_too_large" ? "request_body_too_large" : "invalid_json";
+  const message = error.code === "request_body_too_large"
+    ? "Request body exceeds the demo API size limit."
+    : "Request body must be valid JSON.";
+  return errorResult(400, {}, code, message, { retryable: false });
 }
 
 function idempotencyConflictRecovery() {
@@ -361,17 +421,27 @@ function createSession(body = {}) {
       patient_context: clone(body.patient_context || fixture.profile),
       demo_script: clone(body.demo_script || fixture.live_demo_controls)
     };
+    dynamicEngine.initializeSession(session);
     sessions.set(session.session_key, session);
+    savePersistentSessions();
 
     const response = buildQuestionResponse(
       body,
       session,
-      0,
+      dynamicEngine.getQuestion(session.current_question_id),
       null,
       "Measurement is complete and the demo heart-rate cue is available, so the tachycardia live intake question set can start."
     );
-    return { statusCode: 200, body: response };
+    return auditResult("POST /api/triage-demo/sessions", body, session, { statusCode: 200, body: response });
   });
+}
+
+async function createSessionAsync(body = {}) {
+  const result = createSession(body);
+  if (result.statusCode === 200 && result.body && result.body.session_key) {
+    await saveRedisSession(sessions.get(result.body.session_key));
+  }
+  return result;
 }
 
 function selectedOptionIds(body) {
@@ -390,6 +460,9 @@ function validateAnswer(question, body) {
   if (selectedIds.length > question.max_selections) {
     return `selected_option_ids exceeds max_selections ${question.max_selections}`;
   }
+  if (question.none_option_id && selectedIds.includes(question.none_option_id) && selectedIds.length > 1) {
+    return `${question.none_option_id} cannot be combined with another option`;
+  }
   const allowedOptionIds = new Set(question.options.map((option) => option.id));
   const invalidIds = selectedIds.filter((optionId) => !allowedOptionIds.has(optionId));
   if (invalidIds.length) return `unknown option id(s): ${invalidIds.join(", ")}`;
@@ -404,6 +477,9 @@ function submitAnswer(sessionKey, body = {}) {
       session_key: sessionKey
     });
   }
+  if (isSessionExpired(session)) {
+    return auditResult("POST /api/triage-demo/sessions/{session_key}/answers", body, session, sessionExpiredResult(body, session));
+  }
   return withIdempotency(`answers:${session.session_key}`, body, () => {
     if (session.state === "summary_ready") {
       return errorResult(409, body, "session_summary_ready", "The session has already reached summary status; start a new session for another answer path.", {
@@ -413,7 +489,7 @@ function submitAnswer(sessionKey, body = {}) {
       });
     }
 
-    const question = questionSequence[session.answers.length];
+    const question = dynamicEngine.getQuestion(session.current_question_id);
     if (!question) {
       session.state = "summary_ready";
       return errorResult(409, body, "session_summary_ready", "The session has no remaining questions.", {
@@ -432,29 +508,36 @@ function submitAnswer(sessionKey, body = {}) {
       });
     }
 
+    const selectedIds = selectedOptionIds(body);
+    const { answerRecord, decision } = dynamicEngine.applyAnswerAndSelectNext(session, question, selectedIds);
+
     session.answers.push({
-      question_id: question.id,
+      ...answerRecord,
       answer: clone(body.answer),
       request_id: body.request_id || null,
       idempotency_key: body.idempotency_key || null
     });
+    savePersistentSessions();
 
-    const nextIndex = session.answers.length;
-    if (nextIndex >= expectedTotal) {
+    if (decision.status === "summary") {
       session.state = "summary_ready";
-      return { statusCode: 200, body: buildSummaryResponse(body, session, question.id) };
+      session.current_question_id = null;
+      savePersistentSessions();
+      return auditResult("POST /api/triage-demo/sessions/{session_key}/answers", body, session, { statusCode: 200, body: buildSummaryResponse(body, session, question.id) });
     }
 
-    return {
+    session.current_question_id = decision.selected_next_question_id;
+    savePersistentSessions();
+    return auditResult("POST /api/triage-demo/sessions/{session_key}/answers", body, session, {
       statusCode: 200,
       body: buildQuestionResponse(
         body,
         session,
-        nextIndex,
+        dynamicEngine.getQuestion(session.current_question_id),
         question.id,
-        `${question.id} was recorded; the next governed tachycardia demo question is ready.`
+        decision.phase_reason
       )
-    };
+    });
   }, {
     session_key: session.session_key,
     session_expires_at: session.session_expires_at,
@@ -462,13 +545,152 @@ function submitAnswer(sessionKey, body = {}) {
   });
 }
 
+async function submitAnswerAsync(sessionKey, body = {}) {
+  await ensureSessionLoaded(sessionKey);
+  const result = submitAnswer(sessionKey, body);
+  const session = sessions.get(sessionKey);
+  if (session) await saveRedisSession(session);
+  return result;
+}
+
+function getSummary(sessionKey, body = {}) {
+  const session = sessions.get(sessionKey);
+  if (!session) {
+    return errorResult(404, body, "invalid_session", "The session_key was not found or is no longer available.", {
+      retryable: false,
+      session_key: sessionKey
+    });
+  }
+  if (isSessionExpired(session)) {
+    return auditResult("GET /api/triage-demo/sessions/{session_key}/summary", body, session, sessionExpiredResult(body, session));
+  }
+  if (session.state !== "summary_ready") {
+    return errorResult(409, body, "session_not_summary_ready", "The session has not reached summary status yet.", {
+      retryable: false,
+      session_key: session.session_key,
+      session_expires_at: session.session_expires_at,
+      session_state: session.state
+    });
+  }
+  const lastAnswer = session.answers[session.answers.length - 1];
+  return auditResult("GET /api/triage-demo/sessions/{session_key}/summary", body, session, { statusCode: 200, body: buildSummaryResponse(body, session, lastAnswer.question_id) });
+}
+
+async function getSummaryAsync(sessionKey, body = {}) {
+  await ensureSessionLoaded(sessionKey);
+  const result = getSummary(sessionKey, body);
+  const session = sessions.get(sessionKey);
+  if (session) await saveRedisSession(session);
+  return result;
+}
+
+function answerCandidates(sessionKey, body = {}) {
+  const session = sessions.get(sessionKey);
+  if (!session) {
+    return errorResult(404, body, "invalid_session", "The session_key was not found or is no longer available.", {
+      retryable: false,
+      session_key: sessionKey
+    });
+  }
+  if (isSessionExpired(session)) {
+    return auditResult("POST /api/triage-demo/sessions/{session_key}/answer-candidates", body, session, sessionExpiredResult(body, session));
+  }
+  if (body.input && (body.input.raw_audio || body.input.audio || body.input.audio_base64)) {
+    return errorResult(422, body, "raw_audio_not_accepted", "Raw audio is not accepted or retained by this demo candidate endpoint.", {
+      retryable: false,
+      session_key: session.session_key,
+      session_expires_at: session.session_expires_at
+    });
+  }
+  if (session.state !== "active") {
+    return errorResult(409, body, "session_summary_ready", "The session is no longer accepting answer candidates; start a new session.", {
+      retryable: false,
+      session_key: session.session_key,
+      session_expires_at: session.session_expires_at
+    });
+  }
+  if (body.question_id && body.question_id !== session.current_question_id) {
+    return errorResult(422, body, "invalid_answer_candidate_request", `expected question_id ${session.current_question_id}, received ${body.question_id}`, {
+      retryable: false,
+      session_key: session.session_key,
+      session_expires_at: session.session_expires_at
+    });
+  }
+
+  return auditResult("POST /api/triage-demo/sessions/{session_key}/answer-candidates", body, session, {
+    statusCode: 200,
+    body: {
+      ...baseResponse(body, session, "answer-candidates"),
+      ...dynamicEngine.answerCandidatesForCurrentQuestion(session, body.input || {}),
+      session_state: session.state,
+      official_answer_submission: "POST /api/triage-demo/sessions/{session_key}/answers",
+      transcript_retention: "transcript is used for candidate matching only in this demo contract; raw audio is not accepted or retained"
+    }
+  });
+}
+
+async function answerCandidatesAsync(sessionKey, body = {}) {
+  await ensureSessionLoaded(sessionKey);
+  return answerCandidates(sessionKey, body);
+}
+
+function rateLimitKey(req) {
+  const token = bearerTokenFromHeader(headerValue(req, "authorization"));
+  return token ? `token:${sessionKeyHash(token)}` : `origin:${headerValue(req, "origin") || "unknown"}`;
+}
+
+function requireRateLimit(req) {
+  if (process.env.DEMO_RATE_LIMIT_DISABLED === "1") return null;
+  const now = Date.now();
+  const key = rateLimitKey(req);
+  const record = rateLimitRecords.get(key) || { windowStart: now, count: 0 };
+  if (now - record.windowStart > RATE_LIMIT_WINDOW_MS) {
+    record.windowStart = now;
+    record.count = 0;
+  }
+  record.count += 1;
+  rateLimitRecords.set(key, record);
+  if (record.count > RATE_LIMIT_MAX_REQUESTS) {
+    return errorResult(429, {}, "rate_limited", "Too many demo API requests in the current rate-limit window.", {
+      retryable: true,
+      details: {
+        window_ms: RATE_LIMIT_WINDOW_MS,
+        max_requests: RATE_LIMIT_MAX_REQUESTS
+      }
+    });
+  }
+  return null;
+}
+
+async function readJsonBody(req) {
+  if (req.body && typeof req.body === "object") return req.body;
+  if (typeof req.body === "string") {
+    if (Buffer.byteLength(req.body, "utf8") > MAX_JSON_BODY_BYTES) {
+      throw Object.assign(new Error("request_body_too_large"), { code: "request_body_too_large" });
+    }
+    return JSON.parse(req.body || "{}");
+  }
+
+  const chunks = [];
+  let totalBytes = 0;
+  for await (const chunk of req) {
+    totalBytes += chunk.length;
+    if (totalBytes > MAX_JSON_BODY_BYTES) {
+      throw Object.assign(new Error("request_body_too_large"), { code: "request_body_too_large" });
+    }
+    chunks.push(chunk);
+  }
+  const raw = Buffer.concat(chunks).toString("utf8").trim();
+  return raw ? JSON.parse(raw) : {};
+}
+
 function setCorsHeaders(req, res) {
   const origin = req.headers && req.headers.origin;
-  if (ALLOWED_ORIGINS.has(origin)) {
+  if (allowedOrigins().has(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
     res.setHeader("Vary", "Origin");
   }
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.setHeader("Access-Control-Max-Age", "600");
 }
@@ -482,21 +704,56 @@ function sendResult(res, result) {
 function resetMockState() {
   sessions.clear();
   idempotencyRecords.clear();
+  rateLimitRecords.clear();
+  auditEvents.length = 0;
   responseCounter = 0;
   sessionCounter = 0;
 }
 
+function getSessionSnapshot(sessionKey) {
+  const session = sessions.get(sessionKey);
+  return session ? clone(session) : null;
+}
+
+function forceExpireSession(sessionKey) {
+  const session = sessions.get(sessionKey);
+  if (session) {
+    session.session_expires_at = new Date(Date.now() - 1000).toISOString();
+    savePersistentSessions();
+  }
+}
+
+function getAuditEvents() {
+  return clone(auditEvents);
+}
+
 module.exports = {
-  ALLOWED_ORIGINS,
+  ALLOWED_ORIGINS: new Set(DEFAULT_ALLOWED_ORIGINS),
   DEMO_BOUNDARY,
+  MAX_JSON_BODY_BYTES,
+  allowedOrigins,
+  answerCandidates,
+  answerCandidatesAsync,
   contractFields,
+  createSessionAsync,
   demoBearerAuthChallenge,
   expectedTotal,
+  forceExpireSession,
+  getAuditEvents,
   fixture,
+  getSessionSnapshot,
+  getSummary,
+  getSummaryAsync,
   questionSequence,
   createSession,
   requireDemoBearerAuth,
+  requireRateLimit,
+  readJsonBody,
+  requestRuntimeErrorResult,
+  reloadPersistentSessions,
+  redisStoreEnabled,
   submitAnswer,
+  submitAnswerAsync,
   errorResult,
   setCorsHeaders,
   sendResult,

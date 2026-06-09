@@ -2,13 +2,18 @@
 
 const http = require("node:http");
 const {
-  createSession,
+  answerCandidatesAsync,
+  createSessionAsync,
   demoBearerAuthChallenge,
   errorResult,
+  getSummaryAsync,
+  readJsonBody,
   requireDemoBearerAuth,
+  requireRateLimit,
+  requestRuntimeErrorResult,
   sendResult,
   setCorsHeaders,
-  submitAnswer
+  submitAnswerAsync
 } = require("../api/lib/triage-demo-contract");
 
 const PORT = Number(process.env.PORT || 4193);
@@ -21,26 +26,6 @@ function sendHealth(res) {
     service: "nycu-imedtac-triage-demo-api",
     mode: "synthetic-data-rehearsal-api"
   }));
-}
-
-function readJsonBody(req) {
-  return new Promise((resolve, reject) => {
-    const chunks = [];
-    req.on("data", (chunk) => chunks.push(chunk));
-    req.on("error", reject);
-    req.on("end", () => {
-      const raw = Buffer.concat(chunks).toString("utf8").trim();
-      if (!raw) {
-        resolve({});
-        return;
-      }
-      try {
-        resolve(JSON.parse(raw));
-      } catch (error) {
-        reject(error);
-      }
-    });
-  });
 }
 
 const server = http.createServer(async (req, res) => {
@@ -64,7 +49,12 @@ const server = http.createServer(async (req, res) => {
         sendResult(res, authError);
         return;
       }
-      sendResult(res, createSession(await readJsonBody(req)));
+      const rateLimitError = requireRateLimit(req);
+      if (rateLimitError) {
+        sendResult(res, rateLimitError);
+        return;
+      }
+      sendResult(res, await createSessionAsync(await readJsonBody(req)));
       return;
     }
 
@@ -76,13 +66,52 @@ const server = http.createServer(async (req, res) => {
         sendResult(res, authError);
         return;
       }
-      sendResult(res, submitAnswer(decodeURIComponent(answerMatch[1]), await readJsonBody(req)));
+      const rateLimitError = requireRateLimit(req);
+      if (rateLimitError) {
+        sendResult(res, rateLimitError);
+        return;
+      }
+      sendResult(res, await submitAnswerAsync(decodeURIComponent(answerMatch[1]), await readJsonBody(req)));
       return;
     }
 
-    sendResult(res, errorResult(404, {}, "not_found", "Use POST /api/triage-demo/sessions or POST /api/triage-demo/sessions/{session_key}/answers.", { retryable: false }));
+    const answerCandidateMatch = String(req.url || "").match(/^\/api\/triage-demo\/sessions\/([^/?#]+)\/answer-candidates$/);
+    if (req.method === "POST" && answerCandidateMatch) {
+      const authError = requireDemoBearerAuth(req);
+      if (authError) {
+        res.setHeader("WWW-Authenticate", demoBearerAuthChallenge());
+        sendResult(res, authError);
+        return;
+      }
+      const rateLimitError = requireRateLimit(req);
+      if (rateLimitError) {
+        sendResult(res, rateLimitError);
+        return;
+      }
+      sendResult(res, await answerCandidatesAsync(decodeURIComponent(answerCandidateMatch[1]), await readJsonBody(req)));
+      return;
+    }
+
+    const summaryMatch = String(req.url || "").match(/^\/api\/triage-demo\/sessions\/([^/?#]+)\/summary$/);
+    if (req.method === "GET" && summaryMatch) {
+      const authError = requireDemoBearerAuth(req);
+      if (authError) {
+        res.setHeader("WWW-Authenticate", demoBearerAuthChallenge());
+        sendResult(res, authError);
+        return;
+      }
+      const rateLimitError = requireRateLimit(req);
+      if (rateLimitError) {
+        sendResult(res, rateLimitError);
+        return;
+      }
+      sendResult(res, await getSummaryAsync(decodeURIComponent(summaryMatch[1]), {}));
+      return;
+    }
+
+    sendResult(res, errorResult(404, {}, "not_found", "Use POST /api/triage-demo/sessions, POST /api/triage-demo/sessions/{session_key}/answers, POST /api/triage-demo/sessions/{session_key}/answer-candidates, or GET /api/triage-demo/sessions/{session_key}/summary.", { retryable: false }));
   } catch (error) {
-    sendResult(res, errorResult(400, {}, "invalid_json", "Request body must be valid JSON.", { retryable: false }));
+    sendResult(res, requestRuntimeErrorResult(error));
   }
 });
 

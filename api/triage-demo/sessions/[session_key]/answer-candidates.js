@@ -1,4 +1,5 @@
 const {
+  answerCandidatesAsync,
   demoBearerAuthChallenge,
   errorResult,
   readJsonBody,
@@ -6,13 +7,12 @@ const {
   requireRateLimit,
   requestRuntimeErrorResult,
   sendResult,
-  setCorsHeaders,
-  submitAnswerAsync
+  setCorsHeaders
 } = require("../../../lib/triage-demo-contract");
 
 function sessionKeyFromRequest(req) {
   if (req.query && req.query.session_key) return req.query.session_key;
-  const match = String(req.url || "").match(/\/api\/triage-demo\/sessions\/([^/?#]+)\/answers/);
+  const match = String(req.url || "").match(/\/api\/triage-demo\/sessions\/([^/?#]+)\/answer-candidates/);
   return match ? decodeURIComponent(match[1]) : null;
 }
 
@@ -24,7 +24,7 @@ module.exports = async function handler(req, res) {
     return;
   }
   if (req.method !== "POST") {
-    sendResult(res, errorResult(405, {}, "method_not_allowed", "Use POST /api/triage-demo/sessions/{session_key}/answers.", { retryable: false }));
+    sendResult(res, errorResult(405, {}, "method_not_allowed", "Use POST /api/triage-demo/sessions/{session_key}/answer-candidates.", { retryable: false }));
     return;
   }
 
@@ -41,8 +41,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const sessionKey = sessionKeyFromRequest(req);
-    sendResult(res, await submitAnswerAsync(sessionKey, await readJsonBody(req)));
+    sendResult(res, await answerCandidatesAsync(sessionKeyFromRequest(req), await readJsonBody(req)));
   } catch (error) {
     sendResult(res, requestRuntimeErrorResult(error));
   }

@@ -1,21 +1,14 @@
 const {
-  createSession,
+  createSessionAsync,
   demoBearerAuthChallenge,
   errorResult,
+  readJsonBody,
   requireDemoBearerAuth,
+  requireRateLimit,
+  requestRuntimeErrorResult,
   sendResult,
   setCorsHeaders
 } = require("../lib/triage-demo-contract");
-
-async function readJsonBody(req) {
-  if (req.body && typeof req.body === "object") return req.body;
-  if (typeof req.body === "string") return JSON.parse(req.body || "{}");
-
-  const chunks = [];
-  for await (const chunk of req) chunks.push(chunk);
-  const raw = Buffer.concat(chunks).toString("utf8").trim();
-  return raw ? JSON.parse(raw) : {};
-}
 
 module.exports = async function handler(req, res) {
   setCorsHeaders(req, res);
@@ -35,10 +28,15 @@ module.exports = async function handler(req, res) {
     sendResult(res, authError);
     return;
   }
+  const rateLimitError = requireRateLimit(req);
+  if (rateLimitError) {
+    sendResult(res, rateLimitError);
+    return;
+  }
 
   try {
-    sendResult(res, createSession(await readJsonBody(req)));
+    sendResult(res, await createSessionAsync(await readJsonBody(req)));
   } catch (error) {
-    sendResult(res, errorResult(400, {}, "invalid_json", "Request body must be valid JSON.", { retryable: false }));
+    sendResult(res, requestRuntimeErrorResult(error));
   }
 };
