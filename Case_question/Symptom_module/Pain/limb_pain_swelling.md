@@ -9,7 +9,5 @@ Provenance status: draft question set; needs clinical source mapping and review 
 | LIMB-1 | Location | Which area is affected? | [ ] Arm / hand [ ] Leg / foot [ ] Shoulder [ ] Hip [ ] Knee [ ] Multiple areas |
 | LIMB-2 | Main symptom | What is the main problem? | [ ] Pain [ ] Swelling [ ] Redness / warmth [ ] Numbness / tingling [ ] Trouble moving [ ] Not sure |
 | LIMB-3 | Onset | How did it start? | [ ] Suddenly [ ] Gradually [ ] After injury [ ] After exercise [ ] No clear trigger [ ] Not sure |
-| LIMB-4 | Severity | How strong is the pain now? | [ ] 0-2 mild [ ] 3-5 moderate [ ] 6-8 severe [ ] 9-10 worst pain [ ] No pain |
-| LIMB-5 | Function | Can you use the affected limb? | [ ] Normal use [ ] Painful movement [ ] Cannot move normally [ ] Cannot bear weight [ ] Not sure |
 | LIMB-6 | Staff-review flags | Are any of these happening now? | [ ] Sudden one-sided leg swelling [ ] Cold or pale limb [ ] Severe pain after injury [ ] New weakness / numbness [ ] Fever with swollen red area [ ] None |
 

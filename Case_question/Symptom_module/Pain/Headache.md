@@ -9,7 +9,5 @@ Provenance status: draft question set; needs clinical source mapping and review 
 | HD-1 | Location | Where is the headache located? | [ ] Forehead [ ] One side [ ] Both sides [ ] Back of head [ ] Behind the eyes [ ] Whole head |
 | HD-2 | Onset | How did this headache begin? | [ ] Suddenly [ ] Gradually [ ] After injury [ ] After fever / illness [ ] After exercise [ ] Not sure |
 | HD-3 | Severity | How strong is the headache now? | [ ] 0-2 mild [ ] 3-5 moderate [ ] 6-8 severe [ ] 9-10 worst headache |
-| HD-4 | Pattern | Is this headache different from your usual headaches? | [ ] First time [ ] Similar to before [ ] More severe than before [ ] Lasting longer than before [ ] Not sure |
-| HD-5 | Associated symptoms | Do you have any of these symptoms? | [ ] Nausea / vomiting [ ] Light sensitivity [ ] Fever [ ] Neck stiffness [ ] Vision change [ ] None |
 | HD-6 | Staff-review flags | Are any of these happening now? | [ ] Weakness or numbness [ ] Trouble speaking [ ] Confusion [ ] Seizure [ ] Sudden severe onset [ ] None |
 

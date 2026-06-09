@@ -19,7 +19,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 DEFAULT_INPUT = ROOT / "Symptom_module"
-DEFAULT_OUTPUT = ROOT / "symptom_questions.csv"
+DEFAULT_OUTPUT = ROOT / "Question_DB" / "symptom_questions.csv"
 
 
 OPTION_RE = re.compile(r"\[\s*\]\s*([^\[]+)")

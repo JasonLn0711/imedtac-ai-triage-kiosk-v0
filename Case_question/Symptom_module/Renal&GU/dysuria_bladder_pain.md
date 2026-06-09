@@ -7,8 +7,6 @@ Provenance status: draft question set; needs clinical source mapping and review 
 | ID | Type | Question | Answers |
 |----|------|----------|---------|
 | DBP-1 | Main symptom | What urinary or bladder symptom do you have? | [ ] Burning with urination [ ] Bladder / pelvic pain [ ] Frequency [ ] Urgency [ ] Pain improves after urination [ ] Not sure |
-| DBP-2 | Duration | How long has this been happening? | [ ] Today [ ] 1-3 days [ ] 4-7 days [ ] More than 1 week [ ] Long-term / recurrent [ ] Not sure |
 | DBP-3 | Associated symptoms | Do you have any of these symptoms? | [ ] Fever [ ] Chills [ ] Back / flank pain [ ] Blood in urine [ ] Nausea / vomiting [ ] None |
-| DBP-4 | Pattern | Has this happened before? | [ ] First time [ ] Similar to prior UTI [ ] Recurrent bladder pain [ ] Recently treated [ ] Not sure |
 | DBP-5 | Staff-review flags | Are any of these happening now? | [ ] Fever with flank pain [ ] Unable to urinate [ ] Severe pain [ ] Pregnancy possible [ ] Confusion / severe weakness [ ] None |
 

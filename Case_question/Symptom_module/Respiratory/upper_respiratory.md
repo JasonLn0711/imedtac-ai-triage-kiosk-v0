@@ -9,7 +9,5 @@ Provenance status: draft question set; needs clinical source mapping and review 
 | URI-1 | Symptoms | What symptoms do you have? | [ ] Cough [ ] Sore throat [ ] Runny nose [ ] Nasal congestion [ ] Fever [ ] Body aches |
 | URI-2 | Cough | What is your cough like? | [ ] Dry [ ] With phlegm [ ] Bloody phlegm [ ] Barking / harsh [ ] No cough [ ] Not sure |
 | URI-3 | Breathing | How is your breathing? | [ ] Normal [ ] Mild shortness of breath [ ] Short of breath while walking [ ] Short of breath at rest [ ] Wheezing [ ] Not sure |
-| URI-4 | Duration | How long have symptoms lasted? | [ ] Less than 1 day [ ] 1-3 days [ ] 4-7 days [ ] More than 1 week [ ] Not sure |
-| URI-5 | Exposure context | Does any of this apply? | [ ] Sick contact [ ] Recent travel [ ] Asthma / COPD history [ ] Smoker [ ] None [ ] Not sure |
 | URI-6 | Staff-review flags | Are any of these happening now? | [ ] Trouble breathing at rest [ ] Chest pain [ ] Blue lips / face [ ] Confusion [ ] Coughing blood [ ] None |
 

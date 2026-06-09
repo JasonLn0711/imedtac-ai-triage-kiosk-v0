@@ -9,7 +9,5 @@ Provenance status: draft question set; needs clinical source mapping and review 
 | SKIN-1 | Location | Where is the skin problem? | [ ] Face [ ] Arm / hand [ ] Leg / foot [ ] Trunk [ ] Groin [ ] Multiple areas |
 | SKIN-2 | Appearance | What does it look like? | [ ] Red [ ] Swollen [ ] Warm [ ] Pus / drainage [ ] Blister [ ] Open wound |
 | SKIN-3 | Symptoms | What does it feel like? | [ ] Painful [ ] Itchy [ ] Tender to touch [ ] Numb [ ] No discomfort [ ] Not sure |
-| SKIN-4 | Spread | Has it changed? | [ ] Getting larger [ ] Redness spreading [ ] Red streaks [ ] Same size [ ] Improving [ ] Not sure |
-| SKIN-5 | Risk context | Does any of this apply? | [ ] Recent wound [ ] Insect bite [ ] Diabetes [ ] Immune suppression [ ] Recent procedure [ ] None |
 | SKIN-6 | Staff-review flags | Are any of these happening now? | [ ] Fever / chills [ ] Rapid spreading [ ] Severe pain [ ] Black or purple skin [ ] Confusion / weakness [ ] None |
 

@@ -7,8 +7,6 @@ Provenance status: draft question set; needs clinical source mapping and review 
 | ID | Type | Question | Answers |
 |----|------|----------|---------|
 | SLP-1 | Main problem | What sleep problem do you have? | [ ] Cannot fall asleep [ ] Wake up often [ ] Waking too early [ ] Too sleepy in daytime [ ] Snoring / breathing pauses [ ] Not sure |
-| SLP-2 | Duration | How long has this been happening? | [ ] Less than 1 week [ ] 1-4 weeks [ ] 1-3 months [ ] More than 3 months [ ] Not sure |
 | SLP-3 | Night symptoms | What happens at night? | [ ] Loud snoring [ ] Choking / gasping [ ] Restless legs [ ] Nightmares [ ] Pain wakes me up [ ] None |
-| SLP-4 | Daytime impact | How does it affect daytime activity? | [ ] No major impact [ ] Tired [ ] Trouble concentrating [ ] Falls asleep unintentionally [ ] Unsafe while driving / working [ ] Not sure |
 | SLP-5 | Staff-review flags | Are any of these happening now? | [ ] Severe daytime sleepiness with safety risk [ ] Confusion [ ] Shortness of breath at night [ ] Chest pain at night [ ] New severe mood / self-harm concern [ ] None |
 

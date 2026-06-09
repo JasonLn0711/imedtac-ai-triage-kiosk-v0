@@ -7,6 +7,7 @@ from fastapi.testclient import TestClient
 
 from python_api import triage_contract as contract
 from python_api.main import app
+from python_api.triage_v1.flow_router import validate_answer
 from python_api.triage_v1.question_registry import QuestionRegistry, RegistryError, option_id
 from python_api.triage_v1.vital_normalizer import normalize_vitals
 from python_api.triage_v1.vital_rules import evaluate_vitals
@@ -67,6 +68,20 @@ def test_question_registry_loads_csv_and_stable_option_ids():
     assert registry.questions_for_module("Heart/palpitation.md")[0].id == "PAL-1"
     with pytest.raises(RegistryError):
         registry.get("missing-question")
+
+
+def test_duration_csv_questions_accept_number_pad_text_value():
+    registry = QuestionRegistry(CSV_PATH)
+    question = registry.get("FEV-1")
+
+    assert question.type == "text"
+    assert validate_answer(question, {
+        "question_id": "FEV-1",
+        "answer": {
+            "selected_option_ids": [],
+            "text_value": "2 days",
+        },
+    }) is None
 
 
 def test_fever_vital_context_starts_csv_backed_fever_branch():

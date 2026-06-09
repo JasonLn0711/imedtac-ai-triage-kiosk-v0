@@ -9,7 +9,5 @@ Provenance status: draft question set; needs clinical source mapping and review 
 | SYN-1 | Event | What happened? | [ ] Fainted / passed out [ ] Nearly fainted [ ] Fell without passing out [ ] Felt suddenly weak [ ] Not sure |
 | SYN-2 | Timing | When did it happen? | [ ] Just now [ ] Within 1 hour [ ] Today [ ] Yesterday [ ] More than 1 day ago [ ] Not sure |
 | SYN-3 | Before event | What did you feel before it happened? | [ ] Dizziness [ ] Chest pain [ ] Palpitation [ ] Shortness of breath [ ] Nausea / sweating [ ] No warning |
-| SYN-4 | During / after event | Did any of these happen? | [ ] Head injury [ ] Body shaking [ ] Tongue bite [ ] Lost urine control [ ] Confusion after waking [ ] None |
-| SYN-5 | Trigger | What were you doing when it happened? | [ ] Standing up [ ] Walking / exercise [ ] Sitting / lying down [ ] After pain / stress [ ] During bathroom use [ ] Not sure |
 | SYN-6 | Staff-review flags | Are any of these happening now? | [ ] Current chest pain [ ] Trouble breathing [ ] Repeated fainting [ ] New weakness / numbness [ ] Significant injury from fall [ ] None |
 

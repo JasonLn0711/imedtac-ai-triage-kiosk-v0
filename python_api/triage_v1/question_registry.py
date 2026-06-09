@@ -20,7 +20,7 @@ def _question_type(value: str, labels: list[str]) -> str:
     lowered = value.lower()
     if "age" in lowered or "number" in lowered:
         return "number"
-    if "free text" in lowered or "text" in lowered:
+    if "free text" in lowered or "text" in lowered or "duration" in lowered:
         return "text"
     if "single" in lowered:
         return "single_choice"

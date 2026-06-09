@@ -9,6 +9,5 @@ Provenance status: draft question set; needs clinical source mapping and review 
 | NWP-1 | Location | Where do you feel weakness? | [ ] Face [ ] One arm [ ] One leg [ ] One side of body [ ] Both legs [ ] Whole body |
 | NWP-2 | Onset | How did the weakness start? | [ ] Suddenly [ ] Gradually [ ] After injury [ ] After illness / fever [ ] Comes and goes [ ] Not sure |
 | NWP-3 | Function | What can you do right now? | [ ] Walk normally [ ] Walk with help [ ] Cannot walk [ ] Cannot lift arm / leg normally [ ] Trouble holding objects [ ] Not sure |
-| NWP-4 | Associated symptoms | Do you have any of these symptoms? | [ ] Numbness / tingling [ ] Trouble speaking [ ] Face drooping [ ] Vision change [ ] Severe headache [ ] None |
 | NWP-5 | Staff-review flags | Are any of these happening now? | [ ] Sudden one-sided weakness [ ] Trouble speaking [ ] New confusion [ ] New severe headache [ ] Recent head / spine injury [ ] None |
 

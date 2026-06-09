@@ -9,6 +9,5 @@ Provenance status: draft question set; needs clinical source mapping and review 
 | ASA-1 | Main symptom | What abdominal change do you notice? | [ ] Swelling / bloating [ ] Rapid increase in size [ ] Tight abdomen [ ] Weight gain with swelling [ ] Not sure |
 | ASA-2 | Onset | When did it start? | [ ] Today [ ] 1-3 days ago [ ] 4-7 days ago [ ] More than 1 week ago [ ] Long-term issue [ ] Not sure |
 | ASA-3 | Pain | Do you have abdominal pain? | [ ] No pain [ ] Mild [ ] Moderate [ ] Severe [ ] Not sure |
-| ASA-4 | Associated symptoms | Do you have any of these symptoms? | [ ] Shortness of breath [ ] Leg swelling [ ] Fever [ ] Vomiting [ ] Yellow eyes / skin [ ] None |
 | ASA-5 | Staff-review flags | Are any of these happening now? | [ ] Severe abdominal pain [ ] Fever with swollen abdomen [ ] Trouble breathing [ ] Vomiting blood / black stool [ ] Confusion [ ] None |
 

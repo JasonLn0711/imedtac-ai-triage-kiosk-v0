@@ -9,6 +9,5 @@ Provenance status: draft question set; needs clinical source mapping and review 
 | EDE-1 | Location | Where is the swelling? | [ ] One leg / foot [ ] Both legs / feet [ ] Hands [ ] Face / eyelids [ ] Abdomen [ ] Whole body |
 | EDE-2 | Onset | When did swelling start? | [ ] Today [ ] 1-3 days ago [ ] 4-7 days ago [ ] More than 1 week ago [ ] Long-term issue [ ] Not sure |
 | EDE-3 | Pattern | What is the swelling like? | [ ] Worse at night [ ] Better after raising legs [ ] Painful [ ] Red / warm [ ] Sudden one-sided swelling [ ] Not sure |
-| EDE-4 | Associated symptoms | Do you have any of these symptoms? | [ ] Shortness of breath [ ] Chest pain [ ] Reduced urination [ ] Weight gain [ ] Fever [ ] None |
 | EDE-5 | Staff-review flags | Are any of these happening now? | [ ] Shortness of breath at rest [ ] Chest pain [ ] Sudden one-sided leg swelling [ ] Face / tongue swelling [ ] Very abnormal kiosk vital sign [ ] None |
 

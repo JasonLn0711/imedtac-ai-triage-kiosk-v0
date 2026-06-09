@@ -9,6 +9,5 @@ Provenance status: draft question set; needs clinical source mapping and review 
 | CER-1 | Main symptom | What problem are you noticing? | [ ] Trouble speaking [ ] Trouble understanding speech [ ] Memory loss [ ] Ignoring one side [ ] Personality / behavior change [ ] Not sure |
 | CER-2 | Onset | How did it start? | [ ] Suddenly [ ] Gradually [ ] After head injury [ ] After seizure-like event [ ] Comes and goes [ ] Not sure |
 | CER-3 | Function | What is affected right now? | [ ] Naming objects [ ] Following instructions [ ] Remembering recent events [ ] Reading / writing [ ] Attention / judgment [ ] Not sure |
-| CER-4 | Associated symptoms | Do you have any of these symptoms? | [ ] Weakness [ ] Numbness [ ] Vision change [ ] Severe headache [ ] Confusion [ ] None |
 | CER-5 | Staff-review flags | Are any of these happening now? | [ ] New trouble speaking [ ] New one-sided weakness / numbness [ ] New vision loss [ ] Sudden confusion [ ] Recent head injury [ ] None |
 

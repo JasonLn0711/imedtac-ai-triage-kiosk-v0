@@ -9,6 +9,5 @@ Provenance status: draft question set; needs clinical source mapping and review 
 | UWL-1 | Amount | How much weight have you lost without trying? | [ ] Less than 2 kg [ ] 2-5 kg [ ] More than 5 kg [ ] Clothes much looser [ ] Not sure |
 | UWL-2 | Time course | Over what time period? | [ ] Days [ ] Weeks [ ] 1-3 months [ ] More than 3 months [ ] Not sure |
 | UWL-3 | Appetite | How is your appetite? | [ ] Normal [ ] Reduced [ ] Cannot eat much [ ] Nausea / vomiting limits eating [ ] Increased appetite [ ] Not sure |
-| UWL-4 | Associated symptoms | Do you have any of these symptoms? | [ ] Fever / night sweats [ ] Diarrhea [ ] Abdominal pain [ ] Cough [ ] Fatigue [ ] None |
 | UWL-5 | Staff-review flags | Are any of these happening now? | [ ] Severe weakness [ ] Unable to eat or drink [ ] Blood in stool / vomit [ ] Trouble swallowing [ ] Very abnormal kiosk vital sign [ ] None |
 
