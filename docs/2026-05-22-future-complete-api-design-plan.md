@@ -116,7 +116,47 @@ Use this layer when questions move from demo wording into source-governed clinic
 
 Use this layer when the team needs robust degraded-mode behavior, local scripted fallback, richer staff handoff, or clearer separation between live API and scripted demo mode.
 
-## Layer 3: Future Optimized Workflow
+## Layer 3: Backend Dynamic Engine
+
+The `2026-06-08` dynamic-engine plan promotes the hard part of question
+routing into the NYCU / cloud backend while preserving the frontend-facing
+session contract.
+
+Implemented internal v0.3 surfaces:
+
+- `data/question_manifest.tachycardia.v0.3.json`
+- `data/answer_effects.tachycardia.v0.3.json`
+- `data/routing_policy.tachycardia.v0.3.json`
+- `data/summary_templates.tachycardia.v0.3.json`
+- `api/lib/dynamic-engine/`
+
+The operating split is:
+
+```text
+imedtac frontend: render typed questions, collect selected option ids, show summary
+NYCU backend: session state, effects, derived flags, routing policy, routing_trace, summary assembly
+```
+
+The backend may add optional helper APIs when they are strictly additive:
+
+```text
+GET  /api/triage-demo/sessions/{session_key}/summary
+POST /api/triage-demo/sessions/{session_key}/answer-candidates
+```
+
+These helpers do not replace the official `/answers` path. The
+`answer-candidates` helper only maps an ephemeral transcript to the current
+question's allowed option ids and requires user or staff confirmation before
+`/answers` is called.
+
+AI retrieval and reranking are the planned next support layer. The final
+selection remains deterministic policy plus manifest safety gate, so a model
+cannot introduce an unreviewed patient-facing question or clinical output.
+
+Promotion gate: keep the v0.3 dynamic-engine version internal until a recorded
+change request promotes any new behavior into the imedtac external contract.
+
+## Layer 4: Future Optimized Workflow
 
 The post-`2026-05-21` decision keeps the June demo as post-measurement only. The earlier two-phase design remains a future optimized workflow.
 

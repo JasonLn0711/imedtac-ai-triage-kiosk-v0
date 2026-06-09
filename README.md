@@ -37,8 +37,13 @@ go-to-market 與美國客戶展示，還不是正式醫療決策產品。
 | --- | --- |
 | `app/triage-kiosk/` | English static AI triage kiosk demo adapted from the urology previsit demo pattern |
 | `core/triage_engine/` | Pure JavaScript governed-question ranking and staff-summary logic |
+| `api/lib/dynamic-engine/` | Backend dynamic tachycardia engine: effects, derived flags, deterministic routing, answer candidates, trace, and summary assembly |
 | `scripts/checks/smoke-demo.js` | Runtime smoke check for the English demo |
 | `tests/unit/triage-engine.test.js` | Focused tests for question ranking and demo-only safety boundaries |
+| `tests/contract/tachycardia-dynamic-path.test.js` | Backend dynamic-path, summary consistency, routing trace, and answer-candidate tests |
+| `tests/contract/answer-candidates-api.test.js` | Current-question-only ASR/free-text candidate matching tests |
+| `tests/contract/cloud-security-reliability.test.js` | Auth, CORS, TTL, persistence, rate limit, body limit, and audit tests |
+| `tests/e2e/` | Path A / Path B tachycardia dynamic engine E2E tests |
 | `docs/runtime-to-governance-map.md` | Map from runtime questions to registry/source-family coverage |
 | `docs/demo-acceptance-criteria.md` | Functional, governance, data, and presentation gates for v0 |
 | `docs/demo-script-for-presenter.md` | Safe presenter script and forbidden demo claims |
@@ -68,7 +73,12 @@ go-to-market 與美國客戶展示，還不是正式醫療決策產品。
 | `docs/2026-05-19-two-phase-question-flow-design.md` | Two-phase API/UI design for parallel measurement-time intake and post-vital follow-up |
 | `docs/2026-05-20-duobao-demo-design-consistency-review.md` | Review of 多寶's structured cases/question design against current demo, API, and claim-boundary decisions |
 | `docs/2026-05-22-future-complete-api-design-plan.md` | Future complete API roadmap for trace-friendly fields, lifecycle, fallback, provenance, and two-phase expansion beyond the June small fixed contract |
+| `docs/ai-triage-dynamic-engine-sdd-implementation-test-spec.md` | 2026-06-08 dynamic engine SDD / implementation plan / test specification |
+| `docs/2026-06-08-dynamic-engine-completion-audit.md` | Requirement-by-requirement completion audit for the dynamic-engine spec |
+| `docs/2026-06-08-dynamic-engine-spec-coverage-audit.md` | Requirement-level coverage audit tying the dynamic-engine spec to implementation, tests, and external release gates |
+| `handoff/2026-06-08-dynamic-engine-external-release-gate-closeout.md` | Operational closeout packet for clinical reviewer approval and imedtac deployment-notice confirmation |
 | `decisions/2026-05-20-june-demo-question-budget.md` | Decision that June case flows follow the 慧誠 / iMVS product-spec cap of fewer than 8 visible patient-facing questions |
+| `decisions/2026-06-08-dynamic-engine-cloud-backend-boundary.md` | First-principles decision to keep dynamic routing in the cloud/backend behind the stable session API |
 | `handoff/2026-05-21-imedtac-two-endpoint-api-reply.md` | External-ready small fixed two-endpoint API contract for the June demo |
 | `handoff/2026-05-21-imedtac-engineering-open-issues-checklist.md` | Engineering integration checklist for open issues not fully captured by the API field tables |
 | `handoff/2026-05-21-to-2026-05-25-imedtac-response-plan.md` | Internal response plan for API, question templates, and `not_sure` answer behavior before Monday `2026-05-25` |
@@ -118,6 +128,36 @@ The earlier two-phase design remains a future optimized path. After the
 `2026-05-21` imedtac engineering sync, the June integration default is
 post-measurement-only to minimize iMVS UI changes before the customer demo.
 
+## Backend Dynamic Engine Frame
+
+The `2026-06-08` dynamic-engine slice keeps the imedtac-facing session API
+stable while moving answer effects, derived flags, routing policy,
+`routing_trace`, answer-candidate matching, approved summary-template
+retrieval, and summary assembly into the NYCU backend.
+
+```text
+iMVS frontend
+-> POST /api/triage-demo/sessions
+-> POST /api/triage-demo/sessions/{session_key}/answers
+-> optional GET /summary or POST /answer-candidates helper
+-> backend dynamic engine v0.3
+-> staff_review_summary
+```
+
+Internal v0.3 dynamic-engine files:
+
+```text
+data/question_manifest.tachycardia.v0.3.json
+data/answer_effects.tachycardia.v0.3.json
+data/routing_policy.tachycardia.v0.3.json
+data/summary_templates.tachycardia.v0.3.json
+api/lib/dynamic-engine/
+```
+
+The external v0.2 API version fields remain unchanged because those were
+already communicated as the June demo baseline. The v0.3 label is internal to
+the dynamic routing implementation until a recorded change request promotes it.
+
 ## Demo Mainline
 
 Start the local static demo server:
@@ -136,6 +176,7 @@ Run the verification checks:
 
 ```bash
 npm run demo:ready
+python3 scripts/check_governance_registries.py
 ```
 
 Check or bump the synchronized project version:
@@ -163,12 +204,42 @@ index.html
 It must not contain private source bundles, handoff drafts, patent notes,
 planning snapshots, workstream notes, or governance docs.
 
+Run the backend rehearsal API in Docker:
+
+```bash
+docker compose up --build
+```
+
+Useful backend environment variables:
+
+```text
+DEMO_BEARER_TOKEN        optional bearer-token gate
+DEMO_ALLOWED_ORIGINS     comma-separated CORS allowlist, defaults to localhost origins
+DEMO_REDIS_URL           optional Redis session-store URL for cloud restart continuity
+DEMO_REDIS_KEY_PREFIX    optional Redis key prefix, default ai-triage-demo:session:
+DEMO_SESSION_STORE_FILE  optional persistent session-store JSON file
+DEMO_AUDIT_LOG_PATH      optional append-only JSONL audit log
+DEMO_MAX_JSON_BODY_BYTES request body size limit, default 32768
+DEMO_AI_FORCE_FAILURE    set to 1 to rehearse deterministic AI fallback
+```
+
+`docker-compose.yml` starts Redis and configures `DEMO_REDIS_URL` for the API
+container. The JSON session-store file remains a local/demo fallback for runs
+that do not enable Redis.
+
 The runtime demo is intentionally narrow: synthetic measurement-time intake ->
 synthetic vital payload -> governed English choice-only follow-up questions ->
 staff-review summary. Single-choice answers advance immediately after click;
 multi-choice answers show visible selection order before saving. It does not
 diagnose, recommend treatment, assign a final triage level, order emergency
 care, or write to HIS / EMR / FHIR.
+
+The contract API now also supports backend dynamic tachycardia routing: same
+vitals plus different associated-symptom answers can select different next
+questions and produce different staff-review summary content. The optional
+answer-candidate helper only maps ephemeral transcript text to the current
+question's allowed option ids and still requires confirmation through
+`/answers`.
 
 Current runnable case set: chest pressure, fever / urinary symptoms, and the
 Duobao-aligned respiratory early-handoff flow. The respiratory runtime still

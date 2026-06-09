@@ -117,6 +117,34 @@ login
 This is safer and more product-aligned than starting with AI before measurement,
 because it uses the company's differentiating asset: real measured vital signs.
 
+## 2026-06-08 Dynamic Backend Decision
+
+The dynamic triage engine should sit behind the NYCU / cloud backend API, not
+inside the imedtac frontend. This preserves the strongest product split:
+
+```text
+imedtac iMVS frontend
+-> stable HTTPS session API
+-> NYCU dynamic triage engine
+   -> versioned question manifest
+   -> answer effects and derived flags
+   -> deterministic routing policy
+   -> optional AI candidate retrieval / reranking
+   -> manifest safety gate
+   -> staff-review summary assembler
+```
+
+The frontend continues to render typed questions, collect selected option ids,
+and show `staff_review_summary`. The backend owns routing state, reason codes,
+candidate traces, AI support, fallback behavior, and summary assembly. This
+keeps the demo visibly adaptive while avoiding a frontend rewrite or a silent
+change to the externally communicated endpoint structure.
+
+The current implemented slice is deterministic v0.3 routing for the
+tachycardia live-demo lane. AI retrieval / reranking remains the next support
+layer and must stay candidate-only: the final next-question decision remains
+reviewed manifest plus deterministic policy.
+
 ```mermaid
 flowchart TD
   A[Patient Login] --> B[Vital Sign Measurement]

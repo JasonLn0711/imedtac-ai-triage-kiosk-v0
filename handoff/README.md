@@ -44,6 +44,7 @@ Current detailed discussion artifacts:
 - `source/2026-05-22-nycu-sent-api-reply-email/sent-reply-record.md`
 - `docs/2026-05-22-future-complete-api-design-plan.md`
 - `handoff/2026-05-25-render-rehearsal-api-deployment-runbook.md`
+- `handoff/2026-06-08-dynamic-engine-external-release-gate-closeout.md`
 - `docs/2026-05-19-two-phase-question-flow-design.md`
 - `docs/version-control-policy.md`
 - `docs/2026-05-19-api-session-design-plain-explanation.md`

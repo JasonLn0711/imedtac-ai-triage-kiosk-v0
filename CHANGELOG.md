@@ -1,5 +1,32 @@
 # Changelog
 
+## Unreleased - 2026-06-08
+
+- Added the 2026-06-08 dynamic-engine SDD / implementation / test spec to
+  `docs/`.
+- Recorded the first-principles cloud-backend decision for the dynamic engine:
+  imedtac frontend keeps the stable session API while NYCU backend owns answer
+  effects, derived flags, routing policy, routing trace, and summary assembly.
+- Added internal v0.3 tachycardia dynamic-engine data files for question
+  manifest, answer effects, routing policy, summary templates, and local vector
+  index.
+- Added `api/lib/dynamic-engine/` and wired the contract API to choose the next
+  tachycardia question from deterministic backend policy instead of fixed array
+  position.
+- Added additive `GET /summary` and `POST /answer-candidates` backend helpers;
+  official answer submission remains `/answers` with stable option ids.
+- Added manifest build/check scripts, vector-index builder, body-size guard,
+  TTL expiry, rate limiting, audit events, and a file-backed persistent session
+  store for restart rehearsal.
+- Added Docker and compose deployment artifacts for the backend rehearsal API.
+- Added dynamic-path, answer-candidate, cloud/security/reliability,
+  performance, unit-module, and E2E tests for the spec gates.
+- Added two-path rehearsal packet, clinical wording review checklist, dynamic
+  engine test report, deployment notice draft, and completion audit.
+- Updated runtime/governance docs, acceptance criteria, and README to make the
+  internal v0.3 dynamic layer discoverable while preserving the externally
+  communicated v0.2 API version fields.
+
 ## Unreleased - 2026-05-21
 
 - Archived the 2026-05-21 imedtac engineering-sync corrected transcript and

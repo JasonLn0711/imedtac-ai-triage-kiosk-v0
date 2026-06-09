@@ -1,7 +1,7 @@
 # Runtime To Governance Map
 
-Status: v0.2 runtime review map
-Last updated: 2026-05-20
+Status: v0.3 runtime review map
+Last updated: 2026-06-08
 
 ## Purpose
 
@@ -33,6 +33,7 @@ Who still needs to review the wording?
 | Chest pressure | `demo/fixtures/chest-pain-high-bp-low-spo2.json` | `FLOW-CHEST-PAIN-VITALS` | `DEMO-001`, age `58`, sex `Male` | Staff-review summary only; no condition identification, treatment, final acuity assignment, or emergency order. |
 | Fever and urinary symptoms | `demo/fixtures/fever-urinary.json` | `FLOW-FEVER-URINARY` | `DEMO-002`, age `42`, sex `Female` | Staff-review summary only; no antibiotic recommendation, sepsis claim, condition identification, or final acuity assignment. |
 | Respiratory handoff | `demo/fixtures/respiratory-low-spo2-early-handoff.json` | `FLOW-RESPIRATORY-EARLY-HANDOFF` | `DEMO-RESP-001`, age `80`, sex `Male` | Staff-review summary only; no diagnosis, condition identification, final acuity assignment, disposition recommendation, treatment advice, or HIS/EMR/FHIR writeback. |
+| Tachycardia live demo | `demo/fixtures/tachycardia-live-demo.json` | `FLOW-TACHYCARDIA-LIVE-DEMO` | `DEMO-TACHY-001`, age `76`, sex `Female` | Staff-review summary only; no AfRVR diagnosis, arrhythmia diagnosis, ACS diagnosis, ECG order, treatment advice, final acuity assignment, formal triage score, or HIS/EMR/FHIR writeback. |
 
 ## Runtime Question Map
 
@@ -53,29 +54,26 @@ Who still needs to review the wording?
 | `pregnancy-context` | `post_vital_followup` | Is pregnancy possible or currently known? | Local clinical review needed before production use. | `LOCAL-PROTOCOL-TBD`. | Keeps a key context field visible for staff confirmation. |
 | `medication-allergy` | `pre_vital_intake` | Can you provide current medications or allergies? | `MED-001`; local protocol review needed. | `LOCAL-PROTOCOL-TBD`. | Routes medication/allergy context to staff confirmation. |
 | `support-needed` | `pre_vital_intake` | Do you need staff help before continuing? | Human-factors / handoff row; local product review needed. | `LOCAL-PROTOCOL-TBD`. | Supports kiosk usability and staff-assist workflow. |
+| `tachy-chief-concern` | `post_measurement_intake` | What is the main reason you are using the kiosk today? | `TACHY-001`. | `DUOBAO-DEMO-DESIGN-20260520`, `DUOBAO-AFRVR-TACHY-QA-20260525`, `IMEDTAC-POST-MEETING-PROGRESS-20260521`, `LOCAL-PROTOCOL-TBD`. | Adds chief concern and starts the tachycardia backend session path. |
+| `tachy-onset` | `post_measurement_intake` | When did this start? | `TACHY-002`. | `DUOBAO-DEMO-DESIGN-20260520`, `DUOBAO-AFRVR-TACHY-QA-20260525`, `LOCAL-PROTOCOL-TBD`. | Adds onset and duration context for staff review. |
+| `tachy-current-feeling` | `post_measurement_intake` | Which descriptions fit what you feel now? | `TACHY-003`. | `AHA-TACHYCARDIA-FAST-HR`, `AHA-HEART-ATTACK`, `DUOBAO-DEMO-DESIGN-20260520`, `DUOBAO-AFRVR-TACHY-QA-20260525`. | Adds palpitation, chest tightness, pressure/pain, or staff-confirmation descriptors. |
+| `tachy-associated-symptoms` | `post_measurement_intake` | Are any of these happening with it? | `TACHY-004`. | `AHA-TACHYCARDIA-FAST-HR`, `AHA-HEART-ATTACK`, `MEDLINEPLUS-AFIB`, `DUOBAO-AFRVR-TACHY-QA-20260525`. | Dynamic branch point for associated symptom positives or none-selected context. |
+| `tachy-warning-symptom-review` | `post_measurement_intake` | Please tell staff how those symptoms feel right now. | `TACHY-008`. | `AHA-TACHYCARDIA-FAST-HR`, `AHA-HEART-ATTACK`, `MEDLINEPLUS-AFIB`, `DUOBAO-AFRVR-TACHY-QA-20260525`, `LOCAL-PROTOCOL-TBD`. | Adds staff-confirmation cue after associated cardiopulmonary symptoms are selected. |
+| `tachy-post-vital-heart-rate-cue` | `post_measurement_intake` | The kiosk received a high heart-rate reading for this demo. How do you feel right now? | `TACHY-005`. | `AHA-TACHYCARDIA-FAST-HR`, `MEDLINEPLUS-AFIB`, `DUOBAO-DEMO-DESIGN-20260520`, `DUOBAO-AFRVR-TACHY-QA-20260525`. | Adds post-vital heart-rate cue response when no listed associated symptoms are selected. |
+| `tachy-heart-history-meds` | `post_measurement_intake` | Have you been told you have a heart rhythm problem, or do you take heart / blood-pressure medicine? | `TACHY-006`. | `MEDLINEPLUS-AFIB`, `ENA-ESI-V5`, `DUOBAO-AFRVR-TACHY-QA-20260525`, `LOCAL-PROTOCOL-TBD`. | Adds history and medication context for staff confirmation. |
+| `tachy-medication-allergy-confirm` | `post_measurement_intake` | Do you have medication allergies or medicines staff should confirm? | `TACHY-007`. | `LOCAL-PROTOCOL-TBD`, `DUOBAO-DEMO-DESIGN-20260520`, `DUOBAO-AFRVR-TACHY-QA-20260525`. | Adds medication and allergy confirmation context before summary. |
 
 ## Known Gap
 
-The runtime question ids are not yet generated directly from
-`data/question_registry.csv`. For v0 this is acceptable because the demo is a
-synthetic, deterministic capability demo, but the next engineering hardening
-step should make the runtime consume a checked question manifest derived from
-the registry.
+The backend tachycardia contract now consumes
+`data/question_manifest.tachycardia.v0.3.json`. The clickable frontend engine
+still keeps its own static `core/triage_engine` question bank for the local
+browser demo. The next hardening step is to generate both backend and frontend
+question surfaces from the same checked manifest.
 
 ## Next Hardening Step
 
-Create a `core/triage_engine/question_manifest.js` file that records, for each
-runtime question:
-
-```js
-{
-  runtimeId: "chest-details",
-  registryIds: ["CP-001", "CP-002", "CP-004", "CP-005"],
-  sourceIds: ["AHA-HEART-ATTACK", "AHA-HBP-911-2025", "ENA-ESI-V5"],
-  evidenceStatus: "source-backed",
-  demoAllowed: "yes_demo_only"
-}
-```
-
-The smoke check should then fail if any runtime question lacks registry
-coverage.
+Add a manifest schema validator and a registry-to-manifest build step. The
+check should fail when a served backend or frontend question lacks registry
+coverage, source refs, approved option count, unique option ids, or
+demo-allowed status.

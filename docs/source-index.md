@@ -120,8 +120,36 @@ Derived analysis:
 - `handoff/2026-05-22-api-v0.2-requirements-from-expert-review.md`
 - `handoff/api-examples/`
 - `docs/2026-05-25-demo-fallback-script.md`
+- `docs/ai-triage-dynamic-engine-sdd-implementation-test-spec.md`
+- `docs/2026-06-08-dynamic-engine-completion-audit.md`
+- `docs/2026-06-08-dynamic-engine-spec-coverage-audit.md`
+- `decisions/2026-06-08-dynamic-engine-cloud-backend-boundary.md`
+- `handoff/2026-06-08-dynamic-engine-two-path-rehearsal-packet.md`
+- `handoff/2026-06-08-dynamic-engine-clinical-wording-review-checklist.md`
+- `handoff/2026-06-08-dynamic-engine-test-report.md`
+- `handoff/2026-06-08-dynamic-engine-deployment-notice-draft.md`
+- `handoff/2026-06-08-dynamic-engine-external-release-gate-closeout.md`
 - `api/lib/triage-demo-contract.js`
+- `api/lib/dynamic-engine/`
+- `data/question_manifest.tachycardia.v0.3.json`
+- `data/answer_effects.tachycardia.v0.3.json`
+- `data/routing_policy.tachycardia.v0.3.json`
+- `data/summary_templates.tachycardia.v0.3.json`
+- `data/vector_index/tachycardia.v0.3.json`
+- `scripts/build_tachy_manifest.py`
+- `scripts/validate_dynamic_manifest.py`
+- `scripts/build_vector_index.js`
 - `tests/contract/triage-demo-api.test.js`
+- `tests/contract/tachycardia-dynamic-path.test.js`
+- `tests/contract/answer-candidates-api.test.js`
+- `tests/contract/cloud-security-reliability.test.js`
+- `tests/contract/dynamic-performance.test.js`
+- `tests/unit/manifest-schema.test.js`
+- `tests/unit/answer-effect-mapper.test.js`
+- `tests/unit/routing-policy-engine.test.js`
+- `tests/unit/summary-assembler.test.js`
+- `tests/unit/ai-retrieval-guardrails.test.js`
+- `tests/e2e/`
 
 ## Upstream Prof. Wu Context
 

@@ -1,7 +1,7 @@
 # Demo Acceptance Criteria
 
 Status: v0 clickable demo gate
-Last updated: 2026-05-25
+Last updated: 2026-06-08
 
 ## FIRST PRINCIPLE
 
@@ -39,6 +39,12 @@ integration.
   `progress.expected_total`, and one typed question.
 - `POST /api/triage-demo/sessions/{session_key}/answers` returns the next
   typed question or `status=summary`.
+- `GET /api/triage-demo/sessions/{session_key}/summary` returns
+  `session_not_summary_ready` before completion and `staff_review_summary` after
+  completion.
+- `POST /api/triage-demo/sessions/{session_key}/answer-candidates` maps an
+  ephemeral transcript only within the current question's allowed option ids.
+  It never submits an answer or changes session state.
 - `capabilities.max_questions` is treated as a UI capacity cap; it is not the
   progress denominator.
 - Same `idempotency_key` retry returns the same response without advancing the
@@ -50,15 +56,26 @@ integration.
 - Same `idempotency_key` with a different body returns `idempotency_conflict`
   with `recovery.safe_next_action=restart_demo_session`.
 - Invalid `session_key` returns stable `status=error`.
+- Expired sessions return `session_expired`.
+- Rate-limited clients return `rate_limited`.
+- Oversized JSON request bodies return `request_body_too_large`.
+- Redis-backed session-store mode can serve summary lookup after an API memory
+  reset; JSON-file persistence remains the local/demo fallback.
+- Audit events record request id, session-key hash, idempotency-key hash when
+  present, and routing trace id after routed answers.
 - The final summary response includes `staff_review_summary` and
   `summary_visibility=staff_only`.
+- Same vital payload with different tachycardia answer paths produces different
+  next-question or summary content while keeping objective vitals consistent.
 
 ## Governance Criteria
 
 - Runtime is choice-only.
 - Runtime does not expose `<textarea>`.
 - Runtime question bank has no `type: "text"` question.
-- Runtime does not capture ASR, audio, or free-text patient statements.
+- Runtime does not capture raw ASR audio. The optional backend candidate helper
+  may process an ephemeral transcript for current-question option matching, but
+  confirmation through `/answers` is still required.
 - Staff summary includes the demo boundary.
 - Runtime output does not include:
   - diagnosis;
@@ -87,6 +104,7 @@ Run:
 ```bash
 npm run demo:ready
 python3 scripts/check_governance_registries.py
+npm run dynamic:check
 ```
 
 Expected result:
