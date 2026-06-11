@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AI Triage Vital-Aware API Tester</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <strong>AI Triage Vital-Aware API Tester</strong>
+        <span>Synthetic-data staff-review intake support</span>
+      </div>
+      <div class="topbar-actions">
+        <button id="healthButton" type="button">Health</button>
+        <button id="resetButton" type="button">Reset</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel vital-panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Vital sign phase</p>
+            <h1>Adjust measured vitals, then start the intake flow.</h1>
+          </div>
+          <span id="routePreview" class="pill">route: tachycardia</span>
+        </div>
+
+        <div class="preset-row" aria-label="Vital presets">
+          <button class="preset-button" type="button" data-preset="tachycardia">Tachycardia</button>
+          <button class="preset-button" type="button" data-preset="fever">Fever</button>
+          <button class="preset-button" type="button" data-preset="lowSpo2">Low SpO2</button>
+          <button class="preset-button" type="button" data-preset="normal">Normal</button>
+        </div>
+
+        <div class="vital-grid">
+          <label class="vital-control">
+            <span>Heart rate</span>
+            <input id="heartRateInput" type="number" min="30" max="220" step="1">
+            <small>bpm</small>
+          </label>
+          <label class="vital-control">
+            <span>SpO2</span>
+            <input id="spo2Input" type="number" min="60" max="100" step="1">
+            <small>%</small>
+          </label>
+          <label class="vital-control">
+            <span>Temperature</span>
+            <input id="temperatureInput" type="number" min="34" max="42" step="0.1">
+            <small>C</small>
+          </label>
+          <label class="vital-control">
+            <span>Systolic BP</span>
+            <input id="systolicInput" type="number" min="60" max="240" step="1">
+            <small>mmHg</small>
+          </label>
+          <label class="vital-control">
+            <span>Diastolic BP</span>
+            <input id="diastolicInput" type="number" min="30" max="160" step="1">
+            <small>mmHg</small>
+          </label>
+          <label class="vital-control">
+            <span>Resp. rate</span>
+            <input id="respiratoryRateInput" type="number" min="6" max="50" step="1">
+            <small>/min</small>
+          </label>
+          <label class="vital-control">
+            <span>Glucose</span>
+            <input id="glucoseInput" type="number" min="40" max="500" step="1">
+            <small>mg/dL</small>
+          </label>
+          <label class="vital-control">
+            <span>Height</span>
+            <input id="heightInput" type="number" min="80" max="230" step="0.1">
+            <small>cm</small>
+          </label>
+          <label class="vital-control">
+            <span>Weight</span>
+            <input id="weightInput" type="number" min="20" max="220" step="0.1">
+            <small>kg</small>
+          </label>
+        </div>
+
+        <div class="control-strip">
+          <label>
+            Payload format
+            <select id="payloadFormatSelect">
+              <option value="normalized">Normalized demo fields</option>
+              <option value="imvs">iMVS V1.4-style objects</option>
+            </select>
+          </label>
+          <label>
+            API base URL
+            <input id="baseUrlInput" value="" placeholder="same origin">
+          </label>
+          <label>
+            Demo bearer token
+            <input id="tokenInput" type="password" placeholder="Optional">
+          </label>
+        </div>
+
+        <div class="button-row action-row">
+          <button id="startButton" class="primary" type="button">Pass vitals and start</button>
+          <button id="autoAnswerButton" type="button" disabled>Auto answer</button>
+        </div>
+        <div id="sessionMeta" class="meta"></div>
+      </section>
+
+      <section class="panel request-panel">
+        <div class="panel-head">
+          <p class="eyebrow">Generated start request</p>
+          <button id="refreshPayloadButton" type="button">Refresh</button>
+        </div>
+        <textarea id="payloadEditor" spellcheck="false"></textarea>
+      </section>
+
+      <section class="panel question-panel">
+        <div class="question-head">
+          <div>
+            <p class="eyebrow" id="progressLabel">Question</p>
+            <h2 id="questionText">Start from the vital-sign phase to load the first governed question.</h2>
+          </div>
+          <span id="statusPill" class="pill">ready</span>
+        </div>
+        <div id="optionsMount" class="options"></div>
+        <div class="button-row">
+          <button id="submitButton" class="primary" type="button" disabled>Submit answer</button>
+          <button id="answerFirstButton" type="button" disabled>Pick first</button>
+        </div>
+      </section>
+
+      <section class="panel summary-panel">
+        <p class="eyebrow">Staff-review summary</p>
+        <div id="summaryMount" class="summary empty">Summary appears after the final question.</div>
+      </section>
+
+      <section class="panel raw-panel">
+        <div class="panel-head">
+          <p class="eyebrow">Raw API response</p>
+          <span id="lastStatus" class="meta"></span>
+        </div>
+        <pre id="rawOutput">{}</pre>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

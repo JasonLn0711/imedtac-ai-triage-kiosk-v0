@@ -5,4 +5,6 @@ node_modules/
 dist/
 .vercel/
 __pycache__/
+spec/
 .DS_Store
+Prompt/
