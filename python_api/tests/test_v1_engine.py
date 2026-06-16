@@ -70,16 +70,15 @@ def test_question_registry_loads_csv_and_stable_option_ids():
         registry.get("missing-question")
 
 
-def test_duration_csv_questions_accept_number_pad_text_value():
+def test_duration_csv_question_uses_single_choice_options():
     registry = QuestionRegistry(CSV_PATH, initial_csv_path=PROJECT_ROOT / "Question_DB" / "Initial_questions.csv")
     question = registry.get("INIT-4")
 
-    assert question.type == "time"
+    assert question.type == "single_choice"
     assert validate_answer(question, {
         "question_id": "INIT-4",
         "answer": {
-            "selected_option_ids": [],
-            "text_value": "2 days",
+            "selected_option_ids": ["init-4_1_3_days"],
         },
     }) is None
 

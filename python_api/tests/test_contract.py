@@ -226,11 +226,12 @@ def test_normal_vitals_start_initial_questions_then_route_to_symptom_module_and_
         json=answer_body(body["question"], ["init-1_female"], "idem-normal-init-1"),
     ).json()
     assert gender["question"]["id"] == "INIT-2"
-    assert gender["question"]["type"] == "number"
+    assert gender["question"]["type"] == "single_choice"
 
-    age_answer = answer_body(gender["question"], [], "idem-normal-init-2")
-    age_answer["answer"]["numeric_value"] = 40
-    age = client.post(f"/api/triage-demo/sessions/{session_key}/answers", json=age_answer).json()
+    age = client.post(
+        f"/api/triage-demo/sessions/{session_key}/answers",
+        json=answer_body(gender["question"], ["init-2_40_64"], "idem-normal-init-2"),
+    ).json()
     assert age["question"]["id"] == "INIT-3"
     assert len(age["question"]["options"]) == 9
     assert age["question"]["options"][0] == {"id": "init-3_fever_cold", "label": "Fever or cold symptoms"}
@@ -251,9 +252,10 @@ def test_normal_vitals_start_initial_questions_then_route_to_symptom_module_and_
     ).json()
     assert complaint["question"]["id"] == "INIT-4"
 
-    duration_answer = answer_body(complaint["question"], [], "idem-normal-init-4")
-    duration_answer["answer"]["text_value"] = "Today"
-    symptom = client.post(f"/api/triage-demo/sessions/{session_key}/answers", json=duration_answer).json()
+    symptom = client.post(
+        f"/api/triage-demo/sessions/{session_key}/answers",
+        json=answer_body(complaint["question"], ["init-4_today"], "idem-normal-init-4"),
+    ).json()
 
     assert symptom["question"]["id"] == "PAL-1"
     assert symptom["question_phase"] == "symptom_specific"
@@ -281,9 +283,10 @@ def test_initial_gender_answer_overrides_start_payload_sex_in_summary():
         json=answer_body(body["question"], ["init-1_male"], "idem-gender-override-init-1"),
     ).json()
 
-    age_answer = answer_body(gender["question"], [], "idem-gender-override-init-2")
-    age_answer["answer"]["numeric_value"] = 40
-    age = client.post(f"/api/triage-demo/sessions/{session_key}/answers", json=age_answer).json()
+    age = client.post(
+        f"/api/triage-demo/sessions/{session_key}/answers",
+        json=answer_body(gender["question"], ["init-2_40_64"], "idem-gender-override-init-2"),
+    ).json()
 
     detail = client.post(
         f"/api/triage-demo/sessions/{session_key}/answers",
@@ -299,9 +302,10 @@ def test_initial_gender_answer_overrides_start_payload_sex_in_summary():
         ),
     ).json()
 
-    duration_answer = answer_body(complaint["question"], [], "idem-gender-override-init-4")
-    duration_answer["answer"]["text_value"] = "Today"
-    current = client.post(f"/api/triage-demo/sessions/{session_key}/answers", json=duration_answer).json()
+    current = client.post(
+        f"/api/triage-demo/sessions/{session_key}/answers",
+        json=answer_body(complaint["question"], ["init-4_today"], "idem-gender-override-init-4"),
+    ).json()
 
     for index in range(20):
         if current["status"] == "summary":
@@ -315,7 +319,7 @@ def test_initial_gender_answer_overrides_start_payload_sex_in_summary():
 
     summary = current["staff_review_summary"]
     assert summary["patient_record"]["sex"] == "Male"
-    assert "40 y/o Male" in summary["soap_note"]["subjective"]
+    assert "40-64 y/o Male" in summary["soap_note"]["subjective"]
 
 
 def test_grouped_initial_complaint_inserts_detail_question_and_routes_from_detail():
@@ -338,9 +342,10 @@ def test_grouped_initial_complaint_inserts_detail_question_and_routes_from_detai
         json=answer_body(body["question"], ["init-1_female"], "idem-grouped-initial-1"),
     ).json()
 
-    age_answer = answer_body(gender["question"], [], "idem-grouped-initial-2")
-    age_answer["answer"]["numeric_value"] = 40
-    age = client.post(f"/api/triage-demo/sessions/{session_key}/answers", json=age_answer).json()
+    age = client.post(
+        f"/api/triage-demo/sessions/{session_key}/answers",
+        json=answer_body(gender["question"], ["init-2_40_64"], "idem-grouped-initial-2"),
+    ).json()
 
     detail = client.post(
         f"/api/triage-demo/sessions/{session_key}/answers",
@@ -361,9 +366,10 @@ def test_grouped_initial_complaint_inserts_detail_question_and_routes_from_detai
 
     assert duration["question"]["id"] == "INIT-4"
 
-    duration_answer = answer_body(duration["question"], [], "idem-grouped-initial-4")
-    duration_answer["answer"]["text_value"] = "Today"
-    symptom = client.post(f"/api/triage-demo/sessions/{session_key}/answers", json=duration_answer).json()
+    symptom = client.post(
+        f"/api/triage-demo/sessions/{session_key}/answers",
+        json=answer_body(duration["question"], ["init-4_today"], "idem-grouped-initial-4"),
+    ).json()
 
     assert symptom["question"]["id"] == "DC-1"
     assert symptom["question_phase"] == "symptom_specific"

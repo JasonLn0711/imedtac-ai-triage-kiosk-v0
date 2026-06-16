@@ -380,9 +380,11 @@ def record_answer(flow_state: FlowState, body: dict[str, Any], question: Questio
         if sex:
             flow_state.patient.sex = sex
             flow_state.patient_context["sex"] = sex
-    if question.id == "INIT-2" and isinstance(value, int | float):
-        flow_state.patient.age = value
-        flow_state.patient_context["age"] = value
+    if question.id == "INIT-2":
+        age = value if isinstance(value, int | float) else _display_label_for_selected(question, selected)
+        if age:
+            flow_state.patient.age = age
+            flow_state.patient_context["age"] = age
     if question.id == "INIT-3" and selected:
         chief_concern = _display_label_for_selected(question, selected)
         flow_state.patient.chief_concern = chief_concern

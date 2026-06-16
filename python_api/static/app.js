@@ -209,7 +209,7 @@ function imvsVitals(vitals) {
 
 function capabilitiesForRoute(route) {
   return {
-    question_types: ["single_choice", "multi_choice", "number", "time", "text"],
+    question_types: ["single_choice", "multi_choice", "text"],
     max_questions: route === "tachycardia" || route === "palpitation" ? 7 : 8,
     max_options_per_question: 9,
     max_option_label_length: 64,
@@ -374,17 +374,17 @@ function renderQuestion(data) {
 
 function isNumberQuestion(question) {
   if (!question) return false;
-  return question.type === "number" || question.id === "INIT-2" || /age/i.test(question.text || "");
+  return question.type === "number";
 }
 
 function isTextQuestion(question) {
   if (!question) return false;
-  return question.type === "text" || question.type === "time" || question.id === "INIT-4" || /how long/i.test(question.text || "");
+  return question.type === "text" || question.type === "time";
 }
 
 function isDurationQuestion(question) {
   if (!question) return false;
-  return question.id === "INIT-4" || /how long|duration/i.test(question.text || "");
+  return question.type === "time";
 }
 
 function renderNumberPad() {
