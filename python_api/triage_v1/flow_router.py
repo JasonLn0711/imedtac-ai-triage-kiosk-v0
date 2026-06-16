@@ -11,12 +11,13 @@ from .vital_rules import evaluate_vitals, has_staff_notify_flag
 
 INITIAL_DETAIL_BY_GROUP_OPTION = {
     "init-3_fever_cold": "INIT-3A-FEVER",
+    "init-3_cardiorespiratory": "INIT-3A-CARDIORESP",
     "init-3_gi": "INIT-3A-GI",
     "init-3_gu_back": "INIT-3A-GU-BACK",
     "init-3_neuro_general": "INIT-3A-NEURO",
-    "init-3_injury_wound_limb": "INIT-3A-OTHER",
-    "init-3_skin_allergy_eye_ent": "INIT-3A-OTHER",
-    "init-3_medication_follow_up": "INIT-3A-OTHER",
+    "init-3_injury_wound_limb": "INIT-3A-INJURY",
+    "init-3_skin_allergy_eye_ent": "INIT-3A-SKIN-EYE-ENT",
+    "init-3_medication_follow_up": "INIT-3A-FOLLOW-UP",
     "init-3_other_not_sure": "INIT-3A-OTHER",
 }
 
@@ -207,41 +208,85 @@ def _module_for_initial_answers(flow_state: FlowState, registry: QuestionRegistr
         return BRANCH_MODULES["shortness_of_breath"]
     if "palpitation" in complaint:
         return BRANCH_MODULES["palpitation"]
+    if "high blood pressure" in complaint:
+        return BRANCH_MODULES["hypertension"]
+    if "slow heartbeat" in complaint:
+        return BRANCH_MODULES["bradycardia"]
+    if "fast heartbeat" in complaint:
+        return BRANCH_MODULES["tachycardia"]
+    if "leg swelling" in complaint:
+        return "Heart/edema.md"
+    if "low oxygen" in complaint or "blue lips" in complaint:
+        return BRANCH_MODULES["hypoxia_cyanosis"]
     if "fever" in complaint:
         return BRANCH_MODULES["fever"]
     if "headache" in complaint:
         return "Pain/Headache.md"
     if "abdominal pain" in complaint:
         return "Pain/abdominal_pain.md"
+    if "diarrhea" in complaint or "constipation" in complaint:
+        return "GI/diarrhea_constipation.md"
+    if "nausea" in complaint or "vomiting" in complaint:
+        return "GI/nausea_vomiting.md"
+    if "trouble swallowing" in complaint:
+        return "GI/dysphagia.md"
+    if "abdominal swelling" in complaint or "bloating" in complaint:
+        return "GI/abdominal_swelling_ascites.md"
+    if "black stool" in complaint or "vomiting blood" in complaint:
+        return "GI/gastrointestinal_bleeding.md"
+    if "yellow skin" in complaint or "yellow eyes" in complaint:
+        return "GI/jaundice.md"
+    if "unintentional weight loss" in complaint:
+        return "GI/unintentional_weight_loss.md"
     if "dizziness" in complaint:
         return "Neuro/dizziness.md"
     if "fainting" in complaint:
         return "Neuro/syncope.md"
+    if "confusion" in complaint:
+        return "Neuro/confusion_delirium.md"
+    if "memory" in complaint:
+        return "Neuro/dementia.md"
+    if "weakness or paralysis" in complaint:
+        return "Neuro/neurologic_weakness_paralysis.md"
+    if "numbness" in complaint or "tingling" in complaint:
+        return "Neuro/numbness_tingling_sensory_loss.md"
+    if "walking imbalance" in complaint or "falls" in complaint:
+        return "Neuro/gait_imbalance_falls.md"
+    if "sleep" in complaint:
+        return "Neuro/sleep_disorders.md"
     if "urinary" in complaint:
         return "Renal&GU/urinary_symptoms.md"
+    if "painful urination" in complaint or "bladder pain" in complaint:
+        return "Renal&GU/dysuria_bladder_pain.md"
+    if "abnormal urine" in complaint or "kidney test" in complaint:
+        return "Renal&GU/azotemia_urinary_abnormalities.md"
+    if "fluid or electrolyte" in complaint:
+        return "Renal&GU/fluid_electrolyte_disturbances.md"
     if "cough" in complaint or "cold" in complaint:
         return "Respiratory/upper_respiratory.md"
-    if "diarrhea" in complaint:
-        return "GI/diarrhea_constipation.md"
     if "back pain" in complaint:
         return "Pain/back_pain.md"
     if "eye problem" in complaint:
         return "Eye/eye.md"
-    if "ear" in complaint or "nose" in complaint or "throat" in complaint or "sore throat" in complaint:
+    if "ear" in complaint or "nose" in complaint or "throat" in complaint or "sore throat" in complaint or "sinus" in complaint:
         return "ENT/ent.md"
     if "allergy" in complaint:
         return "allergy.md"
-    if "skin" in complaint:
+    if "skin" in complaint or "wound" in complaint:
         return "Skin/skin_infection.md"
-    if "trauma" in complaint:
+    if "trauma" in complaint or "injury" in complaint:
         return "Trauma/trauma.md"
-    if "nausea" in complaint or "vomiting" in complaint:
-        return "GI/nausea_vomiting.md"
+    if "bruise" in complaint:
+        return "Hema/bruise.md"
+    if "bleeding" in complaint or "clotting" in complaint:
+        return "Hema/bleeding_thrombosis.md"
+    if "lymph" in complaint or "spleen" in complaint:
+        return "Hema/lymph_nodes_spleen_enlargement.md"
     if "weakness" in complaint or "fatigue" in complaint:
         return "Neuro/weakness_fatigue.md"
     if "limb pain" in complaint or "swelling" in complaint:
         return "Pain/limb_pain_swelling.md"
-    if "chronic" in complaint or "other concern" in complaint or "not sure" in complaint:
+    if "chronic" in complaint or "test or lab" in complaint or "other concern" in complaint or "not sure" in complaint:
         return "chronic_follow_up.md"
     return BRANCH_MODULES["palpitation"]
 

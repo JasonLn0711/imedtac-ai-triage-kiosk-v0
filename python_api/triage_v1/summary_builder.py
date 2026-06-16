@@ -247,7 +247,7 @@ def build_summary(flow_state: FlowState, registry: QuestionRegistry) -> dict:
             "objective": soap_note["objective"],
             "review_basis": soap_note["assessment"],
             "review_action": soap_note["plan"],
-            "staff_handoff_note": "Review measured vital context and selected symptom answers.",
+            "staff_handoff_note": "",
         },
         "evidence_refs": ["LOCAL-PROTOCOL-TBD"],
     }

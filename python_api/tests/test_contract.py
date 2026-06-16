@@ -235,9 +235,19 @@ def test_normal_vitals_start_initial_questions_then_route_to_symptom_module_and_
     assert len(age["question"]["options"]) == 9
     assert age["question"]["options"][0] == {"id": "init-3_fever_cold", "label": "Fever or cold symptoms"}
 
-    complaint = client.post(
+    detail = client.post(
         f"/api/triage-demo/sessions/{session_key}/answers",
         json=answer_body(age["question"], ["init-3_cardiorespiratory"], "idem-normal-init-3"),
+    ).json()
+    assert detail["question"]["id"] == "INIT-3A-CARDIORESP"
+
+    complaint = client.post(
+        f"/api/triage-demo/sessions/{session_key}/answers",
+        json=answer_body(
+            detail["question"],
+            ["init-3a-cardioresp_palpitations_heartbeat"],
+            "idem-normal-init-3a",
+        ),
     ).json()
     assert complaint["question"]["id"] == "INIT-4"
 
@@ -247,7 +257,7 @@ def test_normal_vitals_start_initial_questions_then_route_to_symptom_module_and_
 
     assert symptom["question"]["id"] == "PAL-1"
     assert symptom["question_phase"] == "symptom_specific"
-    assert symptom["progress"]["expected_total"] == 10
+    assert symptom["progress"]["expected_total"] == 11
 
 
 def test_initial_gender_answer_overrides_start_payload_sex_in_summary():
@@ -275,9 +285,18 @@ def test_initial_gender_answer_overrides_start_payload_sex_in_summary():
     age_answer["answer"]["numeric_value"] = 40
     age = client.post(f"/api/triage-demo/sessions/{session_key}/answers", json=age_answer).json()
 
-    complaint = client.post(
+    detail = client.post(
         f"/api/triage-demo/sessions/{session_key}/answers",
         json=answer_body(age["question"], ["init-3_cardiorespiratory"], "idem-gender-override-init-3"),
+    ).json()
+
+    complaint = client.post(
+        f"/api/triage-demo/sessions/{session_key}/answers",
+        json=answer_body(
+            detail["question"],
+            ["init-3a-cardioresp_palpitations_heartbeat"],
+            "idem-gender-override-init-3a",
+        ),
     ).json()
 
     duration_answer = answer_body(complaint["question"], [], "idem-gender-override-init-4")
@@ -517,6 +536,40 @@ def test_invalid_session_returns_stable_error_response():
     assert data["error"]["code"] == "invalid_session"
     assert data["error"]["retryable"] is False
     assert data["session_key"] == "missing-session"
+    assert data["workflow_mode"] == "post_measurement_only"
+    assert data["measurement_state"] == "complete"
+    assert data["vitals_ready"] is True
+
+
+def test_expired_session_returns_410_and_expired_state():
+    start = client.post("/api/triage-demo/sessions", json=start_body()).json()
+    session_key = start["session_key"]
+    flow_state = contract._sessions.get(session_key)
+    flow_state.session_expires_at = "2000-01-01T00:00:00Z"
+
+    response = client.post(
+        f"/api/triage-demo/sessions/{session_key}/answers",
+        json=answer_body(start["question"], ["heart_racing"], "idem-expired-session-001"),
+    )
+    body = response.json()
+
+    assert response.status_code == 410
+    assert body["status"] == "error"
+    assert body["session_state"] == "expired"
+    assert body["error"]["code"] == "session_expired"
+
+
+def test_oversized_request_body_returns_contract_error():
+    response = client.post(
+        "/api/triage-demo/sessions",
+        content="{\"payload\":\"" + ("x" * (33 * 1024)) + "\"}",
+        headers={"Content-Type": "application/json"},
+    )
+    body = response.json()
+
+    assert response.status_code == 400
+    assert body["status"] == "error"
+    assert body["error"]["code"] == "request_body_too_large"
 
 
 def test_options_preflight_returns_cors_headers():

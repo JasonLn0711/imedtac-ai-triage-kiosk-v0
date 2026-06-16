@@ -114,6 +114,25 @@ def _expiry_from(now: datetime | None = None) -> str:
     return (current + timedelta(seconds=SESSION_TTL_SECONDS)).isoformat().replace("+00:00", "Z")
 
 
+def _parse_iso_datetime(value: str) -> datetime | None:
+    if not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def _session_is_expired(expires_at: str, now: datetime | None = None) -> bool:
+    expiry = _parse_iso_datetime(expires_at)
+    if not expiry:
+        return False
+    return (now or datetime.now(timezone.utc)) >= expiry
+
+
 def error_result(status_code: int, body: dict[str, Any] | None, code: str, message: str, options: dict[str, Any] | None = None) -> dict[str, Any]:
     body = body or {}
     options = options or {}
@@ -125,6 +144,9 @@ def error_result(status_code: int, body: dict[str, Any] | None, code: str, messa
             "response_id": _next_response_id("error"),
             "session_key": options.get("session_key"),
             "session_expires_at": options.get("session_expires_at"),
+            "workflow_mode": "post_measurement_only",
+            "measurement_state": "complete",
+            "vitals_ready": True,
             "status": "error",
             "session_state": options.get("session_state") or "error",
             "error": {
@@ -245,6 +267,14 @@ def submit_answer(session_key: str | None, body: dict[str, Any] | None = None) -
         return error_result(404, body, "invalid_session", "The session_key was not found or is no longer available.", {
             "retryable": False,
             "session_key": session_key,
+        })
+    if _session_is_expired(flow_state.session_expires_at):
+        flow_state.state = "expired"
+        return error_result(410, body, "session_expired", "The session has expired; start a new demo session.", {
+            "retryable": False,
+            "session_key": flow_state.session_key,
+            "session_expires_at": flow_state.session_expires_at,
+            "session_state": "expired",
         })
 
     def compute() -> dict[str, Any]:
