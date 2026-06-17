@@ -83,6 +83,8 @@ go-to-market 與美國客戶展示，還不是正式醫療決策產品。
 | `handoff/2026-06-08-dynamic-engine-external-release-gate-closeout.md` | Operational closeout packet for clinical reviewer approval and imedtac deployment-notice confirmation |
 | `decisions/2026-05-20-june-demo-question-budget.md` | Decision that June case flows follow the 慧誠 / iMVS product-spec cap of fewer than 8 visible patient-facing questions |
 | `decisions/2026-06-08-dynamic-engine-cloud-backend-boundary.md` | First-principles decision to keep dynamic routing in the cloud/backend behind the stable session API |
+| `decisions/2026-06-09-render-lab-gpu-inference-bridge.md` | Decision record for using Render as the public API orchestrator while calling a lab GPU FastAPI service for embedding/reranker inference |
+| `handoff/2026-06-09-lab-gpu-cloudflare-tunnel-runbook.md` | Operations runbook for reboot-stable Cloudflare Tunnel + systemd setup between Render and the lab GPU FastAPI service |
 | `handoff/2026-05-21-imedtac-two-endpoint-api-reply.md` | External-ready small fixed two-endpoint API contract for the June demo |
 | `handoff/2026-05-21-imedtac-engineering-open-issues-checklist.md` | Engineering integration checklist for open issues not fully captured by the API field tables |
 | `handoff/2026-05-21-to-2026-05-25-imedtac-response-plan.md` | Internal response plan for API, question templates, and `not_sure` answer behavior before Monday `2026-05-25` |

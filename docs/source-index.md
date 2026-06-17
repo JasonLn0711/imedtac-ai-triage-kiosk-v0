@@ -128,6 +128,8 @@ Derived analysis:
 - `docs/2026-06-08-dynamic-engine-completion-audit.md`
 - `docs/2026-06-08-dynamic-engine-spec-coverage-audit.md`
 - `decisions/2026-06-08-dynamic-engine-cloud-backend-boundary.md`
+- `decisions/2026-06-09-render-lab-gpu-inference-bridge.md`
+- `handoff/2026-06-09-lab-gpu-cloudflare-tunnel-runbook.md`
 - `handoff/2026-06-08-dynamic-engine-two-path-rehearsal-packet.md`
 - `handoff/2026-06-08-dynamic-engine-clinical-wording-review-checklist.md`
 - `handoff/2026-06-08-dynamic-engine-test-report.md`
