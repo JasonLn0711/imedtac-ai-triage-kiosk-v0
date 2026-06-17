@@ -73,7 +73,7 @@ until fully removed. It is no longer the canonical imedtac API runtime.
 | `single_choice` / `multi_choice` only for MVP | yes |
 | doebow `Number` / `Time` question types | transformed to option buckets in imedtac-facing mode |
 | Broader doebow branches | allowed behind the same response envelope |
-| `staff_notify` | additive internal/safety response; first imedtac path should validate UI support before relying on it |
+| staff-notify gate | internal safety gate wrapped as `status=summary` for the first imedtac MVP path; UI support for a separate `staff_notify` status remains a future change request |
 | JS backend runtime | legacy / non-canonical after Python scripts are wired |
 
 ## Compatibility Risk

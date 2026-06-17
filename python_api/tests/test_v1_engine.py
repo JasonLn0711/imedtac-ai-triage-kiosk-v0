@@ -154,7 +154,7 @@ def test_vital_selected_module_does_not_append_universal_phase():
 
 
 
-def test_staff_notify_vital_thresholds_start_terminal_flow():
+def test_staff_notify_vital_thresholds_start_summary_compatible_terminal_flow():
     cases = [
         {"temperature_c": {"value": 39, "unit": "C"}},
         {"temperature_c": {"value": 35, "unit": "C"}},
@@ -179,10 +179,11 @@ def test_staff_notify_vital_thresholds_start_terminal_flow():
         body = response.json()
 
         assert response.status_code == 200
-        assert body["status"] == "staff_notify"
-        assert body["session_state"] == "staff_notify_ready"
-        assert body["screen_text"] == "Please notify staff."
-        assert body["staff_review_flags"]
+        assert body["status"] == "summary"
+        assert body["session_state"] == "summary_ready"
+        assert body["question_phase"] == "summary"
+        assert body["compatibility_mode"] == "staff_notify_wrapped_as_summary"
+        assert body["staff_review_summary"]["staff_review_flags"]
 
 
 def test_non_terminal_vital_flags_choose_expected_modules():

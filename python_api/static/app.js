@@ -510,32 +510,6 @@ function handlePadAction(action) {
   else updateNumberPad();
 }
 
-function renderStaffNotify(data) {
-  state.currentQuestion = null;
-  state.selectedOptionIds = [];
-  state.answerValue = null;
-  elements.statusPill.textContent = "staff_notify";
-  elements.progressLabel.textContent = "Staff notification";
-  elements.questionText.textContent = data.screen_text || "Please notify staff.";
-  elements.sessionMeta.textContent = `Session: ${data.session_key} | staff_notify_ready`;
-  elements.optionsMount.innerHTML = "";
-  elements.submitButton.disabled = true;
-  elements.answerFirstButton.disabled = true;
-  elements.autoAnswerButton.disabled = true;
-
-  const flags = data.staff_review_flags || [];
-  elements.summaryMount.classList.remove("empty");
-  elements.summaryMount.innerHTML = `
-    <section class="soap-section">
-      <div class="soap-label" aria-hidden="true">!</div>
-      <div>
-        <h3>Please notify staff.</h3>
-        ${renderSoapContent(flags.map((flag) => `${flag.label}: ${flag.summary_text}`))}
-      </div>
-    </section>
-  `;
-}
-
 function renderSummary(data) {
   state.currentQuestion = null;
   state.selectedOptionIds = [];
@@ -676,8 +650,7 @@ async function startSession() {
   refreshPayload();
   const data = await postJson("/api/triage-demo/sessions", startBodyFromEditor());
   state.sessionKey = data.session_key;
-  if (data.status === "staff_notify") renderStaffNotify(data);
-  else if (data.status === "summary") renderSummary(data);
+  if (data.status === "summary") renderSummary(data);
   else renderQuestion(data);
 }
 
@@ -692,8 +665,7 @@ function hasAnswerReady() {
 async function submitAnswer() {
   if (!state.sessionKey || !state.currentQuestion || !hasAnswerReady()) return;
   const data = await postJson(`/api/triage-demo/sessions/${encodeURIComponent(state.sessionKey)}/answers`, answerBody());
-  if (data.status === "staff_notify") renderStaffNotify(data);
-  else if (data.status === "summary") renderSummary(data);
+  if (data.status === "summary") renderSummary(data);
   else renderQuestion(data);
 }
 

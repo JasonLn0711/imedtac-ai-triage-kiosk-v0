@@ -184,7 +184,7 @@ def test_start_session_routes_from_fever_vital_rules():
     assert body["progress"]["expected_total"] == 3
 
 
-def test_start_session_staff_notify_threshold_returns_terminal_status():
+def test_start_session_staff_notify_threshold_returns_summary_compatible_terminal_status():
     response = client.post(
         "/api/triage-demo/sessions",
         json=start_body(
@@ -195,11 +195,12 @@ def test_start_session_staff_notify_threshold_returns_terminal_status():
     body = response.json()
 
     assert response.status_code == 200
-    assert body["status"] == "staff_notify"
-    assert body["session_state"] == "staff_notify_ready"
-    assert body["screen_text"] == "Please notify staff."
-    assert body["question_phase"] == "staff_notify"
-    assert body["staff_review_flags"]
+    assert body["status"] == "summary"
+    assert body["session_state"] == "summary_ready"
+    assert body["question_phase"] == "summary"
+    assert body["compatibility_mode"] == "staff_notify_wrapped_as_summary"
+    assert body["staff_review_summary"]["staff_review_flags"]
+    assert body["summary_visibility"] == "staff_only"
     assert "question" not in body
 
 

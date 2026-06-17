@@ -219,7 +219,9 @@ def create_session(body: dict[str, Any] | None = None) -> dict[str, Any]:
         flow_state = build_initial_flow(body, _registry, _next_session_key(), _expiry_from())
         _sessions.put(flow_state)
         if flow_state.state == "staff_notify_ready":
-            return {"statusCode": 200, "body": staff_notify_response(body, flow_state, None, contract_fields, _next_response_id)}
+            flow_state.state = "summary_ready"
+            flow_state.current_phase = "summary"
+            return {"statusCode": 200, "body": staff_notify_response(body, flow_state, None, _registry, contract_fields, _next_response_id)}
 
         question = next_question(flow_state, _registry)
         if not question:
@@ -257,11 +259,11 @@ def submit_answer(session_key: str | None, body: dict[str, Any] | None = None) -
                 "session_expires_at": flow_state.session_expires_at,
             })
         if flow_state.state == "staff_notify_ready":
-            return error_result(409, body, "session_staff_notify_ready", "The session has already reached staff-notify status; staff should review before another answer path.", {
+            return error_result(409, body, "session_summary_ready", "The session has already reached summary status; staff should review before another answer path.", {
                 "retryable": False,
                 "session_key": flow_state.session_key,
                 "session_expires_at": flow_state.session_expires_at,
-                "session_state": flow_state.state,
+                "session_state": "summary_ready",
             })
 
         question = next_question(flow_state, _registry)
@@ -283,7 +285,9 @@ def submit_answer(session_key: str | None, body: dict[str, Any] | None = None) -
 
         record_answer(flow_state, body, question, _registry)
         if flow_state.state == "staff_notify_ready":
-            return {"statusCode": 200, "body": staff_notify_response(body, flow_state, question.id, contract_fields, _next_response_id)}
+            flow_state.state = "summary_ready"
+            flow_state.current_phase = "summary"
+            return {"statusCode": 200, "body": staff_notify_response(body, flow_state, question.id, _registry, contract_fields, _next_response_id)}
 
         if flow_state.current_index >= len(flow_state.question_plan):
             flow_state.state = "summary_ready"
