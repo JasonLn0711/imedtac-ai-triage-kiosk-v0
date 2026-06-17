@@ -97,6 +97,53 @@ AI 有參與三件事：答案語意對應、下一題候選題 retrieval / rera
 
 Frontend 不需要知道 engine 是否使用 Qwen3、pgvector、reranker 或 deterministic policy。它只需要遵守既有 API contract：start session、submit answer、read summary。
 
+### 3.1.1 Render To Lab GPU Inference Bridge
+
+For the June demo evolution, Render can remain the public backend
+orchestrator while heavier AI inference runs on a lab GPU server:
+
+```text
+Frontend / iMVS
+  -> Render Backend
+  -> REST API / HTTPS
+  -> Lab GPU Server
+  -> Qwen3 Embedding / Qwen3 Reranker
+  -> Render Backend
+  -> Frontend / iMVS
+```
+
+Render is linked to the GitHub repo and redeploys backend code from the
+configured branch. That backend code may call a lab GPU FastAPI service by
+reading environment variables such as `LAB_GPU_BASE_URL`,
+`LAB_GPU_API_KEY`, `LAB_GPU_TIMEOUT_MS`, and `LAB_GPU_ENABLED`.
+
+The key requirement is network reachability from Render to the lab GPU server.
+Acceptable demo paths include public HTTPS with firewall control, Cloudflare
+Tunnel, Tailscale Funnel, ngrok / frp, or a VPS reverse proxy. The recommended
+demo path is:
+
+```text
+Render Backend
+  -> HTTPS
+  -> Cloudflare Tunnel
+  -> Lab GPU Server FastAPI
+```
+
+This keeps model weights and GPU runtime under lab control while preserving the
+same frontend-facing Render API contract. The Render backend remains the final
+authority for deterministic policy, reviewed manifest filtering, routing trace,
+summary assembly, auth/CORS/session behavior, and fallback when the GPU service
+is unavailable or returns invalid candidates. The lab GPU service returns
+candidate ids, scores, model version, index version, and latency metadata; it
+does not return diagnosis, treatment, formal triage level, or unreviewed
+patient-facing questions.
+
+For reboot-stable operation, the lab GPU server should not require manually
+opening ports after every restart. The target operations pattern is FastAPI on
+`127.0.0.1:8000` plus `cloudflared` installed as a systemd service, with Render
+calling one fixed HTTPS hostname through `LAB_GPU_BASE_URL`. The runbook is
+`handoff/2026-06-09-lab-gpu-cloudflare-tunnel-runbook.md`.
+
 ### 3.2 Demo Cloud Stack
 
 建議最小可部署版本：
@@ -111,6 +158,7 @@ Frontend 不需要知道 engine 是否使用 Qwen3、pgvector、reranker 或 det
 | Reranker model | Qwen3-Reranker-0.6B default | top-k reranking，延遲可控 |
 | Audit store | Postgres / append-only JSONL | 保留 routing_trace 與 request_id |
 | Observability | structured logs + request_id | demo 問題可追蹤 |
+| Lab GPU inference bridge | Render outbound HTTPS to lab FastAPI, preferably through Cloudflare Tunnel | 保留 Render API 穩定性，同時把 Qwen3 inference 放在實驗室 GPU |
 
 ### 3.3 Production Path
 
@@ -593,6 +641,8 @@ Deliverables:
 
 - Dockerfile / compose file。
 - Separate API and AI service containers, or single container for demo。
+- Optional Render-to-lab-GPU inference bridge through `LAB_GPU_BASE_URL` and
+  `LAB_GPU_API_KEY` environment variables。
 - Secret management for tokens。
 - CORS allowlist for imedtac frontend origins。
 - Rate limiting and request body size limit。
@@ -601,6 +651,9 @@ Deliverables:
 Acceptance:
 
 - iMVS machine can call cloud API。
+- Render backend can call the configured lab GPU inference URL, or cleanly
+  record deterministic fallback when it is disabled, unreachable, slow, or
+  returns invalid candidates。
 - p95 tap-flow latency target: under 800 ms after session start, excluding cold start。
 - p95 AI candidate retrieval + rerank target: under 1500 ms for top-k <= 20 on 0.6B model。
 - Fallback path returns in under 800 ms when AI service is unavailable。
