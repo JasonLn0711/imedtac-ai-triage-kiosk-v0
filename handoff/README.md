@@ -46,6 +46,7 @@ Current detailed discussion artifacts:
 - `handoff/2026-05-25-render-rehearsal-api-deployment-runbook.md`
 - `handoff/2026-06-08-dynamic-engine-external-release-gate-closeout.md`
 - `handoff/2026-06-17-contract-compatible-python-mvp-goal-prompt.md`
+- `handoff/2026-06-17-traceable-doebow-python-contract-migration-goal-prompt.md`
 - `handoff/2026-06-17-python-mvp-contract-compatibility-note.md`
 - `handoff/2026-06-17-imedtac-python-mvp-test-note-draft.md`
 - `docs/2026-05-19-two-phase-question-flow-design.md`
