@@ -8,6 +8,8 @@ status: active
 source:
   - ../../source/2026-06-17-imedtac-smart-health-cabin-requirements/source.md
   - ../../source/2026-06-16-imedtac-teams-question-option-adjustment/source.md
+  - ../../source/2026-06-17-smart-health-cabin-expert-tutorial-note/source.md
+  - ./external-authority-verification.md
 ---
 
 # 2026-06-23 Smart Health Cabin Onsite Discovery Plan
@@ -90,6 +92,10 @@ constraints, software architecture, and project delivery.
 - Read `email-requirements-brief.md`.
 - Read both module discovery files.
 - Bring `meeting-question-bank.md`.
+- Read `expert-note-integration-review.md` as internal preparation; do not
+  treat the full expert tutorial note as external meeting material.
+- Read `external-authority-verification.md` before citing FDA, IMDRF, ISO/IEC,
+  FHIR/TW Core, WHO, PDPC, or browser-media facts in the meeting.
 - Keep current AI Triage rehearsal context ready:
   - API base URL;
   - two endpoint contract;
@@ -99,6 +105,29 @@ constraints, software architecture, and project delivery.
 - Prepare to ask for equipment facts rather than infer them.
 - Confirm whether photos, videos, screenshots, or equipment spec captures are
   allowed during the visit.
+- Keep the discussion organized around four internal pre-read packets:
+  - one-page requirement summary;
+  - onsite equipment checklist;
+  - medical/content design question list;
+  - technical and delivery responsibility question list.
+
+## Meeting Control Boundaries
+
+- The meeting can use AI Triage as adjacent context, but it should not silently
+  expand the existing two-endpoint AI Triage contract.
+- The meeting can discuss possible technology stacks, but it should not commit
+  to Next.js, FastAPI, CMS, FHIR, or any production architecture before device,
+  ownership, and deployment facts are confirmed.
+- The meeting can discuss standards and regulatory reading, but any FDA, ISO,
+  IMDRF, FHIR, TW Core, privacy, or medical-device interpretation should remain
+  a validation item until imedtac / hospital confirms intended use and required
+  jurisdiction.
+- Verified standards are meeting background, not automatic deliverables. Ask
+  whether each standard is required as internal design control, proposal
+  evidence, formal deliverable, or out of scope for September.
+- The meeting should close with a decision on what kind of response is needed:
+  internal feasibility memo, imedtac-facing proposal, hospital-facing material,
+  quotation input, or design-spec phase.
 
 ## Expected Meeting Output
 

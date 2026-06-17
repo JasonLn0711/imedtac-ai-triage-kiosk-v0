@@ -7,7 +7,9 @@ type: meeting-prep
 status: active
 source:
   - ../../source/2026-06-17-imedtac-smart-health-cabin-requirements/source.md
+  - ../../source/2026-06-17-smart-health-cabin-expert-tutorial-note/source.md
   - ../../decisions/2026-05-22-api-contract-freeze-and-change-control.md
+  - ./external-authority-verification.md
 ---
 
 # Module B Questionnaire Triage Discovery
@@ -25,6 +27,35 @@ The strongest first-release framing is:
 reviewed fixed questionnaire + versioned branching + structured guidance
 content + integrated report output
 ```
+
+The central engineering question is not whether a questionnaire UI can be
+rendered. It is whether the team can define reviewed content, versioned rules,
+safe department guidance, health-education ownership, and reportable outputs
+that can be explained and audited.
+
+## Verified Regulatory / Interoperability Implications
+
+Use these verified facts as internal meeting preparation:
+
+- FDA's current official CDS guidance page is the `January 2026` final guidance
+  page. It is useful background for distinguishing non-device CDS, device
+  software, patient/caregiver-facing functions, and human-review design
+  controls, but it is not an automatic project requirement unless target market
+  and intended use make it relevant.
+- HL7 FHIR Observation is for measurements and simple assertions. HL7 notes
+  that clinical diagnosis normally belongs in other resources such as
+  Condition or ClinicalImpression, not in Observation.
+- DiagnosticReport can provide clinical or workflow context for a set of
+  Observations, but using a FHIR-shaped report does not mean the system is
+  clinically validated or live-integrated with HIS.
+- TW Core IG v1.0.0 is based on FHIR R4. If Taiwan hospital exchange is in
+  scope, ask whether imedtac / hospital IT expects custom JSON, FHIR R4/TW
+  Core mapping, or live HIS integration.
+
+Meeting implication: first-release questionnaire guidance should stay
+rule-based, reviewed, versioned, and explainable. Stronger CDS, autonomous AI
+recommendation, or live-HIS claims require a separate intended-use and
+validation path.
 
 ## Reusable AI Triage Patterns
 
@@ -68,6 +99,35 @@ Do not silently reuse or expose:
 6. Who can edit health education content?
 7. How are content versions approved before release?
 
+## Content Lifecycle Questions
+
+1. What are the allowed content states: draft, review, approved, published,
+   archived, or rollback?
+2. Who can move a questionnaire from draft to approved?
+3. Should every report preserve the exact question wording and branching logic
+   version used at the time of completion?
+4. How are urgent wording fixes handled after content is published?
+5. Are department recommendations table-driven, score-driven, rule-driven, or
+   manually curated by clinical owners?
+6. Is AI allowed to generate patient-facing text, or should AI be limited to
+   internal drafting before human review?
+7. Should a failed or incomplete questionnaire still generate a report, and if
+   so, how should uncertainty appear?
+
+## Candidate Data Concepts For Discussion
+
+Use these as discussion objects, not as committed schema:
+
+| Concept | Why it matters |
+| --- | --- |
+| `QuestionnaireVersion` | Preserves which reviewed questionnaire produced a report. |
+| `Question` / `Option` | Keeps UI rendering separate from branching logic. |
+| `Rule` / `Branch` | Makes routing explainable and reviewable. |
+| `Recommendation` | Separates department guidance from raw answer capture. |
+| `EducationContent` | Keeps health education text reviewable and versioned. |
+| `ReviewStatus` | Supports draft/review/publish governance before CMS commitment. |
+| `AuditLog` | Tracks who changed content, rules, and report templates. |
+
 ## Questions For API / Data / Report
 
 1. What data must be returned to the kiosk frontend after each answer?
@@ -86,6 +146,8 @@ Do not silently reuse or expose:
    web page?
 5. What is the required HIS-ready payload: custom JSON, HL7, FHIR, or
    hospital-specific mapping?
+6. If FHIR is requested, is the target TW Core / FHIR R4, another hospital
+   profile, or a general mapping draft only?
 
 ## First-Release Recommendation
 
@@ -99,6 +161,11 @@ Recommend a first release that is deliberately narrow:
 - QR Code report concept with access controls defined;
 - HIS-ready JSON schema without live HIS integration unless the hospital
   interface is confirmed.
+
+Prefer rule-based and reviewable guidance for September. Autonomous AI
+recommendation, free-text clinical generation, full CMS approval workflow, and
+live HIS integration should remain later-phase decisions unless the `2026-06-23`
+meeting confirms owners, validation path, and acceptance criteria.
 
 This keeps September delivery credible while preserving a clean path to richer
 CMS and hospital integration later.

@@ -25,6 +25,8 @@ Start here:
 - `workstreams/smart-health-cabin/2026-06-23-onsite-discovery-plan.md`
 - `workstreams/smart-health-cabin/meeting-question-bank.md`
 - `workstreams/smart-health-cabin/feasibility-response-outline.md`
+- `workstreams/smart-health-cabin/expert-note-integration-review.md`
+- `workstreams/smart-health-cabin/external-authority-verification.md`
 
 Boundary: this remains a discovery bridge for the 北市聯醫 / Smart Health Cabin
 requirements. It does not change the current AI Triage two-endpoint rehearsal

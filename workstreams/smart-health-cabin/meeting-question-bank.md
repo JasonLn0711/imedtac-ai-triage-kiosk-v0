@@ -7,6 +7,8 @@ type: meeting-prep
 status: active
 source:
   - ../../source/2026-06-17-imedtac-smart-health-cabin-requirements/source.md
+  - ../../source/2026-06-17-smart-health-cabin-expert-tutorial-note/source.md
+  - ./external-authority-verification.md
 ---
 
 # Smart Health Cabin Meeting Question Bank
@@ -25,6 +27,11 @@ source:
 3. CMS 文件中寫「此為 imedtac 執行，但部分資訊由陽交大提供」，這裡的分工是什麼？
 4. 完整 source code 交付是指專案客製程式碼，還是包含可重用的 engine / framework？
 5. 後續維運、bug fix、題庫更新、部署更新由誰負責？
+6. 是否可以先用 RACI 方式確認每一項 deliverable 的 Responsible /
+   Accountable / Consulted / Informed？
+7. 如果 9 月只做 Narrow MVP，哪些項目一定要保留，哪些可移到 phase 2？
+8. 會後回覆應該是 internal feasibility memo、imedtac-facing proposal、
+   還是 hospital-facing material？
 
 ## Questions For Equipment / Engineering
 
@@ -35,6 +42,12 @@ source:
 5. 音訊播放能否由瀏覽器控制？是否支援固定音量、頻率、左右聲道？
 6. 是否有設備 API/SDK 文件可提供？
 7. 是否要支援離線模式或網路中斷 fallback？
+8. 是否可以現場取得瀏覽器版本、DevTools network 行為、CORS origin、
+   proxy/VPN/firewall 限制？
+9. 是否允許現場安裝或開啟一個測試頁面來確認 audio、microphone、
+   fullscreen/kiosk mode、QR display、network call？
+10. 若未來要交付 source code，部署環境是 imedtac server、hospital
+    server、cloud service，還是 kiosk local runtime？
 
 ## Questions For Module A: Vision / Hearing
 
@@ -45,6 +58,11 @@ source:
 5. 隔音後 dB 數是否已有測量資料？
 6. 聽力測試需要哪些頻率與 dB range？
 7. 測驗失敗、不確定、環境太吵時，報告如何呈現？
+8. 若採固定喇叭、不使用耳機，imedtac / hospital 是否接受
+   screening-support / guided interaction wording，而不是 pure-tone threshold
+   audiometry 或 `dB HL` 結果？
+9. 若希望輸出更正式的視力或聽力結果，誰提供校正方法、臨床驗證路徑與
+   報告用語審核？
 
 ## Questions For Module B: Questionnaire / Triage
 
@@ -64,6 +82,52 @@ source:
 4. 報告是否可被分享或轉傳？
 5. HIS-ready 是否只需要 JSON schema，還是需要接真實 HIS test endpoint？
 6. 目標資料標準是 custom JSON、HL7、FHIR，還是院方既有格式？
+7. QR report 是否有有效期限、撤銷機制、刪除流程與 audit log？
+8. URL 或 QR token 中是否禁止出現姓名、生日、身分證號、病歷號或其他
+   可識別資訊？
+9. 報告要保存當時使用的問卷版本、規則版本、設備 context、measurement
+   quality 與 reviewer / publisher 資訊嗎？
+10. HIS-ready 的第一版是否可先定義為 structured JSON / ERD，不承諾 live
+    HIS integration？
+
+## Questions For MVP Tiers
+
+1. Narrow MVP 是否可接受：
+   - screening-support wording；
+   - reviewed fixed questionnaire；
+   - rule-based branching；
+   - basic report；
+   - expiring QR report；
+   - custom JSON export；
+   - ERD and deployment note？
+2. Expanded MVP 是否需要：
+   - CMS draft/review/publish；
+   - richer audit log；
+   - device context capture；
+   - FHIR mapping draft；
+   - report template versioning？
+3. 哪些項目不應放入 9 月第一版：
+   - formal medical-grade hearing diagnosis；
+   - live HIS integration；
+   - autonomous AI medical recommendation；
+   - complex multi-site CMS；
+   - unvalidated device-measurement claims？
+
+## Questions For External Standards / Validation
+
+1. imedtac / hospital 是否要求遵循特定法規、醫療器材軟體流程、資安或資料交換標準？
+2. 是否有指定 FHIR 版本、TW Core、HL7、院方既有格式，或只需要 custom
+   JSON？
+3. 是否需要 clinical validation plan、usability validation、risk register、
+   cybersecurity checklist，還是目前只需要 feasibility discovery？
+4. 對外文件是否需要避免引用尚未經 imedtac / hospital 確認的 FDA、ISO、
+   IMDRF、FHIR 或個資法解讀？
+5. ISO 14971、IEC 62304、IEC 62366-1、ISO 13485 目前要作為內部設計控制參考，
+   還是正式交付物 / 驗收標準？
+6. 若討論 HIS-ready，院方是否明確要求 TW Core / FHIR R4，而不是泛稱 FHIR
+   或 FHIR R5？
+7. 是否需要把 FDA CDS January 2026、IMDRF SaMD、ISO/IEC、FHIR/TW Core 的
+   引用留在 internal memo，不放入 hospital-facing proposal？
 
 ## Closeout Questions
 

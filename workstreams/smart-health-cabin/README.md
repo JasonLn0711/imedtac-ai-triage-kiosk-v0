@@ -8,6 +8,8 @@ status: active
 source:
   - ../../source/2026-06-17-imedtac-smart-health-cabin-requirements/source.md
   - ../../source/2026-06-16-imedtac-teams-question-option-adjustment/source.md
+  - ../../source/2026-06-17-smart-health-cabin-expert-tutorial-note/source.md
+  - ./external-authority-verification.md
 ---
 
 # Smart Health Cabin Bridge Workstream
@@ -53,6 +55,8 @@ commitment, or implementation, create a separate execution repo such as
 | `feasibility-response-outline.md` | Draft structure for the post-visit feasibility, schedule, and budget response. |
 | `reuse-from-ai-triage.md` | Reusable AI Triage assets and boundaries that should remain separate. |
 | `post-meeting-decision-log.md` | Empty decision log template for the `2026-06-23` follow-up record. |
+| `expert-note-integration-review.md` | Internal review of the preserved expert tutorial note and what should or should not be merged into active materials. |
+| `external-authority-verification.md` | Official / authoritative verification of standards, regulatory, measurement, interoperability, browser, and stack references from the expert note. |
 
 ## Source Bundle
 
@@ -72,6 +76,34 @@ Key preserved files:
   `extracted/2026-06-17-gmail-smart-health-cabin-software-module-requirements-agent-readable.md`
 - Requirements conversion:
   `extracted/2026-06-15-smart-health-cabin-software-module-requirements-spec-agent-readable.md`
+- Expert tutorial note:
+  `source/2026-06-17-smart-health-cabin-expert-tutorial-note/source.md`
+- External authority verification:
+  `workstreams/smart-health-cabin/external-authority-verification.md`
+
+## Expert Note Integration Policy
+
+The expert tutorial note is preserved in full as source context and internal
+training material. Derived meeting documents may reuse its stable systems
+engineering lessons:
+
+- discovery before implementation;
+- source-explicit requirements versus engineering-inferred questions;
+- equipment facts before vision/hearing claims;
+- clinical/content ownership before questionnaire guidance;
+- RACI before schedule or budget commitment;
+- narrow MVP before September delivery assumptions.
+
+Do not copy the full tutorial into the external meeting packet. Do not convert
+its regulatory, standards, technology-stack, ERD, or API examples into project
+commitments until official source text, intended use, device facts, and imedtac
+/ hospital ownership are confirmed.
+
+Verified source corrections now live in `external-authority-verification.md`.
+Use that file as the internal fact baseline before citing FDA CDS, IMDRF SaMD,
+ISO/IEC standards, vision/hearing measurement standards, FHIR/TW Core,
+privacy context, browser media APIs, or implementation-stack examples in any
+meeting packet or feasibility response.
 
 ## Decision Gate
 
