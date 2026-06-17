@@ -139,6 +139,7 @@ Derived analysis:
 - `handoff/2026-06-17-traceable-doebow-python-contract-migration-goal-prompt.md`
 - `handoff/2026-06-17-python-mvp-contract-compatibility-note.md`
 - `handoff/2026-06-17-imedtac-python-mvp-test-note-draft.md`
+- `decisions/2026-06-17-cors-origin-configuration-boundary.md`
 - `python_api/main.py`
 - `python_api/triage_contract.py`
 - `python_api/triage_v1/`

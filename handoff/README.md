@@ -49,6 +49,7 @@ Current detailed discussion artifacts:
 - `handoff/2026-06-17-traceable-doebow-python-contract-migration-goal-prompt.md`
 - `handoff/2026-06-17-python-mvp-contract-compatibility-note.md`
 - `handoff/2026-06-17-imedtac-python-mvp-test-note-draft.md`
+- `decisions/2026-06-17-cors-origin-configuration-boundary.md`
 - `docs/2026-05-19-two-phase-question-flow-design.md`
 - `docs/version-control-policy.md`
 - `docs/2026-05-19-api-session-design-plain-explanation.md`
