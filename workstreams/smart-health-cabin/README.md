@@ -58,6 +58,35 @@ commitment, or implementation, create a separate execution repo such as
 | `expert-note-integration-review.md` | Internal review of the preserved expert tutorial note and what should or should not be merged into active materials. |
 | `external-authority-verification.md` | Official / authoritative verification of standards, regulatory, measurement, interoperability, browser, and stack references from the expert note. |
 
+## 2026-06-23 Material Routing
+
+Use this folder as the working home for the `2026-06-23` onsite meeting packet.
+The FIRST PRINCIPLE boundary is:
+
+- ownership: this repo owns the Smart Health Cabin discovery packet, source
+  pointers, module questions, feasibility-response structure, and post-meeting
+  execution evidence;
+- planning boundary: `../planning-everything-track` records only status,
+  capacity impact, locators, and the next gate;
+- source boundary: raw meeting evidence, screenshots, transcripts, and copied
+  external messages belong under a dated `source/2026-06-23-.../` package with
+  credentials and private tokens redacted;
+- workstream boundary: interpreted meeting facts, open questions, decisions,
+  and feasibility assumptions belong in `post-meeting-decision-log.md` or a
+  dated derived meeting record in this folder;
+- handoff boundary: company-facing recap, feasibility memo, proposal input, or
+  quotation material belongs under `handoff/` only after the cleared audience
+  and scope are explicit.
+
+The evidence gate after the visit is a short source-backed split:
+
+1. archive any raw or copied source material under `source/`;
+2. update `post-meeting-decision-log.md` with confirmed facts and owners;
+3. decide whether the work remains a bridge folder or needs a new execution
+   repo such as `imedtac-smart-health-cabin-v0`;
+4. mirror only the locator, status, and next decision in
+   `../planning-everything-track`.
+
 ## Source Bundle
 
 Canonical source package:

@@ -7,6 +7,7 @@ type: decision-log
 status: template
 source:
   - ./2026-06-23-onsite-discovery-plan.md
+  - ./README.md
   - ../../source/2026-06-17-smart-health-cabin-expert-tutorial-note/source.md
   - ./external-authority-verification.md
 ---
@@ -22,6 +23,29 @@ source:
 | Attendees | TBD |
 | Meeting purpose | AI Triage equipment review and Smart Health Cabin discovery |
 | Source package | `source/2026-06-17-imedtac-smart-health-cabin-requirements/` |
+
+## FIRST PRINCIPLE Capture Rule
+
+This log owns the interpreted record after the `2026-06-23` visit. It should
+capture what the meeting establishes, what remains open, who owns the next
+answer, and which evidence path supports each decision.
+
+Use the following split:
+
+- confirmed equipment, workflow, browser, network, audio, camera, device, and
+  reporting facts go in `Confirmed Facts`;
+- explicit scope, owner, repository, schedule, or standards choices go in
+  `Decisions`;
+- missing clinical-content ownership, validation path, CMS scope, report / QR
+  privacy, HIS-ready level, and feasibility-response assumptions go in
+  `Open Questions`;
+- raw screenshots, transcripts, copied external messages, or meeting exports
+  stay in a dated `source/2026-06-23-.../` folder;
+- planning mirrors only the locator, status, capacity boundary, and next gate.
+
+The done condition is a source-backed post-meeting split that lets NYCU answer
+whether Smart Health Cabin remains a bridge workstream or needs a separate
+execution repo.
 
 ## Confirmed Facts
 
