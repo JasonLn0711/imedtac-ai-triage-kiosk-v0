@@ -127,6 +127,8 @@ Key preserved files:
   `extracted/2026-06-15-smart-health-cabin-software-module-requirements-spec-agent-readable.md`
 - Onsite meeting transcript source:
   `source/2026-06-23-imedtac-onsite-visit-smart-health-cabin/2026-06-23-imedtac-onsite-visit-smart-health-cabin-transcript-corrected-verified-agent-readable.md`
+- Prof. Wu LINE adult preventive health form:
+  `source/2026-06-23-wu-line-hpa-adult-preventive-health-form/2026-06-23-hpa-adult-preventive-health-service-check-record-result-form-agent-readable.md`
 - Expert tutorial note:
   `source/2026-06-17-smart-health-cabin-expert-tutorial-note/source.md`
 - External authority verification:

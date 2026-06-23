@@ -8,6 +8,7 @@ status: active
 source:
   - ../../source/2026-06-17-imedtac-smart-health-cabin-requirements/source.md
   - ../../source/2026-06-23-imedtac-onsite-visit-smart-health-cabin/source.md
+  - ../../source/2026-06-23-wu-line-hpa-adult-preventive-health-form/source.md
   - ../../source/2026-06-17-smart-health-cabin-expert-tutorial-note/source.md
   - ../../decisions/2026-05-22-api-contract-freeze-and-change-control.md
   - ./external-authority-verification.md
@@ -39,6 +40,26 @@ The central engineering question is not whether a questionnaire UI can be
 rendered. It is whether the team can define reviewed content, versioned rules,
 safe department guidance, health-education ownership, and reportable outputs
 that can be explained and audited.
+
+## 2026-06-23 Prof. Wu Form Source
+
+Prof. Wu sent an agent-readable Health Promotion Administration adult
+preventive health service examination record / result form through LINE on
+`2026-06-23`. The source is preserved at:
+
+```text
+../../source/2026-06-23-wu-line-hpa-adult-preventive-health-form/
+```
+
+This form is valuable because it separates the questionnaire discussion from a
+generic "form upload" assumption. It contains user/service-recipient fields,
+clinical or staff-assisted fields, laboratory fields, counseling items, result
+interpretation, follow-up advice, and physician / institution signatures.
+
+Meeting implication: the Smart Health Cabin questionnaire module should first
+classify each official form field into user-facing intake, staff/clinician
+entry, measured data, lab result, counseling, report output, and signature /
+institutional attestation before building CMS or HIS-ready payloads.
 
 ## Verified Regulatory / Interoperability Implications
 
@@ -120,6 +141,9 @@ Do not silently reuse or expose:
    internal drafting before human review?
 7. Should a failed or incomplete questionnaire still generate a report, and if
    so, how should uncertainty appear?
+8. For official forms such as the adult preventive health service form, which
+   fields are user-facing, staff-assisted, measured, lab-derived,
+   clinician-interpreted, or institution-signed?
 
 ## Candidate Data Concepts For Discussion
 
