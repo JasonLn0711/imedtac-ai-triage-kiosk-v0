@@ -25,6 +25,7 @@ app = FastAPI(
     version="0.2.0",
 )
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+app.mount("/demo-ui", StaticFiles(directory=STATIC_DIR / "demo-ui", html=True), name="demo-ui")
 
 
 def cors_headers(request: Request) -> dict[str, str]:

@@ -539,41 +539,16 @@ function renderStaffNotify(data) {
 function renderSummary(data) {
   state.currentQuestion = null;
   state.selectedOptionIds = [];
-  elements.statusPill.textContent = "summary";
-  elements.progressLabel.textContent = `Question ${data.progress.current} of ${data.progress.expected_total}`;
-  elements.questionText.textContent = "SOAP staff-review summary is ready.";
-  elements.sessionMeta.textContent = `Session: ${data.session_key} | summary_ready`;
-  elements.optionsMount.innerHTML = "";
-  elements.submitButton.disabled = true;
-  elements.answerFirstButton.disabled = true;
-  elements.autoAnswerButton.disabled = true;
+  window.name = JSON.stringify({
+    type: "nycu_summary_review_payload",
+    payload: data
+  });
+  window.location.assign(summaryReviewUrl());
+}
 
-  const summary = data.staff_review_summary || {};
-  const assessment = [
-    ...(summary.review_basis || []),
-    ...(summary.staff_review_flags || []).map((flag) => `${flag.label}: ${flag.summary_text}`)
-  ];
-  const plan = [
-    ...(summary.review_action || []),
-    summary.staff_handoff_note
-  ].filter(Boolean);
-  const sections = [
-    ["S", "Subjective", summary.subjective || [summary.chief_concern].filter(Boolean)],
-    ["O", "Objective", summary.objective || summary.vitals_observed || []],
-    ["A", "Assessment", assessment],
-    ["P", "Plan", plan]
-  ];
-
-  elements.summaryMount.classList.remove("empty");
-  elements.summaryMount.innerHTML = sections.map(([letter, title, value]) => `
-    <section class="soap-section">
-      <div class="soap-label" aria-hidden="true">${escapeHtml(letter)}</div>
-      <div>
-        <h3>${escapeHtml(title)}</h3>
-        ${renderSoapContent(value)}
-      </div>
-    </section>
-  `).join("");
+function summaryReviewUrl() {
+  const configured = new URLSearchParams(window.location.search).get("summary_review_url");
+  return configured || "/demo-ui/summary-review/";
 }
 
 function toggleOption(button) {

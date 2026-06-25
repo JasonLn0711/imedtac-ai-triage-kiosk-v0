@@ -696,3 +696,18 @@ def test_options_preflight_returns_cors_headers():
     assert response.status_code == 204
     assert response.headers["Access-Control-Allow-Origin"] == "http://localhost:5174"
     assert response.headers["Access-Control-Allow-Methods"] == "POST, OPTIONS"
+
+
+def test_demo_ui_summary_review_renders_generated_soap_payload():
+    response = client.get("/demo-ui/summary-review/")
+
+    assert response.status_code == 200
+    assert "Review Your Information" in response.text
+    assert "nycu_summary_review_payload" in response.text
+    assert "summary.soap_note" in response.text
+    assert 'section("A","Assessment","","","",true)' in response.text
+    assert 'section("P","Plan","","","",true)' in response.text
+    assert "soap.assessment" not in response.text
+    assert "summary.review_action" not in response.text
+    assert "DEFAULT_REVIEW_MODEL" not in response.text
+    assert "review-your-information-fallback.svg" not in response.text

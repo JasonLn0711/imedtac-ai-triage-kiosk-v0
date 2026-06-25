@@ -51,6 +51,7 @@ POST /api/triage-demo/sessions/{session_key}/answers
 OPTIONS /api/triage-demo/sessions
 OPTIONS /api/triage-demo/sessions/{session_key}/answers
 GET /healthz
+GET /demo-ui/summary-review/
 GET /
 ```
 
