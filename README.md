@@ -52,8 +52,36 @@ go-to-market 與美國客戶展示，還不是正式醫療決策產品。
 | Health check | `GET /healthz` |
 | Start session | `POST /api/triage-demo/sessions` |
 | Submit answer | `POST /api/triage-demo/sessions/{session_key}/answers` |
+| Demo review page | `GET /demo-ui/summary-review/` |
 | Browser origins enabled by default | `http://localhost`, `http://localhost:5174`, `http://127.0.0.1`, `http://127.0.0.1:5174` |
 | Auth | `Authorization: Bearer <demo token>` for POST endpoints when `DEMO_BEARER_TOKEN` is configured |
+
+## 2026-06-25 Update
+
+`main` now includes the latest `origin/doebow` branch content through a
+contract-preserving merge. The merged runtime keeps the same two POST endpoints
+and terminal `staff_review_summary` behavior while adding doebow's no-number-pad
+question-bank updates, local LLM summary service, and additive summary-review
+demo page.
+
+The default summary path remains deterministic. `LLM_SUMMARY_URL` is empty by
+default, so the FastAPI runtime does not call a local LLM server unless that URL
+is intentionally configured for a controlled demo. The local API tester displays
+the summary inline by default and offers the summary-review page through an
+explicit button; it does not automatically replace the imedtac display surface.
+
+Current QR/report-summary status: the API does not yet provide `report_url` or
+QR-code content. The current mechanism is still response-payload based:
+`status=summary` plus `staff_review_summary`. A QR flow would be an additional
+change-controlled design covering URL lifetime, payload storage, privacy,
+expiration, auth, and whether imedtac or NYCU renders the QR code.
+
+Verified local evidence:
+
+- Python API tests: `50 passed`.
+- LLM API tests: `2 passed`.
+- JS tests: `33` unit tests and `41` contract tests passed.
+- `npm run smoke`, `npm run build`, and `git diff --check` passed.
 
 ## 2026-06-17 Update
 
@@ -78,12 +106,12 @@ Verified evidence now recorded in this repo:
 - CORS preflight for `http://localhost:5174` passes.
 - Unknown origins are not echoed.
 - No-token POST returns HTTP `401` / `demo_bearer_token_required`.
-- Python tests pass: `39` tests.
+- Python tests pass: `50` tests.
 - JS tests pass: `33` unit tests and `41` contract tests.
 - Local authenticated doebow route reaches:
 
 ```text
-INIT-1 -> INIT-2 -> INIT-3 -> INIT-4 -> PAL-1 -> PAL-2 -> PAL-6
+INIT-1 -> INIT-2 -> INIT-3 -> INIT-3A-* -> INIT-4 -> PAL-1 -> PAL-2 -> PAL-6
 -> UNIV-1 -> UNIV-3 -> UNIV-4 -> summary
 ```
 
@@ -97,6 +125,7 @@ and public logs.
 | --- | --- |
 | `python_api/` | Canonical Python/FastAPI imedtac demo API runtime for the unchanged two-endpoint contract |
 | `Question_DB/` | Canonical doebow question bank for initial, symptom-specific, and universal questions |
+| `LLM_api/` | Optional local Hugging Face summary service; disabled by default unless `LLM_SUMMARY_URL` is configured |
 | `JS/app/triage-kiosk/` | English static AI triage kiosk viewer adapted from the urology previsit demo pattern |
 | `JS/core/triage_engine/` | Legacy/static JavaScript governed-question viewer logic retained for frontend reference and tests |
 | `JS/api/` | Legacy JavaScript mock API path; not the canonical imedtac backend after the Python MVP transition |
@@ -304,6 +333,7 @@ Useful backend environment variables:
 ```text
 DEMO_BEARER_TOKEN        optional bearer-token gate
 DEMO_ALLOWED_ORIGINS     optional comma-separated exact browser Origin allowlist
+LLM_SUMMARY_URL          optional local LLM subjective-summary endpoint; empty by default
 ```
 
 `docker-compose.yml` starts the Python FastAPI container on port `8000`. The
@@ -421,6 +451,8 @@ docs/repo-organization.md
    `progress.expected_total`, and display `staff_review_summary`.
 4. If CORS blocks recur, collect the exact DevTools `Origin` and add it through
    `DEMO_ALLOWED_ORIGINS` only if it is outside the default local origins.
-5. Keep AI ranking, LLM summary, ASR/free-text matching, additional endpoints,
-   and broader clinical branches behind explicit change control until the
-   current two-endpoint rehearsal is stable.
+5. Decide with imedtac whether summary display stays payload-rendered by iMVS
+   or moves to a separate report URL / QR flow. Keep QR/report URLs, AI ranking,
+   LLM summary activation, ASR/free-text matching, additional endpoints, and
+   broader clinical branches behind explicit change control until the current
+   two-endpoint rehearsal is stable.

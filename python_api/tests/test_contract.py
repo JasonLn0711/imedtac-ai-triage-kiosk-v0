@@ -8,6 +8,7 @@ from fastapi.testclient import TestClient
 
 from python_api import triage_contract as contract
 from python_api.main import app
+from python_api.triage_v1.llm_summary_client import LlmSubjectiveSummary
 from python_api.triage_v1.models import FlowState, NormalizedVital, Patient, PatientAnswer
 from python_api.triage_v1.summary_builder import build_summary
 
@@ -108,11 +109,13 @@ def setup_function():
     contract.reset_mock_state()
     os.environ.pop("DEMO_BEARER_TOKEN", None)
     os.environ.pop("DEMO_ALLOWED_ORIGINS", None)
+    os.environ.pop("LLM_SUMMARY_URL", None)
 
 
 def teardown_function():
     os.environ.pop("DEMO_BEARER_TOKEN", None)
     os.environ.pop("DEMO_ALLOWED_ORIGINS", None)
+    os.environ.pop("LLM_SUMMARY_URL", None)
 
 
 def cors_preflight(path="/api/triage-demo/sessions", origin="http://127.0.0.1:5174"):
@@ -313,9 +316,19 @@ def test_normal_vitals_start_initial_questions_then_route_to_symptom_module_and_
     assert age["question"]["options"][0] == {"id": "init-3_fever_cold", "label": "Fever or cold symptoms"}
     assert_mvp_question_contract(age["question"])
 
-    complaint = client.post(
+    detail = client.post(
         f"/api/triage-demo/sessions/{session_key}/answers",
         json=answer_body(age["question"], ["init-3_cardiorespiratory"], "idem-normal-init-3"),
+    ).json()
+    assert detail["question"]["id"] == "INIT-3A-CARDIORESP"
+
+    complaint = client.post(
+        f"/api/triage-demo/sessions/{session_key}/answers",
+        json=answer_body(
+            detail["question"],
+            ["init-3a-cardioresp_palpitations_heartbeat"],
+            "idem-normal-init-3a",
+        ),
     ).json()
     assert complaint["question"]["id"] == "INIT-4"
     assert complaint["question"]["type"] == "single_choice"
@@ -330,7 +343,7 @@ def test_normal_vitals_start_initial_questions_then_route_to_symptom_module_and_
 
     assert symptom["question"]["id"] == "PAL-1"
     assert symptom["question_phase"] == "symptom_specific"
-    assert symptom["progress"]["expected_total"] == 10
+    assert symptom["progress"]["expected_total"] == 11
     assert_mvp_question_contract(symptom["question"])
 
 
@@ -362,9 +375,18 @@ def test_initial_gender_answer_overrides_start_payload_sex_in_summary():
     )
     age = client.post(f"/api/triage-demo/sessions/{session_key}/answers", json=age_answer).json()
 
-    complaint = client.post(
+    detail = client.post(
         f"/api/triage-demo/sessions/{session_key}/answers",
         json=answer_body(age["question"], ["init-3_cardiorespiratory"], "idem-gender-override-init-3"),
+    ).json()
+
+    complaint = client.post(
+        f"/api/triage-demo/sessions/{session_key}/answers",
+        json=answer_body(
+            detail["question"],
+            ["init-3a-cardioresp_palpitations_heartbeat"],
+            "idem-gender-override-init-3a",
+        ),
     ).json()
 
     duration_answer = answer_body(
@@ -540,7 +562,8 @@ def test_summary_builder_formats_subjective_template_fields():
         branch="Pain/abdominal_pain.md",
     )
 
-    subjective = build_summary(flow_state, registry=None)["staff_review_summary"]["subjective"]
+    summary = build_summary(flow_state, registry=None)["staff_review_summary"]
+    subjective = summary["subjective"]
 
     assert "32 y/o Female" in subjective
     assert "C.C.: abdominal pain for 2 days" in subjective
@@ -550,6 +573,112 @@ def test_summary_builder_formats_subjective_template_fields():
     assert "Allergy: No" in subjective
     assert "NRS: 6" in subjective
     assert "Pregnancy: Not sure" in subjective
+    assert summary["subjective_summary_source"] == "deterministic_fallback"
+
+
+def test_summary_builder_replaces_only_subjective_when_llm_returns_valid_response(monkeypatch):
+    vitals = {
+        "temperature_c": NormalizedVital("temperature_c", 37.2, "C", "measured", "ok"),
+    }
+    patient = Patient(
+        patient_id="demo-llm",
+        age=53,
+        sex="M",
+        chief_concern="Fever",
+        vitals=vitals,
+        past_history=["HTN"],
+        answers=[
+            PatientAnswer("INIT-4", "How long have you had fever?", [], "2 days", "initial"),
+            PatientAnswer("ABD-1", "Where is the pain?", ["RUQ blunt pain"], None, "symptom_specific"),
+            PatientAnswer("UNIV-3", "Are you currently taking any medications?", ["No"], None, "universal"),
+            PatientAnswer("UNIV-4", "Do you have any drug allergy?", ["No"], None, "universal"),
+            PatientAnswer("1-1-2", "Rate the pain from 1-10.", [], 6, "symptom_specific"),
+        ],
+    )
+    flow_state = FlowState(
+        session_key="summary-llm-session",
+        case_id="summary-llm-case",
+        flow_version="test",
+        current_phase="summary",
+        question_plan=[],
+        current_index=0,
+        vitals=vitals,
+        patient_context={},
+        patient=patient,
+        answers=[],
+        flags=[],
+        branch="Pain/abdominal_pain.md",
+    )
+
+    def fake_request(payload):
+        assert payload["patient_record"]["age"] == 53
+        assert payload["subjective_template"]
+        return LlmSubjectiveSummary(
+            subjective=[
+                "53 y/o M",
+                "C.C. Fever for 2 days",
+                "Detail: RUQ blunt pain",
+                "Past history: HTN",
+                "Medication: Nil",
+                "Allergy: Nil",
+                "NRS: 6",
+            ],
+            model_id="test/medgemma",
+        )
+
+    monkeypatch.setattr("python_api.triage_v1.summary_builder.request_subjective_summary", fake_request)
+
+    summary = build_summary(flow_state, registry=None)["staff_review_summary"]
+
+    assert summary["subjective"] == [
+        "53 y/o M",
+        "C.C. Fever for 2 days",
+        "Detail: RUQ blunt pain",
+        "Past history: HTN",
+        "Medication: Nil",
+        "Allergy: Nil",
+        "NRS: 6",
+    ]
+    assert summary["soap_note"]["subjective"] == summary["subjective"]
+    assert summary["objective"] == ["Vital sign: T/P/R: 37.2/-/-"]
+    assert "S\n53 y/o M\nC.C. Fever for 2 days" in summary["soap_text"]
+    assert "O\nVital sign: T/P/R: 37.2/-/-" in summary["soap_text"]
+    assert summary["subjective_summary_source"] == "llm"
+    assert summary["subjective_summary_model"] == "test/medgemma"
+
+
+def test_summary_builder_falls_back_when_llm_returns_no_summary(monkeypatch):
+    vitals = {}
+    patient = Patient(
+        patient_id="demo-fallback",
+        age=32,
+        sex="Female",
+        chief_concern="abdominal pain",
+        vitals=vitals,
+        answers=[PatientAnswer("INIT-4", "How long have you had abdominal pain?", [], "2 days", "initial")],
+    )
+    flow_state = FlowState(
+        session_key="summary-fallback-session",
+        case_id="summary-fallback-case",
+        flow_version="test",
+        current_phase="summary",
+        question_plan=[],
+        current_index=0,
+        vitals=vitals,
+        patient_context={},
+        patient=patient,
+        answers=[],
+        flags=[],
+        branch="Pain/abdominal_pain.md",
+    )
+    monkeypatch.setattr("python_api.triage_v1.summary_builder.request_subjective_summary", lambda payload: None)
+
+    summary = build_summary(flow_state, registry=None)["staff_review_summary"]
+
+    assert "32 y/o Female" in summary["subjective"]
+    assert "C.C.: abdominal pain for 2 days" in summary["subjective"]
+    assert summary["subjective_summary_source"] == "deterministic_fallback"
+    assert "subjective_summary_model" not in summary
 
 
 def test_answering_final_question_returns_staff_review_summary():
@@ -660,9 +789,18 @@ def test_initial_age_and_duration_questions_render_as_single_choice_buckets():
         f"/api/triage-demo/sessions/{session_key}/answers",
         json=answer_body(age["question"], [option_id_by_label(age["question"], "40-64")], "idem-initial-bucket-age"),
     ).json()
-    duration = client.post(
+    detail = client.post(
         f"/api/triage-demo/sessions/{session_key}/answers",
         json=answer_body(complaint["question"], ["init-3_cardiorespiratory"], "idem-initial-bucket-complaint"),
+    ).json()
+
+    duration = client.post(
+        f"/api/triage-demo/sessions/{session_key}/answers",
+        json=answer_body(
+            detail["question"],
+            ["init-3a-cardioresp_palpitations_heartbeat"],
+            "idem-initial-bucket-detail",
+        ),
     ).json()
 
     assert duration["question"]["id"] == "INIT-4"
@@ -688,6 +826,40 @@ def test_invalid_session_returns_stable_error_response():
     assert data["error"]["code"] == "invalid_session"
     assert data["error"]["retryable"] is False
     assert data["session_key"] == "missing-session"
+    assert data["workflow_mode"] == "post_measurement_only"
+    assert data["measurement_state"] == "complete"
+    assert data["vitals_ready"] is True
+
+
+def test_expired_session_returns_410_and_expired_state():
+    start = client.post("/api/triage-demo/sessions", json=start_body()).json()
+    session_key = start["session_key"]
+    flow_state = contract._sessions.get(session_key)
+    flow_state.session_expires_at = "2000-01-01T00:00:00Z"
+
+    response = client.post(
+        f"/api/triage-demo/sessions/{session_key}/answers",
+        json=answer_body(start["question"], ["heart_racing"], "idem-expired-session-001"),
+    )
+    body = response.json()
+
+    assert response.status_code == 410
+    assert body["status"] == "error"
+    assert body["session_state"] == "expired"
+    assert body["error"]["code"] == "session_expired"
+
+
+def test_oversized_request_body_returns_contract_error():
+    response = client.post(
+        "/api/triage-demo/sessions",
+        content="{\"payload\":\"" + ("x" * (33 * 1024)) + "\"}",
+        headers={"Content-Type": "application/json"},
+    )
+    body = response.json()
+
+    assert response.status_code == 400
+    assert body["status"] == "error"
+    assert body["error"]["code"] == "request_body_too_large"
 
 
 def test_options_preflight_keeps_localhost_origin_enabled():
@@ -756,3 +928,18 @@ def test_bearer_auth_error_includes_cors_header_for_allowed_origin():
     assert response.status_code == 401
     assert response.headers["Access-Control-Allow-Origin"] == "http://127.0.0.1:5174"
     assert response.json()["error"]["code"] == "demo_bearer_token_required"
+
+
+def test_demo_ui_summary_review_renders_generated_soap_payload():
+    response = client.get("/demo-ui/summary-review/")
+
+    assert response.status_code == 200
+    assert "Review Your Information" in response.text
+    assert "nycu_summary_review_payload" in response.text
+    assert "summary.soap_note" in response.text
+    assert 'section("A","Assessment","","","",true)' in response.text
+    assert 'section("P","Plan","","","",true)' in response.text
+    assert "soap.assessment" not in response.text
+    assert "summary.review_action" not in response.text
+    assert "DEFAULT_REVIEW_MODEL" not in response.text
+    assert "review-your-information-fallback.svg" not in response.text

@@ -209,7 +209,7 @@ function imvsVitals(vitals) {
 
 function capabilitiesForRoute(route) {
   return {
-    question_types: ["single_choice", "multi_choice", "number", "time", "text"],
+    question_types: ["single_choice", "multi_choice", "text"],
     max_questions: route === "tachycardia" || route === "palpitation" ? 7 : 8,
     max_options_per_question: 9,
     max_option_label_length: 64,
@@ -374,17 +374,17 @@ function renderQuestion(data) {
 
 function isNumberQuestion(question) {
   if (!question) return false;
-  return question.type === "number" || question.id === "INIT-2" || /age/i.test(question.text || "");
+  return question.type === "number";
 }
 
 function isTextQuestion(question) {
   if (!question) return false;
-  return question.type === "text" || question.type === "time" || question.id === "INIT-4" || /how long/i.test(question.text || "");
+  return question.type === "text" || question.type === "time";
 }
 
 function isDurationQuestion(question) {
   if (!question) return false;
-  return question.id === "INIT-4" || /how long|duration/i.test(question.text || "");
+  return question.type === "time";
 }
 
 function renderNumberPad() {
@@ -513,41 +513,54 @@ function handlePadAction(action) {
 function renderSummary(data) {
   state.currentQuestion = null;
   state.selectedOptionIds = [];
-  elements.statusPill.textContent = "summary";
-  elements.progressLabel.textContent = `Question ${data.progress.current} of ${data.progress.expected_total}`;
-  elements.questionText.textContent = "SOAP staff-review summary is ready.";
-  elements.sessionMeta.textContent = `Session: ${data.session_key} | summary_ready`;
+  elements.statusPill.textContent = data.status;
+  elements.progressLabel.textContent = "Summary";
+  elements.questionText.textContent = "Staff-review summary is ready.";
+  elements.sessionMeta.textContent = `Session: ${data.session_key} | ${data.question_phase || "summary"}`;
   elements.optionsMount.innerHTML = "";
   elements.submitButton.disabled = true;
   elements.answerFirstButton.disabled = true;
   elements.autoAnswerButton.disabled = true;
 
   const summary = data.staff_review_summary || {};
-  const assessment = [
-    ...(summary.review_basis || []),
-    ...(summary.staff_review_flags || []).map((flag) => `${flag.label}: ${flag.summary_text}`)
-  ];
-  const plan = [
-    ...(summary.review_action || []),
-    summary.staff_handoff_note
-  ].filter(Boolean);
-  const sections = [
-    ["S", "Subjective", summary.subjective || [summary.chief_concern].filter(Boolean)],
-    ["O", "Objective", summary.objective || summary.vitals_observed || []],
-    ["A", "Assessment", assessment],
-    ["P", "Plan", plan]
-  ];
-
+  const soap = summary.soap_note || {};
+  const reviewUrl = summaryReviewUrl();
   elements.summaryMount.classList.remove("empty");
-  elements.summaryMount.innerHTML = sections.map(([letter, title, value]) => `
+  elements.summaryMount.innerHTML = `
+    ${soapSection("S", "Subjective", soap.subjective || summary.subjective)}
+    ${soapSection("O", "Objective", soap.objective || summary.objective)}
+    ${soapSection("A", "Assessment", soap.assessment || summary.review_basis)}
+    ${soapSection("P", "Plan", soap.plan || summary.review_action)}
+    ${reviewUrl ? `<div class="summary-actions"><button id="openSummaryReviewButton" type="button">Open review page</button></div>` : ""}
+  `;
+  const openButton = elements.summaryMount.querySelector("#openSummaryReviewButton");
+  if (openButton) openButton.addEventListener("click", () => openSummaryReview(data));
+}
+
+function summaryReviewUrl() {
+  const configured = new URLSearchParams(window.location.search).get("summary_review_url");
+  if (configured === "0" || configured === "false") return "";
+  return configured || "/demo-ui/summary-review/";
+}
+
+function openSummaryReview(data) {
+  window.name = JSON.stringify({
+    type: "nycu_summary_review_payload",
+    payload: data
+  });
+  window.open(summaryReviewUrl(), "_blank", "noopener");
+}
+
+function soapSection(letter, title, value) {
+  return `
     <section class="soap-section">
-      <div class="soap-label" aria-hidden="true">${escapeHtml(letter)}</div>
+      <div class="soap-label">${letter}</div>
       <div>
         <h3>${escapeHtml(title)}</h3>
         ${renderSoapContent(value)}
       </div>
     </section>
-  `).join("");
+  `;
 }
 
 function toggleOption(button) {

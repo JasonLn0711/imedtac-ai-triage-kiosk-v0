@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .constants import SCOPE_CONTROLS
+from .llm_summary_client import request_subjective_summary
 from .models import FlowState, NormalizedVital, Patient
 from .question_registry import QuestionRegistry
 
@@ -196,6 +197,39 @@ def _flat_soap_text(soap_note: dict[str, list[str]]) -> str:
     return "\n\n".join(sections)
 
 
+def _patient_record(flow_state: FlowState) -> dict:
+    return {
+        "patient_id": flow_state.patient.patient_id,
+        "age": flow_state.patient.age,
+        "sex": flow_state.patient.sex,
+        "chief_concern": flow_state.patient.chief_concern,
+        "past_history": flow_state.patient.past_history,
+        "medications": flow_state.patient.medications,
+        "allergies": flow_state.patient.allergies,
+        "demo_review_level": flow_state.patient.demo_review_level,
+        "answers": [answer.__dict__ for answer in flow_state.patient.answers],
+    }
+
+
+def _maybe_apply_llm_subjective(
+    soap_note: dict[str, list[str]],
+    patient_record: dict,
+    vitals_observed: list[dict],
+) -> tuple[str, str | None]:
+    payload = {
+        "patient_record": patient_record,
+        "subjective_template": soap_note["subjective"],
+        "objective": soap_note["objective"],
+        "vitals_observed": vitals_observed,
+        "scope_controls": SCOPE_CONTROLS,
+    }
+    result = request_subjective_summary(payload)
+    if result is None:
+        return "deterministic_fallback", None
+    soap_note["subjective"] = result.subjective
+    return "llm", result.model_id
+
+
 def build_summary(flow_state: FlowState, registry: QuestionRegistry) -> dict:
     highlights = []
     for answer in flow_state.answers:
@@ -209,47 +243,45 @@ def build_summary(flow_state: FlowState, registry: QuestionRegistry) -> dict:
 
     flag_codes = [flag.code for flag in flow_state.flags]
     soap_note = _soap_note(flow_state)
+    patient_record = _patient_record(flow_state)
+    vitals_observed = _observed_vitals(flow_state)
+    subjective_source, subjective_model = _maybe_apply_llm_subjective(soap_note, patient_record, vitals_observed)
+    soap_text = _flat_soap_text(soap_note)
+    staff_review_summary = {
+        "format": "soap_review_summary_demo_v1",
+        "capability_statement": "This demo shows a synthetic-data vital-aware intake loop for staff-review summary generation.",
+        "scope_controls": SCOPE_CONTROLS,
+        "patient_record": patient_record,
+        "vitals_observed": vitals_observed,
+        "chief_concern": flow_state.patient.chief_concern,
+        "symptom_answer_highlights": highlights,
+        "history_medication_allergy_context": [
+            item for item in highlights if "history" in item["question_id"] or "allergy" in item["question_id"]
+        ],
+        "staff_review_flags": [
+            {
+                "code": flag.code,
+                "label": flag.label,
+                "summary_text": flag.summary_text,
+                "triggered_by": flag.triggered_by,
+            }
+            for flag in flow_state.flags
+        ],
+        "soap_note": soap_note,
+        "soap_text": soap_text,
+        "subjective": soap_note["subjective"],
+        "objective": soap_note["objective"],
+        "review_basis": soap_note["assessment"],
+        "review_action": soap_note["plan"],
+        "staff_handoff_note": "Review measured vital context and selected symptom answers.",
+        "subjective_summary_source": subjective_source,
+    }
+    if subjective_model:
+        staff_review_summary["subjective_summary_model"] = subjective_model
     return {
         "summary_visibility": "staff_only",
         "handoff_required": bool(flag_codes),
         "handoff_reason_codes": flag_codes + ["staff_review_needed"],
-        "staff_review_summary": {
-            "format": "soap_review_summary_demo_v1",
-            "capability_statement": "This demo shows a synthetic-data vital-aware intake loop for staff-review summary generation.",
-            "scope_controls": SCOPE_CONTROLS,
-            "patient_record": {
-                "patient_id": flow_state.patient.patient_id,
-                "age": flow_state.patient.age,
-                "sex": flow_state.patient.sex,
-                "chief_concern": flow_state.patient.chief_concern,
-                "past_history": flow_state.patient.past_history,
-                "medications": flow_state.patient.medications,
-                "allergies": flow_state.patient.allergies,
-                "demo_review_level": flow_state.patient.demo_review_level,
-                "answers": [answer.__dict__ for answer in flow_state.patient.answers],
-            },
-            "vitals_observed": _observed_vitals(flow_state),
-            "chief_concern": flow_state.patient.chief_concern,
-            "symptom_answer_highlights": highlights,
-            "history_medication_allergy_context": [
-                item for item in highlights if "history" in item["question_id"] or "allergy" in item["question_id"]
-            ],
-            "staff_review_flags": [
-                {
-                    "code": flag.code,
-                    "label": flag.label,
-                    "summary_text": flag.summary_text,
-                    "triggered_by": flag.triggered_by,
-                }
-                for flag in flow_state.flags
-            ],
-            "soap_note": soap_note,
-            "soap_text": _flat_soap_text(soap_note),
-            "subjective": soap_note["subjective"],
-            "objective": soap_note["objective"],
-            "review_basis": soap_note["assessment"],
-            "review_action": soap_note["plan"],
-            "staff_handoff_note": "Review measured vital context and selected symptom answers.",
-        },
+        "staff_review_summary": staff_review_summary,
         "evidence_refs": ["LOCAL-PROTOCOL-TBD"],
     }

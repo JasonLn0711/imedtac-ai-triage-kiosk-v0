@@ -50,8 +50,13 @@ POST /api/triage-demo/sessions/{session_key}/answers
 OPTIONS /api/triage-demo/sessions
 OPTIONS /api/triage-demo/sessions/{session_key}/answers
 GET /healthz
+GET /demo-ui/summary-review/
 GET /
 ```
+
+`GET /demo-ui/summary-review/` is a demo review surface for a completed
+`staff_review_summary` payload. It is not a replacement for the two POST
+endpoints and does not add a required `report_url` or QR-code API contract.
 
 The workflow is:
 
@@ -119,6 +124,20 @@ sequenceDiagram
   Contract-->>API: contract-shaped response
   API-->>UI: next question or staff_review_summary
 ```
+
+## Optional LLM Summary
+
+The default staff-review summary is deterministic and does not require an LLM
+service. `LLM_SUMMARY_URL` is empty by default. Set it only for a controlled
+demo run that intentionally enables `../LLM_api/`:
+
+```text
+LLM_SUMMARY_URL=http://127.0.0.1:8091/api/llm-summary/subjective
+```
+
+When the URL is missing, unreachable, or returns an invalid payload, the runtime
+falls back to the deterministic subjective summary and still returns the same
+`staff_review_summary` envelope.
 
 The main files are:
 

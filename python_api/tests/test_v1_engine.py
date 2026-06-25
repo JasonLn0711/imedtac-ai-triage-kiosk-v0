@@ -131,6 +131,12 @@ def test_duration_csv_questions_render_as_single_choice_buckets_for_mvp():
             "selected_option_ids": [question.options[0].id],
         },
     }) is None
+    assert validate_answer(question, {
+        "question_id": "INIT-4",
+        "answer": {
+            "selected_option_ids": ["init-4_1_3_days"],
+        },
+    }) is None
 
 
 def test_question_registry_sanitizes_disposition_like_labels_for_mvp():

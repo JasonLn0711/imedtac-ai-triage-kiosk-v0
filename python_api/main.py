@@ -13,6 +13,11 @@ except ImportError:  # pragma: no cover - supports running main.py from python_a
 
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
+REQUEST_BODY_LIMIT_BYTES = 32 * 1024
+
+
+class RequestBodyTooLarge(ValueError):
+    pass
 
 app = FastAPI(
     title="AI Triage Demo API",
@@ -20,6 +25,7 @@ app = FastAPI(
     version="0.2.0",
 )
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+app.mount("/demo-ui", StaticFiles(directory=STATIC_DIR / "demo-ui", html=True), name="demo-ui")
 
 
 def cors_headers(request: Request) -> dict[str, str]:
@@ -45,6 +51,8 @@ def json_result(request: Request, result: dict) -> JSONResponse:
 
 async def read_json_body(request: Request) -> dict:
     raw = (await request.body()).strip()
+    if len(raw) > REQUEST_BODY_LIMIT_BYTES:
+        raise RequestBodyTooLarge
     if not raw:
         return {}
     value = json.loads(raw)
@@ -89,6 +97,8 @@ async def start_session(request: Request) -> JSONResponse:
 
     try:
         body = await read_json_body(request)
+    except RequestBodyTooLarge:
+        return json_result(request, contract.error_result(400, {}, "request_body_too_large", "Request body exceeds the demo API size limit.", {"retryable": False}))
     except json.JSONDecodeError:
         return json_result(request, contract.error_result(400, {}, "invalid_json", "Request body must be valid JSON.", {"retryable": False}))
 
@@ -105,6 +115,8 @@ async def submit_answer(request: Request, session_key: str) -> JSONResponse:
 
     try:
         body = await read_json_body(request)
+    except RequestBodyTooLarge:
+        return json_result(request, contract.error_result(400, {}, "request_body_too_large", "Request body exceeds the demo API size limit.", {"retryable": False}))
     except json.JSONDecodeError:
         return json_result(request, contract.error_result(400, {}, "invalid_json", "Request body must be valid JSON.", {"retryable": False}))
 

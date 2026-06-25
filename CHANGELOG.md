@@ -1,5 +1,23 @@
 # Changelog
 
+## Unreleased - 2026-06-25
+
+- Merged the latest `origin/doebow` branch into `main` with the existing
+  imedtac two-endpoint API contract preserved.
+- Added doebow's no-number-pad initial intake updates, expanded fixed-question
+  content, optional local `LLM_api/` summary service, and additive
+  `/demo-ui/summary-review/` page.
+- Kept deterministic staff-review summary generation as the default by leaving
+  `LLM_SUMMARY_URL` empty unless explicitly configured.
+- Kept the local API tester's summary display inline by default and exposed the
+  summary-review page through an explicit button instead of automatic redirect.
+- Added the 2026-06-25 merge decision note documenting that the current API
+  still returns `staff_review_summary` payloads and does not yet provide
+  `report_url` or QR-code content.
+- Updated local verification evidence: Python API tests `50 passed`, LLM API
+  tests `2 passed`, JS unit/contract tests `33 + 41 passed`, smoke/build/check
+  passed.
+
 ## Unreleased - 2026-06-17
 
 - Recorded the successful Render/FastAPI deployment and repo-safe live smoke

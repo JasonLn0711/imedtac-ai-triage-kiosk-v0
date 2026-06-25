@@ -20,13 +20,15 @@ graph LR
 What is your biological gender? Male, Female, Other
 
 **Question 0-2**
-What is your age? []number pad
+What is your age group?
+Choice: Under 18, 18-39, 40-64, 65-79, 80 or older, Not sure / staff confirm
 **Question 0-3**
 What brings you here?
 *Example: headache for 3 days*
 Choice: headache, sore throat, abdominal pain, chest pain, shortness of breath, palpitation, fainting, fever, dizziness, trauma, skin problem, allergy, urinary symptoms, cough / cold symptoms, diarrhea, back pain, eye problem, ear / nose / throat problem, chronic follow-up, nausea / vomiting, weakness / fatigue, limb pain / swelling
-**Question 0-3** *(if duration not provided in 0-2)*
+**Question 0-4** *(if duration is not provided in the main concern)*
 How long have you had {symptoms}?
+Choice: Just started / within 1 hour, Today, 1-3 days, 4-7 days, More than 1 week, Long-term issue, Not sure
 
 ## (1) Vital Rules Phase
 

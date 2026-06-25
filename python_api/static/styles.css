@@ -438,6 +438,11 @@ button:disabled {
   overflow-wrap: anywhere;
 }
 
+.summary-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
 pre {
   min-height: 260px;
   max-height: 560px;
