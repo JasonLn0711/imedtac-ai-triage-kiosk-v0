@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "root": ".",
+  "tables": {
+    "sources": "data/source_registry.csv",
+    "questions": "data/question_registry.csv",
+    "api": "data/api_question_mapping.csv",
+    "flows": "data/flow_registry.csv"
+  },
+  "relations": [
+    {
+      "id": "questions.sources",
+      "from": {
+        "table": "questions",
+        "column": "source_ids"
+      },
+      "to": {
+        "table": "sources",
+        "column": "source_id"
+      },
+      "separator": ";"
+    },
+    {
+      "id": "api.questions",
+      "from": {
+        "table": "api",
+        "column": "registry_refs"
+      },
+      "to": {
+        "table": "questions",
+        "column": "question_id"
+      },
+      "separator": ";"
+    },
+    {
+      "id": "api.sources",
+      "from": {
+        "table": "api",
+        "column": "source_refs"
+      },
+      "to": {
+        "table": "sources",
+        "column": "source_id"
+      },
+      "separator": ";"
+    },
+    {
+      "id": "flows.questions",
+      "from": {
+        "table": "flows",
+        "column": "question_ids"
+      },
+      "to": {
+        "table": "questions",
+        "column": "question_id"
+      },
+      "separator": ";"
+    }
+  ],
+  "json_relations": [
+    {
+      "id": "fixtures.question",
+      "files": {
+        "table": "flows",
+        "column": "fixture_path"
+      },
+      "pointer": "/question_ids",
+      "to": {
+        "table": "questions",
+        "column": "question_id"
+      },
+      "allow_missing": true
+    },
+    {
+      "id": "fixtures.source",
+      "files": {
+        "table": "flows",
+        "column": "fixture_path"
+      },
+      "pointer": "/source_ids",
+      "to": {
+        "table": "sources",
+        "column": "source_id"
+      },
+      "allow_missing": true
+    }
+  ]
+}

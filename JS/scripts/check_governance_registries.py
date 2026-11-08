@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import csv
 import json
+import os
+import subprocess
 import re
 from pathlib import Path
 
@@ -22,11 +24,41 @@ def read_csv(path: Path) -> list[dict[str, str]]:
     return rows
 
 
-def split_ids(value: str) -> list[str]:
-    return [item.strip() for item in value.split(";") if item.strip()]
+def shared_relations() -> tuple[int, list[str]]:
+    """Run the pinned shared mechanism; operational failures never fall back."""
+    try:
+        result = subprocess.run(
+            [os.environ.get("WORKSPACE_VERIFY_BIN", "workspace-verify"),
+             "check-csv-relations", str(ROOT / "governance-relations.json")],
+            capture_output=True, text=True, check=False,
+        )
+        report = json.loads(result.stdout)
+        if (result.returncode not in (0, 1) or report.get("schema_version") != 1
+                or type(report.get("checked_files")) is not int
+                or report["checked_files"] < 0
+                or (result.returncode == 0 and report["checked_files"] < 4)
+                or not isinstance(report.get("findings"), list)
+                or (result.returncode == 0) != (len(report["findings"]) == 0)):
+            raise ValueError("invalid shared report")
+        errors = []
+        for item in report["findings"]:
+            if not isinstance(item, dict) or not all(isinstance(item.get(k), str) for k in ("rule", "message")):
+                raise ValueError("invalid shared finding")
+            errors.append(f"{item['rule']}: {item['message']}")
+        structural = any(item["rule"] not in ("csv.reference", "json.reference") for item in report["findings"])
+        return (1 if structural else 0), errors
+    except (OSError, ValueError, TypeError, AttributeError):
+        print("ERROR: shared relation tool unavailable or invalid report; install the pinned kairos-rust-tools source")
+        return 2, []
 
 
 def main() -> int:
+    status, errors = shared_relations()
+    if status:
+        for error in errors:
+            print(f"ERROR: {error}")
+        return status
+
     sources = read_csv(DATA / "source_registry.csv")
     questions = read_csv(DATA / "question_registry.csv")
     api_questions = read_csv(DATA / "api_question_mapping.csv")
@@ -36,8 +68,6 @@ def main() -> int:
     question_ids = {row["question_id"] for row in questions}
     flow_ids = {row["flow_id"] for row in flows}
 
-    errors: list[str] = []
-
     for row in sources:
         if row["review_owner"].endswith("_tbd"):
             # This is allowed pre-review, but it should stay visible.
@@ -46,27 +76,10 @@ def main() -> int:
             errors.append(f"source {row['source_id']} is missing url")
 
     for row in questions:
-        for source_id in split_ids(row["source_ids"]):
-            if source_id not in source_ids:
-                errors.append(
-                    f"question {row['question_id']} references missing source {source_id}"
-                )
         if row["evidence_status"] == "clinician-signoff-needed":
             if not row["demo_allowed"].startswith("blocked"):
                 errors.append(
                     f"question {row['question_id']} needs signoff but is not blocked"
-                )
-
-    for row in api_questions:
-        for question_id in split_ids(row["registry_refs"]):
-            if question_id not in question_ids:
-                errors.append(
-                    f"api question {row['api_question_id']} references missing question {question_id}"
-                )
-        for source_id in split_ids(row["source_refs"]):
-            if source_id not in source_ids:
-                errors.append(
-                    f"api question {row['api_question_id']} references missing source {source_id}"
                 )
 
     for row in flows:
@@ -83,20 +96,6 @@ def main() -> int:
             errors.append(
                 f"fixture {row['fixture_path']} flow_id does not match {row['flow_id']}"
             )
-        for question_id in split_ids(row["question_ids"]):
-            if question_id not in question_ids:
-                errors.append(f"flow {row['flow_id']} references missing question {question_id}")
-        for question_id in fixture.get("question_ids", []):
-            if question_id not in question_ids:
-                errors.append(
-                    f"fixture {row['fixture_path']} references missing question {question_id}"
-                )
-        for source_id in fixture.get("source_ids", []):
-            if source_id not in source_ids:
-                errors.append(
-                    f"fixture {row['fixture_path']} references missing source {source_id}"
-                )
-
     id_pattern = re.compile(r"`([A-Z][A-Z0-9]+(?:-[A-Z0-9]+)+)`")
     markdown_roots = [
         ROOT / "README.md",

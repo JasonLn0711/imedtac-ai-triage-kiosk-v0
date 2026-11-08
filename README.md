@@ -456,3 +456,5 @@ docs/repo-organization.md
    LLM summary activation, ASR/free-text matching, additional endpoints, and
    broader clinical branches behind explicit change control until the current
    two-endpoint rehearsal is stable.
+
+治理檢查的共用關聯機制、安裝與驗收範圍見 [共用 Rust 工具](docs/shared-rust-tools.md)。
