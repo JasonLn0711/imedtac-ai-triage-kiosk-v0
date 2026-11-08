@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/JasonLn0711/kairos-rust-tools",
-  "revision": "57bcd4d5c24c0d5a974a95d1112d4a99a7c87a76",
+  "revision": "efd0da5ade9a92f7bfa9267ea1d0f1715b537ebe",
   "minimum_rust": "1.93",
   "binary": "workspace-verify"
 }

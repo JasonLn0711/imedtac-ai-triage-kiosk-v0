@@ -46,3 +46,10 @@ worktree 發布，應用 API 與正式服務驗收各維持原責任。
 95% bootstrap 區間為慢 7.198–9.123 ms。共用化消除六組關聯演算法的重複維護，
 但保留 Python 領域讀取並新增子程序；本次沒有加速證據。一次暖快取本機
 量測不推論 CI、能源、維護工時或 LLM token 節省，原始樣本留工具庫 .local。
+
+## 共用 profile
+
+[workspace-verify.json](../workspace-verify.json)提供 `workspace-verify run workspace-verify.json`
+入口，固定來源已升級至支援此規則的完整 SHA。此 profile 只驗證六組關聯；
+完整治理驗收仍須執行上述 Python 入口，保留 URL、簽核、合成資料與文件引用
+規則。本輪已用安裝後的全域命令驗證 profile 與完整入口，兩者皆通過。
